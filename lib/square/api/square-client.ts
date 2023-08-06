@@ -11,14 +11,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Client } from "square";
+import { Client, Environment } from "square";
 
 const accessToken = process.env["SQUARE_ACCESS_TOKEN"];
 
 // Set Square credentials
 const config = {
   accessToken,
-  environment: "development",
+  environment:
+    process.env.NODE_ENV == "development"
+      ? Environment.Sandbox
+      : process.env.NODE_ENV == "production"
+      ? Environment.Production
+      : Environment.Custom,
   userAgentDetail: "sample_app_node_bookings", // Remove or replace this detail when building your own app
 };
 

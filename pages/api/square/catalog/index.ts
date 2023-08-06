@@ -22,7 +22,7 @@ handler.get(async (req, res, next) => {
   try {
     let {
       result: { objects },
-    } = await catalogApi.listCatalog();
+    } = await catalogApi.listCatalog(undefined, "CATEGORY");
 
     res.sendSuccess(objects);
   } catch (error) {

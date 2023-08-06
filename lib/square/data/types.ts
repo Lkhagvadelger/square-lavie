@@ -22,7 +22,7 @@ export interface ItemVariation {
   };
 }
 
-export interface Item {
+export type ServiceItem = {
   type: string;
   id: string;
   updatedAt: string;
@@ -39,8 +39,4 @@ export interface Item {
     productType: string;
     skipModifierScreen: boolean;
   };
-}
-
-export interface ItemsResponse {
-  items: Item[];
-}
+};

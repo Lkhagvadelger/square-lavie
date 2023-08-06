@@ -13,12 +13,7 @@ import { catalogApi } from "@lib/square/api/squareClient";
 
 handler.get(async (req, res, next) => {
   const locationId = process.env["SQUARE_LOCATION_ID"];
-  const cancel = req.query.cancel;
 
-  // if (cancel! || cancel == undefined)
-  //   throw AppError.BadRequest("cancel is required");
-
-  console.log("start hrer");
   try {
     let {
       result: { items },
@@ -27,13 +22,10 @@ handler.get(async (req, res, next) => {
       productTypes: ["APPOINTMENTS_SERVICE"],
     });
 
-    console.log("d----------------");
-    console.log(items);
     if (!items) {
       items = [];
     }
-
-    res.sendSuccess({ cancel, items });
+    res.sendSuccess(items);
   } catch (error) {
     res.sendError(error);
   }

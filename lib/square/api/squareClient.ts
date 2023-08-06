@@ -26,15 +26,16 @@ const accessToken = process.env.SQUARE_ACCESS_TOKEN;
 // Set Square credentials
 const config = {
   accessToken,
-  environment:
-    process.env.NODE_ENV == "development"
-      ? Environment.Sandbox
-      : process.env.NODE_ENV == "production"
-      ? Environment.Production
-      : Environment.Custom,
+  environment: Environment.Production,
+  // process.env.NODE_ENV == "development"
+  //   ? Environment.Sandbox
+  //   : process.env.NODE_ENV == "production"
+  //   ? Environment.Production
+  //   : Environment.Custom,
   // userAgentDetail: "sample_app_node_bookings", // Remove or replace this detail when building your own app
 };
 
+console.log(config);
 const client = new Client(config);
 const { customersApi, bookingsApi, catalogApi, locationsApi, teamApi } = client;
 

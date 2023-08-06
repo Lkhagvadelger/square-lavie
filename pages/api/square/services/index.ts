@@ -15,8 +15,8 @@ handler.get("/", async (req, res, next) => {
   const locationId = process.env["SQUARE_LOCATION_ID"];
   const cancel = req.query.cancel;
 
-  if (cancel! || cancel == undefined)
-    throw AppError.BadRequest("cancel is required");
+  // if (cancel! || cancel == undefined)
+  //   throw AppError.BadRequest("cancel is required");
 
   try {
     let {
@@ -26,6 +26,7 @@ handler.get("/", async (req, res, next) => {
       productTypes: ["APPOINTMENTS_SERVICE"],
     });
 
+    console.log(items);
     if (!items) {
       items = [];
     }

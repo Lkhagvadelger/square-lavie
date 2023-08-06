@@ -32,23 +32,28 @@ const config = {
       : process.env.NODE_ENV == "production"
       ? Environment.Production
       : Environment.Custom,
-  userAgentDetail: "sample_app_node_bookings", // Remove or replace this detail when building your own app
+  // userAgentDetail: "sample_app_node_bookings", // Remove or replace this detail when building your own app
 };
 
-// Extract instances of Api that are used
-// You can add additional APIs here if you so choose
-const {
-  customersApi,
-  bookingsApi,
-  catalogApi,
-  locationsApi,
-  teamApi,
-}: {
-  customersApi: CustomersApi;
-  bookingsApi: BookingsApi;
-  catalogApi: CatalogApi;
-  locationsApi: LocationsApi;
-  teamApi: TeamApi;
-} = new Client(config);
+console.log(config);
+
+const client = new Client(config);
+const { customersApi, bookingsApi, catalogApi, locationsApi, teamApi } = client;
+
+// // Extract instances of Api that are used
+// // You can add additional APIs here if you so choose
+// const {
+//   customersApi,
+//   bookingsApi,
+//   catalogApi,
+//   locationsApi,
+//   teamApi,
+// }: {
+//   customersApi: CustomersApi;
+//   bookingsApi: BookingsApi;
+//   catalogApi: CatalogApi;
+//   locationsApi: LocationsApi;
+//   teamApi: TeamApi;
+// } = client;
 
 export { bookingsApi, catalogApi, customersApi, locationsApi, teamApi };

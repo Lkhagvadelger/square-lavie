@@ -72,5 +72,5 @@ export const searchActiveTeamMembers = async (serviceId: string) => {
       serviceTeamMembers?.includes(profile.teamMemberId) &&
       activeTeamMembers?.includes(profile?.teamMemberId)
   );
-  return [services, bookableStaff?.map((staff) => staff.teamMemberId)];
+  return [services as any, bookableStaff?.map((staff) => staff.teamMemberId)];
 };

@@ -25,6 +25,7 @@ handler.get(async (req, res) => {
           segmentFilters: [
             {
               serviceVariationId: serviceId,
+              teamMemberIdFilter: {},
             },
           ],
           startAtRange: {
@@ -52,9 +53,11 @@ handler.get(async (req, res) => {
       // get availability
       const { result } = await bookingsApi.searchAvailability(searchRequest);
       availabilities = result.availabilities;
+      if (services == undefined)
+        throw AppError.BadRequest("services is undefined");
       additionalInfo = {
         serviceItem: services.relatedObjects.filter(
-          (relatedObject) => relatedObject.type === "ITEM"
+          (relatedObject: any) => relatedObject.type === "ITEM"
         )[0],
         serviceVariation: services.object,
       };
@@ -82,7 +85,7 @@ handler.get(async (req, res) => {
       additionalInfo = {
         bookingProfile: teamMemberBookingProfile,
         serviceItem: services.relatedObjects.filter(
-          (relatedObject) => relatedObject.type === "ITEM"
+          (relatedObject: any) => relatedObject.type === "ITEM"
         )[0],
         serviceVariation: services.object,
       };

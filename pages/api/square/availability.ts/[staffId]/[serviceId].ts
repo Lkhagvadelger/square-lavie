@@ -90,14 +90,13 @@ handler.get(async (req, res) => {
         serviceVariation: services.object,
       };
       // send the serviceId & serviceVersion since it's needed to book an appointment in the next step
-      res.render("pages/availability", {
-        availabilities,
-        serviceId,
-        serviceVersion,
-        ...additionalInfo,
-      });
     }
-    res.json({});
+    res.sendSuccess({
+      availabilities,
+      serviceId,
+      serviceVersion,
+      ...additionalInfo,
+    });
   } catch (e) {
     res.sendError(e);
   }

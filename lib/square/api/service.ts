@@ -1,10 +1,15 @@
 import { TeamApi, TeamMember } from "square";
 
 const dateHelpers = require("../util/date-helpers");
-
+const { v4: uuidv4 } = require("uuid");
 const locationId = process.env.SQUARE_LOCATION_ID || "locationId";
 
-import { bookingsApi, catalogApi, teamApi } from "@lib/square/api/squareClient";
+import {
+  bookingsApi,
+  catalogApi,
+  customersApi,
+  teamApi,
+} from "@lib/square/api/squareClient";
 // the path param for staffId when user is searching for all staff member availability
 const ANY_STAFF_PARAMS = "anyStaffMember";
 
@@ -73,4 +78,65 @@ export const searchActiveTeamMembers = async (serviceId: string) => {
       activeTeamMembers?.includes(profile?.teamMemberId)
   );
   return [services as any, bookableStaff?.map((staff) => staff.teamMemberId)];
+};
+
+/**
+ * Convert a duration in milliseconds to minutes
+ *
+ * @param {*} duration - duration in milliseconds
+ * @returns {Number} - duration in minutes
+ */
+export const convertMsToMins = (duration: any) => {
+  return Math.round(Number(duration) / 1000 / 60);
+};
+
+/**
+ * Return the id of a customer that matches the firstName, lastName and email
+ * If such customer doesn't exist, create a new customer.
+ *
+ * @param {string} givenName
+ * @param {string} familyName
+ * @param {string} emailAddress
+ */
+export const getCustomerID = async (
+  givenName: string,
+  familyName: string,
+  emailAddress: string
+) => {
+  const {
+    result: { customers },
+  } = await customersApi.searchCustomers({
+    query: {
+      filter: {
+        emailAddress: {
+          exact: emailAddress,
+        },
+      },
+    },
+  });
+
+  if (customers && customers.length > 0) {
+    const matchingCustomers = customers.filter(
+      (customer) =>
+        customer.givenName === givenName && customer.familyName === familyName
+    );
+
+    // If a matching customer is found, return the first matching customer
+    if (matchingCustomers.length > 0) {
+      return matchingCustomers[0].id;
+    }
+  }
+
+  // If no matching customer is found, create a new customer and return its ID
+  const {
+    result: { customer },
+  } = await customersApi.createCustomer({
+    emailAddress,
+    familyName,
+    givenName,
+    idempotencyKey: uuidv4(),
+    referenceId: "BOOKINGS-SAMPLE-APP",
+  });
+
+  return customer.id;
 };

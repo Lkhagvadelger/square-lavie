@@ -1,6 +1,4 @@
 import { createHandler } from "@api/handler";
-import { getUserList, updateProfileLatinName } from "@lib/user/api/service";
-import { UserRole } from "@prisma/client";
 import { AppError } from "@util/errors";
 
 const handler = createHandler();

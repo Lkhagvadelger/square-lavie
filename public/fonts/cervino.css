@@ -1,0 +1,7 @@
+@font-face {
+  font-family: "Cervino";
+  src: url("cervino.otf") format("opentype");
+  font-style: normal;
+  font-weight: 100;
+  font-display: swap;
+}

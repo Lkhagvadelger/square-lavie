@@ -1,0 +1,284 @@
+{
+  "change-locale": "Change locale",
+  "menu": "Menu",
+  "privacy-policy": "Privacy Policy",
+  "terms-of-service": "Terms of Service",
+  "account": "Account",
+  "roles": {
+    "PATIENT": "Patient",
+    "LOCAL_DOCTOR": "Local Doctor",
+    "HOSPITAL_ADMIN": "Hospital Admin",
+    "PATIENT_EXPERIENCE_MANAGER": "PXM",
+    "SPECIALIST": "Specialist",
+    "ADMIN": "Admin"
+  },
+  "copy-action": "Copy action",
+  "copied-to-clipboard": "Copied to clipboard",
+  "delete-confirmation-question": "Are you sure to delete ${title}?",
+  "delete-confirm-yes": "Delete",
+  "delete-confirm-no": "Cancel",
+  "home": "Home",
+  "back": "Back",
+  "exit": "Exit",
+  "profile-settings": "Profile Settings",
+  "feedback-support": "Feedback & Support",
+  "logout": "Logout",
+  "jan": "Jan",
+  "feb": "Feb",
+  "mar": "Mar",
+  "apr": "Apr",
+  "may": "May",
+  "jun": "Jun",
+  "jul": "Jul",
+  "aug": "Aug",
+  "sep": "Sep",
+  "oct": "Oct",
+  "nov": "Nov",
+  "dec": "Dec",
+  "dateFormatLong": "dd MMMM yyyy",
+  "dateFormat": "dd MMM yyyy",
+  "date-of-birth": "Date of birth",
+  "view-less": "View less",
+  "view-more": "View more",
+  "uploading-file": "Uploading file",
+  "months": "month(s)",
+  "years-old": "years old",
+  "birthdate": "Birthdate",
+  "date": "Date",
+  "sex": { "male": "Male", "female": "Female" },
+  "bmi-status": {
+    "underweight": "Underweight",
+    "healthy": "Healthy",
+    "overweight": "Overweight",
+    "obese": "Obese"
+  },
+  "date-order": { "day": "1", "month": "2", "year": "3" },
+  "document-type": {
+    "lab_test": "Lab test",
+    "radiology_test": "Radiology test",
+    "diagnostic_test": "Diagnostic test"
+  },
+  "country-name": {
+    "us": "USA",
+    "es": "El Salvador",
+    "gt": "Guatemala",
+    "hn": "Honduras",
+    "usa": "USA",
+    "el salvador": "El Salvador",
+    "guatemala": "Guatemala",
+    "honduras": "Honduras",
+    "mongolia": "Mongolia",
+    "mn": "Mongolia"
+  },
+  "language": { "en": "English", "mn": "Монгол хэл", "es": "Español" },
+  "currency": { "us": "$", "es": "$", "gt": "$", "hn": "$", "mn": "₮" },
+  "paging": {
+    "filtered": "Filtered",
+    "pages": "Page ${page} of ${pages}",
+    "records": "Showing ${start} to ${end}",
+    "total": "Total ${total} ${name}"
+  },
+  "answers": { "yes": "Yes", "no": "No", "unknown": "Not Sure" },
+  "widget": {
+    "title": "Clinical Apps",
+    "note": "These tools are provided as guides to help you learn more. Please use your discretion as a medical professional to evaluate their efficacy.",
+    "verify-diagnosis": {
+      "title": "Verify Diagnosis",
+      "description": "Use our simple tool to find out what medical issue you might have and get guidance on next steps.",
+      "action": "Continue"
+    },
+    "medication-dosage": {
+      "title": "Medication Dosage",
+      "request": {
+        "caption": "Medication Dosage",
+        "reminder": "These tools are provided as guides to help you learn more. Please use your discretion as a medical professional to evaluate their efficacy.",
+        "action": "Calculate"
+      },
+      "result": {
+        "caption": "Medication Dosage",
+        "reminder": "No dosage can be recommended without knowing the diagnosis and the medication being prescribed. Please consult a healthcare professional for further advice."
+      }
+    },
+    "med-lookup": { "title": "Med Lookup" },
+    "next-steps-summary": { "title": "Next Steps Summary" },
+    "condition": { "title": "Condition Research" },
+    "condition-research": {
+      "title": "Condition Research",
+      "note": "This tool lets you get a basic overview of a specific condition and next steps for your patient.",
+      "overview": "Overview",
+      "recent-article": "Recent article",
+      "next-steps": "Next steps",
+      "condition-specialist": "If you think your patient has <0></0> they should be seen by a <1></1>.",
+      "input-placeholder": "Search for a condition, e.g. colitis, UTI, etc."
+    },
+    "lab-test-lookup": { "title": "Lab Test Lookup" },
+    "medical-articles": { "title": "Medical Articles" },
+    "procedure-review": { "title": "Procedure Review" },
+    "nutrition-guide": {
+      "title": "Nutrition Guide",
+      "description": "Answers some quick questions to get some guidance on your nutrition goals!",
+      "action": "Continue",
+      "request": {
+        "caption": "Optimize your health",
+        "description": "Use this tool to get a set of nutrition goals that are specific to your needs. Just make a few choice below to view the results.",
+        "reminder": "Remember to consult with a doctor or dietician to make sure you are getting the right nutrients and vitamin intake.",
+        "action": "View Results"
+      },
+      "result": {
+        "caption": "Nutrition goals",
+        "description": "For a <0>${age} old ${dietary} ${sex} with ${condition}</0>, here is a set of nutrition goals to follow.",
+        "reminder": "Remember to consult with a doctor or dietician to make sure you are getting the right nutrients and vitamin intake."
+      }
+    },
+    "radiology-guide": { "title": "Radiology Guide" },
+    "history": { "title": "History" },
+    "telehealth-call": { "title": "Telehealth Call" },
+    "search-for-a-doctor": { "title": "Search for a Doctor" },
+    "params": {
+      "sex": {
+        "caption": "Sex",
+        "placeholder": "Please select",
+        "validation": { "required": "Please select sex" },
+        "value": { "male": "Male", "female": "Female" }
+      },
+      "patient-sex": { "caption": "Patient Sex" },
+      "patient-age": { "caption": "Patient Age", "placeholder": "18" },
+      "factors": { "caption": "Factors", "placeholder": "Pregnant, etc." },
+      "diagnosis": { "caption": "Diagnosis", "placeholder": "UTI, etc." },
+      "medication": {
+        "caption": "Medication",
+        "placeholder": "Acetaminophen, etc."
+      },
+      "age-range": {
+        "caption": "Age Range",
+        "placeholder": "Please select",
+        "validation": { "required": "Please select age range" },
+        "value": {
+          "0": "0 years",
+          "1-4": "1-4 years",
+          "5-9": "5-9 years",
+          "10-14": "10-14 years",
+          "15-19": "15-19 years",
+          "20-24": "20-24 years",
+          "25-29": "25-29 years",
+          "30-34": "30-34 years",
+          "35-39": "35-39 years",
+          "40-44": "40-44 years",
+          "45-49": "45-49 years",
+          "50-54": "50-54 years",
+          "55-59": "55-59 years",
+          "60-64": "60-64 years",
+          "65-69": "65-69 years",
+          "70-74": "70-74 years",
+          "75-79": "75-79 years",
+          "80-84": "80-84 years",
+          "85+": "85+ years"
+        }
+      },
+      "pre-existing-condition": {
+        "caption": "Pre-existing Condition",
+        "placeholder": "Please select",
+        "search-no-result": "No result found!",
+        "validation": { "required": "Please input pre-existing condition" },
+        "value": {
+          "none": "None",
+          "underweight": "Underweight",
+          "overweight": "Overweight",
+          "hypertension": "High blood pressure (Hypertension)",
+          "high-cholesterol": "High cholesterol",
+          "diabetes": "Diabetes"
+        }
+      },
+      "dietary-restrictions": {
+        "caption": "Dietary Restrictions",
+        "placeholder": "Please select",
+        "validation": { "required": "Please select dietary restrictions" },
+        "value": {
+          "none": "None",
+          "vegetarian": "Vegetarian",
+          "vegan": "Vegan",
+          "gluten-free": "Gluten Free",
+          "dairy-free": "Dairy Free"
+        }
+      }
+    },
+    "restart": "Restart"
+  },
+  "app": {
+    "loading": "Please wait...",
+    "splash": {
+      "welcome": "Welcome to",
+      "title-order": "welcome",
+      "caption": "We’re delighted you’re here.",
+      "description": "Our goal is to help you get the medical expertise you need. We have big plans for what you’ll be able to do in our app—and with your help we’ll make it the go to place to find the right information to help you.",
+      "get-started": "Get Started",
+      "continue": "Continue"
+    },
+    "notification-permission": {
+      "welcome": "We'd love to",
+      "entity": "keep in touch",
+      "caption": "We want to keep you informed.",
+      "description": "Please allow us to send occasional notifications about medical news and features.",
+      "allow": "Tap “Allow” in the next screen.",
+      "later": "You can always change this in Settings.",
+      "maybe-later": "Maybe Later",
+      "allow-button": "Allow"
+    },
+    "exit": {
+      "title": "Are you sure you want to exit?",
+      "info": "If you leave now you will lose all progress and have to start again from the beginning.",
+      "confirm": "Yes, Exit",
+      "cancel": "No stay here"
+    },
+    "construction": {
+      "title": "We’re almost ready!",
+      "caption": "Putting on the final touches...",
+      "description": "We’ll notifiy you when the app is ready to use."
+    },
+    "menu": {
+      "articles": "Home",
+      "seminars": "Seminars",
+      "healthtool": "Health Tools",
+      "settings": "Settings"
+    },
+    "article": {
+      "source": {
+        "healthday": "Healthday",
+        "mayo-clinic": "Mayo Clinic",
+        "verywell-health": "Verywell Health",
+        "harvard-medical": "Harvard Medical School",
+        "stanford-health": "Stanford Medicine News",
+        "medical-daily": "Medical Daily"
+      },
+      "article": "Article",
+      "article-title": "Health news",
+      "all-sources": "All Sources",
+      "via": "via",
+      "read-more": "READ MORE",
+      "read-full": "Read the full article"
+    },
+    "seminars": {
+      "upcoming": "Upcoming",
+      "title": "Seminar",
+      "fb_live": "Webinar",
+      "register-on-facebook": "Register on facebook",
+      "past-events": "Past Events"
+    },
+    "feature": {
+      "upcoming": "Upcoming",
+      "title": "Featured",
+      "fb_live": "Webinar",
+      "private": "Private",
+      "register-on-facebook": "Register on facebook",
+      "join-on-facebook": "Join on facebook group",
+      "past-events": "Past Events"
+    },
+    "settings": {
+      "change-line": "Language preference",
+      "notifications": "Notifications",
+      "notifications-text": "We’ll send notifications occasionally about medical news and features.",
+      "connect": "Connect with us",
+      "change-settings": "Change"
+    }
+  }
+}

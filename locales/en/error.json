@@ -1,0 +1,207 @@
+{
+  "validation": {
+    "first-name": {
+      "required": "Invalid first name!"
+    },
+    "title": {
+      "required": "Title required!"
+    },
+    "last-name": {
+      "required": "Invalid last name!"
+    },
+    "full-name": {
+      "required": "Invalid name!"
+    },
+    "file-upload": {
+      "required": "File category required!"
+    },
+    "phone-or-email": {
+      "required": "Phone number or email required!"
+    },
+    "latin-name": {
+      "required": "Invalid latin name!"
+    },
+    "selection": {
+      "required": "Please check at least one interest in"
+    },
+    "phone": {
+      "required": "Please input phone number",
+      "min": "Phone number must be at least 8 digit",
+      "max": "Phone number must be less than 13 digit",
+      "invalid": "Invalid phone number",
+      "duplicate": "This phone number is already registered with another account.",
+      "exceed": "SMS request exceeded!"
+    },
+    "email": {
+      "required": "Please input email address!",
+      "invalid": "Invalid email address!",
+      "duplicate": "Email address already registered!"
+    },
+    "password": {
+      "required": "Please input password!",
+      "format": "Invalid password format!",
+      "confirmation": "New password confirmation doesn't match!",
+      "current": "Current password doesn't match!",
+      "min": "Minimum length should be 8"
+    },
+    "registration": {
+      "not-enabled": "You can create account only by invitation of your local doctor."
+    },
+    "country": {
+      "required": "Please select country of residence!",
+      "invalid": "Country you selected is not supported"
+    },
+    "language": {
+      "required": "Please select language!"
+    },
+    "invitation-token": {
+      "invalid": "Invalid token!",
+      "used": "Invitation token already used!"
+    },
+    "verification-code": {
+      "failed": "Verification code failed!"
+    },
+    "concept-domain": {
+      "invalid": "Invalid data!"
+    },
+    "concept-type": {
+      "invalid": "Invalid data!"
+    },
+    "concept-mapping-subject": {
+      "invalid": "Invalid data!"
+    },
+    "concept-mapping-part": {
+      "invalid": "Invalid data!"
+    },
+    "date": {
+      "required": "Please input date!"
+    },
+    "user": {
+      "not-found": "User not found!",
+      "hospital": {
+        "assigned": "Hospital already assigned!"
+      }
+    },
+    "patient": {
+      "required": "Patient is required!",
+      "sex": {
+        "required": "Please select patient sex"
+      },
+      "dob": {
+        "invalid": "Please input patient date of birth"
+      },
+      "age": {
+        "max": "Patient age must be over 18!"
+      },
+      "not-found": "Patient not found!"
+    },
+    "dob": {
+      "year": {
+        "invalid": "Invalid year value!"
+      },
+      "month": {
+        "invalid": "Invalid month value!"
+      },
+      "day": {
+        "invalid": "Invalid day value!"
+      }
+    },
+    "patient-case": {
+      "not-found": "Patient case not found!"
+    },
+    "patient-note": {
+      "not-found": "Patient note not found!",
+      "type": {
+        "invalid": "Invalid note type!"
+      }
+    },
+    "local-doctor": {
+      "required": "Local doctor is required!",
+      "assigned": "Local doctor already assigned!",
+      "no-email": "Local doctor email not found!"
+    },
+    "interview": {
+      "not-found": "Interview not found!",
+      "disabled": "Please contact a Mederva Health Partner Physician to create an expert opinion or health assessment."
+    },
+    "interviewee": {
+      "required": "Interviewee information required!"
+    },
+    "interview-step": {
+      "invalid": "Invalid interview step!"
+    },
+    "medical-history": {
+      "not-found": "Patient medical history not found!"
+    },
+    "systolic": {
+      "invalid": "Invalid systolic blood pressure!"
+    },
+    "diastolic": {
+      "invalid": "Invalid diastolic blood pressure!"
+    },
+    "family-history": {
+      "family-member": {
+        "required": "Please select family member"
+      },
+      "family-conditions": {
+        "required": "Please select condition"
+      }
+    },
+    "recipe": {
+      "not-found": "Recipe not found!"
+    },
+    "section": {
+      "not-found": "Section not found!"
+    },
+    "template": {
+      "email": {
+        "not-found": "E-mail template not found!"
+      }
+    },
+    "specialty": {
+      "required": "Please choose at least one specialty type!"
+    },
+    "availibility": {
+      "day": {
+        "required": "Please choose at least one available day!"
+      },
+      "visit": {
+        "required": "Please choose at least one visit type!"
+      }
+    },
+    "paging": {
+      "size": "Invalid size of items per page!"
+    },
+    "question": {
+      "specialty": {
+        "required": "Question specialty is required!"
+      },
+      "type": {
+        "required": "Question type is required!"
+      },
+      "content": {
+        "required": "Question is required!"
+      }
+    },
+    "pin": {
+      "required": "Please input PIN code!",
+      "not-found": "Unable to send PIN code, please try again later!",
+      "max": "Unable to send PIN code, please try again later!",
+      "error": "Unable to send PIN code, please try again later!",
+      "check": {
+        "invalid": "Invalid PIN code!",
+        "no-pin": "Invalid PIN code!",
+        "error": "Invalid PIN code!"
+      }
+    }
+  },
+  "not-logged-in": "You are not logged in!",
+  "session-expired": "For your security and patient privacy, you've been logged out due to inactivity.",
+  "invalid-credentials": "Incorrect phone number, email address or password",
+  "forbidden": "You are not authorized!",
+  "not-found": "Not found!",
+  "required": "This is required!",
+  "agreement": "Please accept agreament",
+  "not-implemented": "Not implemented yet!",
+  "undefined": "Something's not right! Please try again..."
+}

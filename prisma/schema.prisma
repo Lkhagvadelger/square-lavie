@@ -1,0 +1,145 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                       String    @id @default(cuid())
+  email                    String?   @unique
+  emailVerified            DateTime?
+  passwordDigest           String?
+  phoneNumber              String    @unique
+  phoneNumberVerified      DateTime?
+  role                     UserRole  @default(PATIENT)
+  inviteToken              String?   @unique
+  isTokenUsed              DateTime?
+  createdAt                DateTime  @default(now())
+  updatedAt                DateTime  @updatedAt
+  invitedBy                String?
+  lastRecommendedSpecialty String?
+  pin                      String?
+  pinCreatedAt             DateTime?
+  pinType                  String?
+  pinVerifiedAt            DateTime?
+  hospitalId               String?
+  accounts                 Account[]
+  profile                  Profile?
+  doctorProfileId          String?
+}
+
+model Account {
+  id                String   @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refreshToken      String?
+  accessToken       String?
+  tokenType         String?
+  expiresAt         Int?
+  scope             String?
+  idToken           String?
+  sessionState      String?
+  oauthTokenSecret  String?
+  oauthToken        String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Profile {
+  id                 String    @id @default(cuid())
+  userId             String    @unique
+  firstName          String    @default("")
+  lastName           String    @default("")
+  latinName          String    @default("")
+  sex                String?
+  dob                String?
+  country            Country?
+  height             Int?
+  weight             Int?
+  picture            String?
+  priceMin           Int?
+  priceMax           Int?
+  notifyEmail        Boolean   @default(true)
+  notifyPush         Boolean   @default(true)
+  notifyBadge        Boolean   @default(true)
+  historyId          String?   @unique
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  specialistDesc     String?
+  patientCode        String?   @unique
+  allowPatientAssign DateTime?
+  user               User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String
+  expiresAt DateTime
+}
+
+model SmsRequestAttempt {
+  id          String   @id @default(cuid())
+  phoneNumber String
+  ipAddress   String
+  createdAt   DateTime @default(now())
+}
+
+model FileUpload {
+  id                   String    @id @default(cuid())
+  fileGroup            String?
+  fileLink             String
+  fileSource           String
+  removedAt            DateTime?
+  createdBy            String
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  fileCategory         String?
+  fileSourceDate       String?
+  patientNoteId        String?
+  fileMIMEType         String
+  specialistQuestionId String?
+}
+
+enum UserRole {
+  PATIENT
+  LOCAL_DOCTOR
+  PATIENT_EXPERIENCE_MANAGER
+  SPECIALIST
+  ADMIN
+  HOSPITAL_ADMIN
+  NURSE
+}
+enum Country {
+  us
+  mn
+  es
+  hn
+  gt
+  sv
+}
+
+model IP2Location {
+  id          String   @id @default(cuid())
+  ipFrom      BigInt
+  ipTo        BigInt
+  countryCode String
+  country     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model FirebaseToken {
+  id        String   @id @default(cuid())
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

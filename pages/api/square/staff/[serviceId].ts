@@ -11,13 +11,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const express = require("express");
-const router = express.Router();
-require("dotenv").config();
+import { bookingsApi, catalogApi, teamApi } from "squareClient";
 
 const locationId = process.env["SQUARE_LOCATION_ID"];
-
-const { bookingsApi, catalogApi, teamApi } = require("../util/square-client");
 
 /**
  * GET /staff/:serviceId?version

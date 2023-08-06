@@ -1,6 +1,9 @@
 import { createHandler } from "@api/handler";
 import { getUploadKey } from "@lib/file/api/service";
-
+import { getEndAtDate, getStartAtDate } from "@lib/square/api/service";
+import { bookingsApi } from "@lib/square/api/squareClient";
+import { AppError } from "@util/errors";
+const locationId = process.env["SQUARE_LOCATION_ID"];
 const handler = createHandler();
 /**
  * GET /booking/:bookingId/reschedule
@@ -10,16 +13,19 @@ const handler = createHandler();
  */
 handler
   .get(async (req, res) => {
-    const bookingId = req.query.bookingId;
+    const bookingId = req.query.bookingId as string;
+    if (bookingId === undefined)
+      throw AppError.BadRequest("bookingId is required");
     try {
       // Retrieve the booking provided by the bookingId.
       const {
         result: { booking },
       } = await bookingsApi.retrieveBooking(bookingId);
+
       const { serviceVariationId, teamMemberId, serviceVariationVersion } =
-        booking.appointmentSegments[0];
-      const startAt = dateHelpers.getStartAtDate();
-      const searchRequest = {
+        booking!.appointmentSegments![0];
+      const startAt = getStartAtDate();
+      const searchRequest: any = {
         query: {
           filter: {
             locationId,
@@ -32,7 +38,7 @@ handler
               },
             ],
             startAtRange: {
-              endAt: dateHelpers.getEndAtDate(startAt).toISOString(),
+              endAt: getEndAtDate(startAt).toISOString(),
               startAt: startAt.toISOString(),
             },
           },
@@ -58,8 +64,8 @@ handler
    * Update an existing booking, you may update the starting date
    */
   .post(async (req, res) => {
-    const bookingId = req.query.bookingId;
-    const startAt = req.query.startAt;
+    const bookingId = req.query.bookingId as string;
+    const startAt = req.query.startAt as string;
 
     try {
       const {
@@ -67,7 +73,7 @@ handler
       } = await bookingsApi.retrieveBooking(bookingId);
       const updateBooking = {
         startAt,
-        version: booking.version,
+        version: booking!.version,
       };
 
       const {
@@ -76,7 +82,7 @@ handler
         booking: updateBooking,
       });
 
-      res.sendSuccess({ bookingId: newBooking.id });
+      res.sendSuccess({ bookingId: newBooking!.id });
     } catch (e) {
       res.sendError(e);
     }

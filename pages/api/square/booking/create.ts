@@ -1,6 +1,7 @@
 import { createHandler } from "@api/handler";
 import { getUploadKey } from "@lib/file/api/service";
 import { convertMsToMins, getCustomerID } from "@lib/square/api/service";
+import { bookingsApi, catalogApi } from "@lib/square/api/squareClient";
 const { v4: uuidv4 } = require("uuid");
 
 const handler = createHandler();
@@ -21,10 +22,10 @@ const locationId = process.env["SQUARE_LOCATION_ID"];
  */
 handler.post(async (req, res) => {
   try {
-    const serviceId = req.query.serviceId;
-    const serviceVariationVersion = req.query.version;
-    const staffId = req.query.staffId;
-    const startAt = req.query.startAt;
+    const serviceId = req.query.serviceId as string;
+    const serviceVariationVersion = req.query.version as any;
+    const staffId = req.query.staffId as string;
+    const startAt = req.query.startAt as string;
 
     const customerNote = req.body.customerNote;
     const emailAddress = req.body.emailAddress;
@@ -36,7 +37,7 @@ handler.post(async (req, res) => {
       result: { object: catalogItemVariation },
     } = await catalogApi.retrieveCatalogObject(serviceId);
     const durationMinutes = convertMsToMins(
-      catalogItemVariation.itemVariationData.serviceDuration
+      catalogItemVariation!.itemVariationData!.serviceDuration
     );
 
     // Create booking
@@ -60,9 +61,7 @@ handler.post(async (req, res) => {
       idempotencyKey: uuidv4(),
     });
 
-    res.redirect("/booking/" + booking.id);
-
-    res.sendSuccess({ bookingId: booking.id });
+    res.sendSuccess({ bookingId: booking!.id });
   } catch (e) {
     res.sendError(e);
   }

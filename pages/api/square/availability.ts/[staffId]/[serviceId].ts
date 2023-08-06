@@ -1,6 +1,7 @@
 import { createHandler } from "@api/handler";
 import { getUploadKey } from "@lib/file/api/service";
 import { searchActiveTeamMembers } from "@lib/square/api/service";
+import { bookingsApi, catalogApi } from "@lib/square/api/squareClient";
 import { AppError } from "@util/errors";
 
 const handler = createHandler();
@@ -16,7 +17,7 @@ handler.get(async (req, res) => {
     if (serviceId! || serviceId == undefined)
       throw AppError.BadRequest("serviceId is required");
     const serviceVersion = req.query.version;
-    const staffId = req.query.staffId;
+    const staffId = req.query.staffId as string;
     const startAt = dateHelpers.getStartAtDate();
     const searchRequest = {
       query: {
@@ -37,7 +38,7 @@ handler.get(async (req, res) => {
     };
 
     // get service item - needed to display service details in left pane
-    const retrieveServicePromise = catalogApi.retrieveCatalogObject(
+    const retrieveServicePromise = await catalogApi.retrieveCatalogObject(
       serviceId,
       true
     );
@@ -84,7 +85,7 @@ handler.get(async (req, res) => {
       availabilities = result.availabilities;
       additionalInfo = {
         bookingProfile: teamMemberBookingProfile,
-        serviceItem: services.relatedObjects.filter(
+        serviceItem: services.relatedObjects!.filter(
           (relatedObject: any) => relatedObject.type === "ITEM"
         )[0],
         serviceVariation: services.object,

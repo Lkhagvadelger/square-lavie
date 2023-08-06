@@ -1,5 +1,6 @@
 import { createHandler } from "@api/handler";
 import { getUploadKey } from "@lib/file/api/service";
+import { bookingsApi } from "@lib/square/api/squareClient";
 
 const handler = createHandler();
 /**
@@ -9,13 +10,13 @@ const handler = createHandler();
  */
 handler.post(async (req, res) => {
   try {
-    const bookingId = req.query.bookingId;
+    const bookingId = req.query.bookingId as string;
 
     const {
       result: { booking },
     } = await bookingsApi.retrieveBooking(bookingId);
     await bookingsApi.cancelBooking(bookingId, {
-      bookingVersion: booking.version,
+      bookingVersion: booking!.version,
     });
 
     res.sendSuccess({ cancel: "success" });

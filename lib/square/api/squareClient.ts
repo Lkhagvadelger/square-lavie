@@ -35,8 +35,6 @@ const config = {
   // userAgentDetail: "sample_app_node_bookings", // Remove or replace this detail when building your own app
 };
 
-console.log(config);
-
 const client = new Client(config);
 const { customersApi, bookingsApi, catalogApi, locationsApi, teamApi } = client;
 

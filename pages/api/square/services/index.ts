@@ -11,13 +11,14 @@ import { catalogApi } from "@lib/square/api/squareClient";
  * This endpoint is in charge of retrieving all of the service items that can be booked for the current location.
  */
 
-handler.get("/", async (req, res, next) => {
+handler.get(async (req, res, next) => {
   const locationId = process.env["SQUARE_LOCATION_ID"];
   const cancel = req.query.cancel;
 
   // if (cancel! || cancel == undefined)
   //   throw AppError.BadRequest("cancel is required");
 
+  console.log("start hrer");
   try {
     let {
       result: { items },
@@ -26,6 +27,7 @@ handler.get("/", async (req, res, next) => {
       productTypes: ["APPOINTMENTS_SERVICE"],
     });
 
+    console.log("d----------------");
     console.log(items);
     if (!items) {
       items = [];

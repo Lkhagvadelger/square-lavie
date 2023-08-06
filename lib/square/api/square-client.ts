@@ -12,17 +12,13 @@ limitations under the License.
 */
 
 import { Client } from "square";
-// import * from "dotenv";
 
-require("dotenv").config();
-
-const env = process.env["ENVIRONMENT"].toLowerCase();
 const accessToken = process.env["SQUARE_ACCESS_TOKEN"];
 
 // Set Square credentials
 const config = {
   accessToken,
-  environment: env,
+  environment: "development",
   userAgentDetail: "sample_app_node_bookings", // Remove or replace this detail when building your own app
 };
 

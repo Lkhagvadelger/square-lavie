@@ -11,9 +11,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Client, Environment } from "square";
+import {
+  Client,
+  Environment,
+  CustomersApi,
+  BookingsApi,
+  CatalogApi,
+  LocationsApi,
+  TeamApi,
+} from "square";
 
-const accessToken = process.env["SQUARE_ACCESS_TOKEN"];
+const accessToken = process.env.SQUARE_ACCESS_TOKEN;
 
 // Set Square credentials
 const config = {
@@ -29,13 +37,18 @@ const config = {
 
 // Extract instances of Api that are used
 // You can add additional APIs here if you so choose
-const { customersApi, bookingsApi, catalogApi, locationsApi, teamApi } =
-  new Client(config);
-
-module.exports = {
+const {
+  customersApi,
   bookingsApi,
   catalogApi,
-  customersApi,
   locationsApi,
   teamApi,
-};
+}: {
+  customersApi: CustomersApi;
+  bookingsApi: BookingsApi;
+  catalogApi: CatalogApi;
+  locationsApi: LocationsApi;
+  teamApi: TeamApi;
+} = new Client(config);
+
+export { bookingsApi, catalogApi, customersApi, locationsApi, teamApi };

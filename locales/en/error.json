@@ -120,10 +120,6 @@
       "assigned": "Local doctor already assigned!",
       "no-email": "Local doctor email not found!"
     },
-    "interview": {
-      "not-found": "Interview not found!",
-      "disabled": "Please contact a Mederva Health Partner Physician to create an expert opinion or health assessment."
-    },
     "interviewee": {
       "required": "Interviewee information required!"
     },

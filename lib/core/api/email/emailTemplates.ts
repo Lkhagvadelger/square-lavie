@@ -17,28 +17,16 @@ export const emailTemplates = (lang: string, type: EmailType, data: {}) => {
       type: EmailType.PasswordReset,
       email: {
         en: {
-          subject: `Mederva Health password reset request PIN code`,
-          body: `<p>Hello,</p>
-          <p>Please input {pin} as password reset PIN code.</p>
-          <p>Please contact us if you have any questions.</p>
-          <p>Mederva Health</p>
-          <p>support@medervahealth.com</p>`,
+          subject: ``,
+          body: ``,
         },
         mn: {
-          subject: `Mederva Health нууц үг шинэчлэх хүсэлтийн PIN код`,
-          body: `<p>Сайн байна уу,</p>
-          <p>Нууц үг солих дэлгэцэнд {pin} кодыг оруулна уу.</p>
-          <p>Танд асууж лавлах зүйл байвал бидэнтэй холбогдоорой.</p>
-          <p>Mederva Health</p>
-          <p>support@medervahealth.com</p>`,
+          subject: ``,
+          body: ``,
         },
         es: {
-          subject: `Solicitud de restablecimiento de contraseña de Mederva Health Código PIN`,
-          body: `<p>Hola,</p>
-          <p>Ingrese {pin} como código PIN para restablecer la contraseña.</p>
-          <p>Por favor, póngase en contacto con nosotros si tiene alguna pregunta.</p>
-          <p>Mederva Health</p>
-          <p>support@medervahealth.com</p>`,
+          subject: ``,
+          body: ``,
         },
       },
     },

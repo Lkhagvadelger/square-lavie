@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useGetServices } from "../data/hooks";
 import { ServiceItem } from "../data/types";
-export const Home = () => {
+import { useRouter } from "next/router";
+export const Home = ({ locationId }: { locationId: string }) => {
   const { data, isLoading } = useGetServices();
 
-  return <>asdf</>;
+  return <>{locationId}</>;
 };

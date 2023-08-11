@@ -1,21 +1,17 @@
-import { getRootUrl } from "@lib/auth/data/types";
-import { useAuth, withRequireLogin } from "@lib/auth/ui";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
-import { useCookies } from "react-cookie";
+import SquareHomePage from "./square";
 
-const HomePage = () => {
-  const router = useRouter();
-  const { user } = useAuth();
-  const [cookie] = useCookies(["lang"]);
+// const HomePage = () => {
+//   const router = useRouter();
+//   const { user } = useAuth();
+//   const [cookie] = useCookies(["lang"]);
 
-  useEffect(() => {
-    const rootUrl = getRootUrl(user);
-    if (rootUrl)
-      router.replace(rootUrl, "", cookie.lang ? { locale: cookie.lang } : {});
-  }, [router, user, cookie]);
+//   useEffect(() => {
+//     const rootUrl = getRootUrl(user);
+//     if (rootUrl)
+//       router.replace(rootUrl, "", cookie.lang ? { locale: cookie.lang } : {});
+//   }, [router, user, cookie]);
 
-  return null;
-};
+//   return null;
+// };
 
-export default withRequireLogin(HomePage);
+export default SquareHomePage;

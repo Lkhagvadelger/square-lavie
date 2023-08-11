@@ -21,7 +21,7 @@ export const useRefresh = () =>
   useQuery([`refresh`], API._query(Method.GET, `auth/refresh`));
 
 export const useLogin = () =>
-  useMutation(API._auth(Method.POST, `auth/login`, true));
+  useMutation(API._auth(Method.POST, `auth/loginonetimecode`, true));
 
 export const useSignup = () =>
   useMutation(API._auth(Method.POST, `auth/signup`));

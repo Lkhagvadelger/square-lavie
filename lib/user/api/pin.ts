@@ -89,7 +89,25 @@ export const verifyPIN = async (
     data: { pin, pinVerifiedAt: new Date() },
   });
 };
+export const verifyPINlocal = async (
+  method: string,
+  username: string,
+  pin: string
+) => {
+  const user = await findUserByUsername(method, username);
 
+  if (!user) throw AppError.BadRequest("validation.pin.check.invalid");
+  if (user.pinType !== method || isExpired(user.pinCreatedAt))
+    throw AppError.BadRequest("validation.pin.check.invalid");
+
+  if (pin !== user.pin)
+    throw AppError.BadRequest("validation.pin.check.invalid");
+
+  await prisma.user.update({
+    where: { id: user.id },
+    data: { pin, pinVerifiedAt: new Date() },
+  });
+};
 export const consumePIN = async (
   method: string,
   username: string,

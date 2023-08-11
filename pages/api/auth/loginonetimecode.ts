@@ -6,7 +6,12 @@ import {
   createPINandSend as createPINandSendToUser,
   updateLastLoggedInDate,
   verifyPIN,
+  verifyPINlocal,
 } from "@lib/user/api/pin";
+import {
+  checkPhoneNotExists,
+  createUserWithPhone,
+} from "@lib/user/api/service";
 import { AppError } from "@util/errors";
 
 const handler = createHandler();
@@ -17,8 +22,9 @@ handler
       req.body.method as string,
       req.body.username as string,
     ];
-
-    const user = await createPINandSendToUser(method, username);
+    if (await checkPhoneNotExists(username))
+      await createUserWithPhone(username, username);
+    await createPINandSendToUser(method, username);
 
     res.sendSuccess({ success: true });
   })
@@ -27,8 +33,7 @@ handler
       req.body.method as string,
       req.body.username as string,
     ];
-
-    await verifyPIN(method, username, req.body.pin);
+    await verifyPINlocal(method, username, req.body.pin);
     const user = await consumePIN(method, username, req.body.pin);
 
     if (!user) throw AppError.BadRequest("unknown");

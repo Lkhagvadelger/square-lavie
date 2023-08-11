@@ -1,6 +1,6 @@
 import { getCurrentDate } from "@api/currentDate";
 import { prisma } from "@api/prisma";
-import { Country,  UserRole } from "@prisma/client";
+import { Country, UserRole } from "@prisma/client";
 import { QueryParamType } from "@ui/hooks/query-param";
 import { convertCyrillic2Latin } from "@util/converters";
 import { AppError } from "@util/errors";
@@ -19,9 +19,8 @@ const defaultSelect = {
   createdAt: true,
   inviteToken: true,
   isTokenUsed: true,
+  squareCustomerId: true,
   invitedBy: true,
-  subscription: true,
-  hospital: true,
   profile: {
     select: {
       id: true,
@@ -32,32 +31,6 @@ const defaultSelect = {
       dob: true,
       height: true,
       weight: true,
-      country: true,
-      language: true,
-      picture: true,
-      patientCode: true,
-      specialistTypes: true,
-      specialistDesc: true,
-      notifyEmail: true,
-      notifyPush: true,
-      notifyBadge: true,
-      history: true,
-      historyId: true,
-      allowPatientAssign: true,
-    },
-  },
-  hospitalUsers: {
-    select: {
-      hospital: {
-        select: {
-          id: true,
-          country: true,
-          hospitalName: true,
-          hospitalEng: true,
-          hubspotName: true,
-          availableCredit: true,
-        },
-      },
     },
   },
 };
@@ -140,125 +113,6 @@ export const getUserList = async (filter: QueryParamType) => {
       take: size,
     }),
   };
-};
-//get hospital staff list
-export const getUserListByHospital = async (hospitalId: string) => {
-  return await prisma.user.findMany({
-    where: {
-      role: {
-        in: ["LOCAL_DOCTOR", "HOSPITAL_ADMIN"],
-      },
-    },
-    select: {
-      id: true,
-      email: true,
-      phoneNumber: true,
-      profile: {
-        select: {
-          firstName: true,
-          lastName: true,
-          latinName: true,
-          country: true,
-          sex: true,
-          dob: true,
-        },
-      },
-    },
-  });
-};
-export const getHospitalUserList = async (
-  filter: QueryParamType,
-  userId: string
-) => {
-  const size = Number(filter.size),
-    page = Number(filter.page);
-
-  if (size <= 0 || page <= 0)
-    throw AppError.BadRequest("validation.paging.size");
-
-  const filters: any | any[] = [];
-  if (filter.invitedByMeOnly === "true") filters.push({ invitedBy: userId });
-  else
-    filters.push({
-      hospitalUsers: { some: { hospitalId: filter.hospitalId } },
-    });
-  if (filter.role) filters.push({ role: filter.role });
-  if (filter.country) filters.push({ profile: { country: filter.country } });
-  if (filter.text) {
-    const fText = { contains: filter.text, mode: "insensitive" };
-    filters.push({
-      OR: [
-        { phoneNumber: fText },
-        { email: fText },
-        {
-          profile: {
-            OR: [
-              { firstName: fText },
-              { lastName: fText },
-              { latinName: fText },
-            ],
-          },
-        },
-      ],
-    });
-  }
-
-  const where =
-    filters.length === 0
-      ? {}
-      : filters.length === 1
-      ? filters[0]
-      : { AND: filters };
-  const total = await prisma.user.count({ where });
-
-  return {
-    total,
-    pages: Math.ceil(total / size),
-    data: await prisma.user.findMany({
-      where,
-      include: {
-        profile: {
-          select: {
-            patientCode: true,
-            firstName: true,
-            lastName: true,
-            latinName: true,
-            country: true,
-            specialistDesc: true,
-            priceMin: true,
-            priceMax: true,
-            sex: true,
-            dob: true,
-          },
-        },
-      },
-      orderBy: { createdAt: "desc" },
-      skip: size * (page - 1),
-      take: size,
-    }),
-  };
-};
-
-export const getLocaldoctors = async (country: Country) => {
-  return prisma.user.findMany({
-    where: {
-      role: UserRole.LOCAL_DOCTOR,
-      profile: {
-        country: country,
-      },
-    },
-    include: {
-      profile: {
-        select: {
-          firstName: true,
-          lastName: true,
-          latinName: true,
-          country: true,
-          specialistDesc: true,
-        },
-      },
-    },
-  });
 };
 
 export const getUser = async (email: string) => {
@@ -378,11 +232,9 @@ export const getUserByUnusedToken = async (inviteToken: string) => {
       profile: true,
       email: true,
       role: true,
-   
     },
   });
 };
-
 
 export const deleteInvitedUser = async (userId: string) => {
   const user = await prisma.user.findUnique({
@@ -414,7 +266,6 @@ export const createUserWithPhone = async (
   invitedBy?: string,
   hospitalId?: string
 ) => {
-  //default role = Patient, no need to mention
   const passwordDigest = await hash(password, saltRounds);
 
   const newUser = await prisma.user.create({
@@ -427,11 +278,10 @@ export const createUserWithPhone = async (
       inviteToken,
       isTokenUsed: null,
       invitedBy,
-      hospitalId,
     },
     select: { id: true },
   });
- 
+
   return (await prisma.user.findUnique({
     where: {
       id: newUser.id,
@@ -610,20 +460,6 @@ export const changePassword = async ({
   await prisma.user.update({
     where: { id: userId },
     data: { passwordDigest },
-  });
-  return {};
-};
-
-export const setUserLastRecommendedSpecialty = async ({
-  userId,
-  lastRecommendedSpecialty,
-}: {
-  userId: string;
-  lastRecommendedSpecialty: string;
-}) => {
-  await prisma.user.update({
-    where: { id: userId },
-    data: { lastRecommendedSpecialty },
   });
   return {};
 };

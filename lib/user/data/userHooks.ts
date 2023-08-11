@@ -1,38 +1,7 @@
 import { useQuery, useMutation } from "react-query";
 import { API, Method } from "@util/query";
-import { Country,  UserRole } from "@prisma/client";
+import { Country, UserRole } from "@prisma/client";
 import { QueryParamType } from "@ui/hooks/query-param";
- 
-export const useHospitalUserList = (filter: QueryParamType) =>
-  useQuery(
-    [
-      "userList",
-      filter.size,
-      filter.page,
-      filter.role,
-      filter.country,
-      filter.text,
-      filter.hospitalId,
-      filter.invitedByMeOnly,
-      filter.withAssessmentCount,
-    ],
-    API._query(Method.POST, `users/hospitalusers`, {}, filter),
-    { enabled: !!filter }
-  );
-
-export const useHospitalAdminUserList = (filter: QueryParamType) =>
-  useQuery(
-    [
-      "hospitalAdminUserList",
-      filter.size,
-      filter.page,
-      filter.role,
-      filter.country,
-      filter.text,
-    ],
-    API._query(Method.POST, `users/hospitaladminusers`, {}, filter),
-    { enabled: !!filter }
-  );
 
 export const useUserList = (filter: QueryParamType) =>
   useQuery(

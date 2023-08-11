@@ -141,16 +141,10 @@ const MenuPopup = ({
 export const ProfileMenu = () => {
   const { lang } = useTranslation();
   const { user } = useAuth();
-  const name = user?.profile.firstName;
 
   return (
     <Menu placement="bottom-end">
-      {({ isOpen }) => (
-        <>
-          <MenuButton name={name} isOpen={isOpen} />
-          <MenuPopup name={name} role={user?.role} />
-        </>
-      )}
+      {({ isOpen }) => <>{user?.phoneNumber}</>}
     </Menu>
   );
 };

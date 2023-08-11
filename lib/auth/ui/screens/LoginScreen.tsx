@@ -85,7 +85,8 @@ export const LoginScreen = ({
     mutation.mutate(
       { ...body, pin: getValues("pin") },
       {
-        onError: (error: any) => setError("pin", { message: "Please " }),
+        onError: (error: any) =>
+          setError("pin", { message: "Please " + error.translationKey }),
         onSuccess: (data: any) => {
           goToAppHome();
         },

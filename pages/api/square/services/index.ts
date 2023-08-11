@@ -4,6 +4,7 @@ import { AppError } from "@util/errors";
 const handler = createHandler();
 
 import { catalogApi } from "@lib/square/api/squareClient";
+import { offileData } from "./offlineData";
 
 /**
  * GET /services
@@ -15,17 +16,17 @@ handler.get(async (req, res, next) => {
   const locationId = process.env["SQUARE_LOCATION_ID"];
 
   try {
-    let {
-      result: { items },
-    } = await catalogApi.searchCatalogItems({
-      enabledLocationIds: [locationId!],
-      productTypes: ["APPOINTMENTS_SERVICE"],
-    });
+    // let {
+    //   result: { items },
+    // } = await catalogApi.searchCatalogItems({
+    //   enabledLocationIds: [locationId!],
+    //   productTypes: ["APPOINTMENTS_SERVICE"],
+    // });
 
-    if (!items) {
-      items = [];
-    }
-    res.sendSuccess(items);
+    // if (!items) {
+    //   items = [];
+    // }
+    res.sendSuccess(offileData());
   } catch (error) {
     res.sendError(error);
   }

@@ -37,22 +37,22 @@ const config = {
 
 console.log(config);
 const client = new Client(config);
-const { customersApi, bookingsApi, catalogApi, locationsApi, teamApi } = client;
+// const { customersApi, bookingsApi, catalogApi, locationsApi, teamApi } = client;
 
 // // Extract instances of Api that are used
 // // You can add additional APIs here if you so choose
-// const {
-//   customersApi,
-//   bookingsApi,
-//   catalogApi,
-//   locationsApi,
-//   teamApi,
-// }: {
-//   customersApi: CustomersApi;
-//   bookingsApi: BookingsApi;
-//   catalogApi: CatalogApi;
-//   locationsApi: LocationsApi;
-//   teamApi: TeamApi;
-// } = client;
+const {
+  customersApi,
+  bookingsApi,
+  catalogApi,
+  locationsApi,
+  teamApi,
+}: {
+  customersApi: CustomersApi;
+  bookingsApi: BookingsApi;
+  catalogApi: CatalogApi;
+  locationsApi: LocationsApi;
+  teamApi: TeamApi;
+} = client;
 
 export { bookingsApi, catalogApi, customersApi, locationsApi, teamApi };

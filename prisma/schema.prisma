@@ -8,27 +8,26 @@ datasource db {
 }
 
 model User {
-  id                       String    @id @default(cuid())
-  email                    String?   @unique
-  emailVerified            DateTime?
-  passwordDigest           String?
-  phoneNumber              String    @unique
-  phoneNumberVerified      DateTime?
-  role                     UserRole  @default(PATIENT)
-  inviteToken              String?   @unique
-  isTokenUsed              DateTime?
-  createdAt                DateTime  @default(now())
-  updatedAt                DateTime  @updatedAt
-  invitedBy                String?
-  lastRecommendedSpecialty String?
-  pin                      String?
-  pinCreatedAt             DateTime?
-  pinType                  String?
-  pinVerifiedAt            DateTime?
-  hospitalId               String?
-  accounts                 Account[]
-  profile                  Profile?
-  doctorProfileId          String?
+  id                  String    @id @default(cuid())
+  email               String?   @unique
+  emailVerified       DateTime?
+  passwordDigest      String?
+  phoneNumber         String    @unique
+  phoneNumberVerified DateTime?
+  role                UserRole  @default(USER)
+  inviteToken         String?   @unique
+  lastLoggedInAt      DateTime?
+  isTokenUsed         DateTime?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  invitedBy           String?
+  pin                 String?
+  pinCreatedAt        DateTime?
+  pinType             String?
+  pinVerifiedAt       DateTime?
+  accounts            Account[]
+  profile             Profile?
+  squareCustomerId    String?
 }
 
 model Account {
@@ -110,21 +109,13 @@ model FileUpload {
 }
 
 enum UserRole {
-  PATIENT
-  LOCAL_DOCTOR
-  PATIENT_EXPERIENCE_MANAGER
-  SPECIALIST
+  USER
   ADMIN
-  HOSPITAL_ADMIN
-  NURSE
 }
+
 enum Country {
   us
   mn
-  es
-  hn
-  gt
-  sv
 }
 
 model IP2Location {

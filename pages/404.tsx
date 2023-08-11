@@ -1,5 +1,12 @@
-import { AppLayout } from "@ui/components/App1Layout";
-import { Box, Img, SEO, Stack, Text, useColorModeValue } from "@ui/index";
+import {
+  AppLayout,
+  Box,
+  Img,
+  SEO,
+  Stack,
+  Text,
+  useColorModeValue,
+} from "@ui/index";
 import NextLink from "next/link";
 
 const NotFoundPage = () => {

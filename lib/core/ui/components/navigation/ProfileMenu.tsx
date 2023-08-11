@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { useLogout } from "@lib/auth/data/authHooks";
 import { getRootUrl } from "@lib/auth/data/types";
-import { useAuth } from "@lib/auth/ui"; 
+import { useAuth } from "@lib/auth/ui";
 import useTranslation from "next-translate/useTranslation";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
@@ -141,7 +141,7 @@ const MenuPopup = ({
 export const ProfileMenu = () => {
   const { lang } = useTranslation();
   const { user } = useAuth();
-  const name =  user?.profile.firstName
+  const name = user?.profile.firstName;
 
   return (
     <Menu placement="bottom-end">

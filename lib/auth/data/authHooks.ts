@@ -15,7 +15,8 @@ export const useCurrentUser = () => {
     ...query,
   };
 };
-
+export const useRequestOneTimeCode = () =>
+  useMutation(API._auth(Method.PATCH, `auth/loginonetimecode`, true));
 export const useRefresh = () =>
   useQuery([`refresh`], API._query(Method.GET, `auth/refresh`));
 

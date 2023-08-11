@@ -1,12 +1,12 @@
 version: "3.8"
 services:
   postgres:
-    container_name: boilerplate_dev_postgres_container
+    container_name: square_lavie_dev_postgres_container
     image: postgres:latest
     ports:
-      - 5666:5432
+      - 5667:5432
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: boilerplate_dev
+      POSTGRES_DB: square_lavie_dev
       POSTGRES_HOST_AUTH_METHOD: trust

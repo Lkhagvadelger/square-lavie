@@ -20,7 +20,6 @@ export const AppLayout = ({
       <Box mx={"auto"} maxW={"800px"} p="2">
         {children}
       </Box>
-      <AppFooter />
       <LoginModal />
     </Box>
   );

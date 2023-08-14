@@ -95,6 +95,7 @@ export const LoginScreen = ({
   };
   const goToAppHome = () => {
     //after login send to app home
+    onClose();
   };
 
   const onPinChange = (value: string) => {

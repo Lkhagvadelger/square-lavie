@@ -60,7 +60,7 @@ export const LoginModal = () => {
       <ModalContent>
         <ModalCloseButton />
         <ModalBody>
-          <LoginScreen redirectTo={redirectTo} onClose={onClose} />
+          <LoginScreen redirectTo={redirectTo} onClose={onCloseLogin} />
         </ModalBody>
       </ModalContent>
     </Modal>

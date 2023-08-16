@@ -2,6 +2,7 @@ import { AppLayout, Box } from "@ui/index";
 import { useEffect, useState } from "react";
 import { useLocalStorage } from "../data/hooks";
 import { SingleDatepicker } from "chakra-dayzed-datepicker";
+import { Calendar } from "@ui/components/calendar/calendar";
 
 export const DatePage = ({ locationId }: { locationId: string }) => {
   const [cart, setCart] = useLocalStorage("cart", []);
@@ -36,16 +37,15 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
 
   //if selected time is free with second staff than create new order to second staff
   const onDateChange = (pickedDate: Date) => {};
+  const getYesterday = () => {
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    return yesterday;
+  };
   return (
     <AppLayout>
-      <Box color="red">
-        <SingleDatepicker
-          usePortal={true}
-          propsConfigs={{ inputProps: { size: "md" } }}
-          date={new Date()}
-          onDateChange={(endDate: Date) => onDateChange(endDate)}
-        />
-      </Box>
+      <Calendar month="2023-08" onDatePicked={() => {}} />
     </AppLayout>
   );
 };

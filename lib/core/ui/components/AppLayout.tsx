@@ -16,7 +16,7 @@ export const AppLayout = ({
 
   return (
     <Box as="main" bg={"white"} w={"full"} h="100vh" overflowY={"hidden"}>
-      <AppHeader titleText={"TheLavie"} />
+      <AppHeader />
       <Box mx={"auto"}>{children}</Box>
       <LoginModal />
     </Box>

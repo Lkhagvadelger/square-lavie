@@ -1,7 +1,7 @@
 import { createStandaloneToast, ToastPosition } from "@chakra-ui/react";
 import { theme } from "../theme";
 const position = "top";
-const duration = 9000;
+const duration = 1000;
 const isClosable = true;
 
 const { toast } = createStandaloneToast({ theme });

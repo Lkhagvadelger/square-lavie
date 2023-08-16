@@ -1,6 +1,5 @@
 import { TeamApi, TeamMember } from "square";
 
-const dateHelpers = require("../util/date-helpers");
 const { v4: uuidv4 } = require("uuid");
 const locationId = process.env.SQUARE_LOCATION_ID || "locationId";
 

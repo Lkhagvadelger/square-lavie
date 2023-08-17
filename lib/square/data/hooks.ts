@@ -1,12 +1,16 @@
 import { API, Method } from "@util/query";
 import { useState, useEffect } from "react";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { ServiceItem } from "./types";
 
 // return ItemsResponse type
 
 export const useGetServices = () =>
   useQuery<ServiceItem[]>([], API._query(Method.GET, `square/services`));
+
+export const useAvailability = (locationId: string) =>
+  useMutation(API._auth(Method.POST, `square/services`));
+
 export const useLocalStorage = (key: string, initialValue: any) => {
   const [value, setValue] = useState(initialValue);
 

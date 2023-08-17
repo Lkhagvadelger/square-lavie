@@ -45,7 +45,12 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
   };
   return (
     <AppLayout>
-      <Calendar startMonth={{ year: 2023, month: 7 }} onDatePicked={() => {}} />
+      <Calendar
+        startMonth={{ year: 2023, month: 7, day: 1 }}
+        onDatePicked={(data) => {
+          console.log(data);
+        }}
+      />
     </AppLayout>
   );
 };

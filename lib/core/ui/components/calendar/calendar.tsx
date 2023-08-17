@@ -39,8 +39,16 @@ export const Calendar = ({
   onDatePicked,
   hidePastDays = true,
 }: {
-  startMonth: { year: number; month: number };
-  onDatePicked: () => void;
+  startMonth: { year: number; month: number; day: number };
+  onDatePicked: ({
+    year,
+    month,
+    day,
+  }: {
+    year: number;
+    month: number;
+    day: number;
+  }) => void;
   hidePastDays?: boolean;
 }) => {
   let day = 0;
@@ -54,6 +62,7 @@ export const Calendar = ({
     setSelectedMonth({
       year: newDate.getFullYear(),
       month: newDate.getMonth(),
+      day: newDate.getDate(),
     });
   };
 
@@ -65,6 +74,7 @@ export const Calendar = ({
     setSelectedMonth({
       year: newDate.getFullYear(),
       month: newDate.getMonth(),
+      day: newDate.getDate(),
     });
   };
 
@@ -99,11 +109,36 @@ export const Calendar = ({
     if (day <= lastDayOfMonth) return day;
     return -1;
   };
-  const btnPicker = (day: number) => {
+  const btnPicker = (day: number, weekDay: number, week: number) => {
     return day == 0 ? (
-      <Box borderRadius={"50%"} bg="green.50" w={"10"} h={"10"}></Box>
+      <Box
+        borderRadius={"50%"}
+        border="1px"
+        borderColor={"green.50"}
+        w={"10"}
+        h={"10"}
+      ></Box>
     ) : (
-      <Button p={0} borderRadius={"50%"}>
+      <Button
+        p={0}
+        color={day == selectedMonth.day ? "white" : "green.500"}
+        bg={day == selectedMonth.day ? "green.500" : "white"}
+        borderRadius={"50%"}
+        border="1px"
+        borderColor={"green.500"}
+        onClick={() => {
+          setSelectedMonth({
+            year: selectedMonth.year,
+            month: selectedMonth.month,
+            day: day,
+          });
+          onDatePicked({
+            year: selectedMonth.year,
+            month: selectedMonth.month,
+            day: day,
+          });
+        }}
+      >
         {day}
       </Button>
     );
@@ -140,13 +175,13 @@ export const Calendar = ({
             {[1, 2, 3, 4, 5].map((week: number, key) => {
               return (
                 <Tr key={key}>
-                  <Td>{btnPicker(getDayOfMonth(0, week))}</Td>
-                  <Td>{btnPicker(getDayOfMonth(1, week))}</Td>
-                  <Td>{btnPicker(getDayOfMonth(2, week))}</Td>
-                  <Td>{btnPicker(getDayOfMonth(3, week))}</Td>
-                  <Td>{btnPicker(getDayOfMonth(4, week))}</Td>
-                  <Td>{btnPicker(getDayOfMonth(5, week))}</Td>
-                  <Td>{btnPicker(getDayOfMonth(6, week))}</Td>
+                  <Td>{btnPicker(getDayOfMonth(0, week), 0, week)}</Td>
+                  <Td>{btnPicker(getDayOfMonth(1, week), 1, week)}</Td>
+                  <Td>{btnPicker(getDayOfMonth(2, week), 2, week)}</Td>
+                  <Td>{btnPicker(getDayOfMonth(3, week), 3, week)}</Td>
+                  <Td>{btnPicker(getDayOfMonth(4, week), 4, week)}</Td>
+                  <Td>{btnPicker(getDayOfMonth(5, week), 5, week)}</Td>
+                  <Td>{btnPicker(getDayOfMonth(6, week), 6, week)}</Td>
                 </Tr>
               );
             })}

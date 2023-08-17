@@ -17,7 +17,7 @@ import {
 import { last } from "lodash";
 import { useState } from "react";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
-const getMonthName = (date: string) => {
+const getMonthName = (month: number) => {
   const months = [
     "January",
     "February",
@@ -32,47 +32,64 @@ const getMonthName = (date: string) => {
     "November",
     "December",
   ];
-  return months[date.split("-").map(Number)[1] - 1];
+  return months[month];
 };
 export const Calendar = ({
-  month,
+  startMonth,
   onDatePicked,
+  hidePastDays = true,
 }: {
-  month: string;
+  startMonth: { year: number; month: number };
   onDatePicked: () => void;
+  hidePastDays?: boolean;
 }) => {
   let day = 0;
   let canIncrease = false;
-  const [selectedMonth, setSelectedMonth] = useState(month);
-  const getYear = () => {
-    return selectedMonth.split("-").map(Number)[0];
-  };
-  const getMonth = () => {
-    return selectedMonth.split("-").map(Number)[1];
-  };
+  const [selectedMonth, setSelectedMonth] = useState(startMonth);
   const nextMonth = () => {
-    const [year, month] = selectedMonth.split("-").map(Number);
-    const newMonth = (month % 12) + 1;
-    const newYear = year + Math.floor((month + 1) / 12);
-    setSelectedMonth(`${newYear}-${String(newMonth).padStart(2, "0")}`);
+    const newDate = new Date(selectedMonth.year, selectedMonth.month, 1);
+    // Decrease the month by one
+    newDate.setMonth(newDate.getMonth() + 1);
+
+    setSelectedMonth({
+      year: newDate.getFullYear(),
+      month: newDate.getMonth(),
+    });
   };
 
   const prevMonth = () => {
-    const [year, month] = selectedMonth.split("-").map(Number);
-    const newMonth = ((month - 2 + 12) % 12) + 1;
-    const newYear = year + Math.floor((month - 1) / 12);
-    setSelectedMonth(`${newYear}-${String(newMonth).padStart(2, "0")}`);
+    const newDate = new Date(selectedMonth.year, selectedMonth.month, 1);
+    // Decrease the month by one
+    newDate.setMonth(newDate.getMonth() - 1);
+
+    setSelectedMonth({
+      year: newDate.getFullYear(),
+      month: newDate.getMonth(),
+    });
   };
 
   const getDayOfMonth = (weekDay: number, weekNumber: number) => {
-    const firstDay = new Date(getYear(), getMonth() - 1, 1);
+    const firstDay = new Date(selectedMonth.year, selectedMonth.month, 1);
     const firstDayWeekDay = firstDay.getDay(); // 0 (Sunday) to 6 (Saturday)
 
     if (weekDay === firstDayWeekDay && weekNumber === 1) {
       canIncrease = true;
     }
     if (canIncrease) day++;
-    const lastDayOfMonth = new Date(getYear(), getMonth(), 0).getDate();
+    const lastDayOfMonth = new Date(
+      selectedMonth.year,
+      selectedMonth.month,
+      0
+    ).getDate();
+
+    if (hidePastDays) {
+      const calculatedDay = new Date(
+        selectedMonth.year,
+        selectedMonth.month,
+        day + 1
+      );
+      if (calculatedDay < new Date()) return 0;
+    }
 
     if (day == lastDayOfMonth) {
       canIncrease = false;
@@ -80,8 +97,16 @@ export const Calendar = ({
       return lastDayOfMonth;
     }
     if (day <= lastDayOfMonth) return day;
-    console.log(lastDayOfMonth);
-    return "";
+    return -1;
+  };
+  const btnPicker = (day: number) => {
+    return day == 0 ? (
+      <Box borderRadius={"50%"} bg="green.50" w={"10"} h={"10"}></Box>
+    ) : (
+      <Button p={0} borderRadius={"50%"}>
+        {day}
+      </Button>
+    );
   };
   return (
     <Box w="full">
@@ -91,15 +116,17 @@ export const Calendar = ({
             <Icon as={BsChevronLeft} />
           </Button>
         </Box>
-        <Box>{getMonthName(selectedMonth)}</Box>
+        <Box>
+          {getMonthName(selectedMonth.month) + " " + selectedMonth.year}
+        </Box>
         <Box>
           <Button onClick={nextMonth} fontSize="24px" textAlign={"right"}>
             <Icon as={BsChevronRight} />
           </Button>
         </Box>
       </Flex>
-      <Box>
-        <Table variant="simple">
+      <Box w="full">
+        <Table w="full" variant="calendar">
           <Tbody>
             <Tr>
               <Td>Sun</Td>
@@ -113,13 +140,13 @@ export const Calendar = ({
             {[1, 2, 3, 4, 5].map((week: number, key) => {
               return (
                 <Tr key={key}>
-                  <Td>{getDayOfMonth(0, week)}</Td>
-                  <Td>{getDayOfMonth(1, week)}</Td>
-                  <Td>{getDayOfMonth(2, week)}</Td>
-                  <Td>{getDayOfMonth(3, week)}</Td>
-                  <Td>{getDayOfMonth(4, week)}</Td>
-                  <Td>{getDayOfMonth(5, week)}</Td>
-                  <Td>{getDayOfMonth(6, week)}</Td>
+                  <Td>{btnPicker(getDayOfMonth(0, week))}</Td>
+                  <Td>{btnPicker(getDayOfMonth(1, week))}</Td>
+                  <Td>{btnPicker(getDayOfMonth(2, week))}</Td>
+                  <Td>{btnPicker(getDayOfMonth(3, week))}</Td>
+                  <Td>{btnPicker(getDayOfMonth(4, week))}</Td>
+                  <Td>{btnPicker(getDayOfMonth(5, week))}</Td>
+                  <Td>{btnPicker(getDayOfMonth(6, week))}</Td>
                 </Tr>
               );
             })}

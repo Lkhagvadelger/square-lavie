@@ -24,18 +24,17 @@ const variants = {
       },
     },
   },
-  noBottom: {
+  calendar: {
     tr: {
-      px: 0,
+      p: 0,
       borderBottom: "0px",
       borderColor: "gray.100",
       td: {
         py: "8px",
-        pl: 0,
+        px: "2px",
       },
       th: {
         py: 2,
-
         pl: 0,
         color: "gray.500",
         fontWeight: "500",

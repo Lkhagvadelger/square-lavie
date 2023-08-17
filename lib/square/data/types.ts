@@ -40,3 +40,10 @@ export type ServiceItem = {
     skipModifierScreen: boolean;
   };
 };
+export type CartModel = {
+  serviceId: string;
+  variantId: string;
+  name: string;
+  price: number;
+  quantity: number;
+};

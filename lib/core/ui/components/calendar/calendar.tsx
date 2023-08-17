@@ -109,7 +109,7 @@ export const Calendar = ({
     if (day <= lastDayOfMonth) return day;
     return -1;
   };
-  const btnPicker = (day: number, weekDay: number, week: number) => {
+  const btnPicker = (day: number) => {
     return day == 0 ? (
       <Box
         borderRadius={"50%"}
@@ -175,13 +175,13 @@ export const Calendar = ({
             {[1, 2, 3, 4, 5].map((week: number, key) => {
               return (
                 <Tr key={key}>
-                  <Td>{btnPicker(getDayOfMonth(0, week), 0, week)}</Td>
-                  <Td>{btnPicker(getDayOfMonth(1, week), 1, week)}</Td>
-                  <Td>{btnPicker(getDayOfMonth(2, week), 2, week)}</Td>
-                  <Td>{btnPicker(getDayOfMonth(3, week), 3, week)}</Td>
-                  <Td>{btnPicker(getDayOfMonth(4, week), 4, week)}</Td>
-                  <Td>{btnPicker(getDayOfMonth(5, week), 5, week)}</Td>
-                  <Td>{btnPicker(getDayOfMonth(6, week), 6, week)}</Td>
+                  <Td>{btnPicker(getDayOfMonth(0, week))}</Td>
+                  <Td>{btnPicker(getDayOfMonth(1, week))}</Td>
+                  <Td>{btnPicker(getDayOfMonth(2, week))}</Td>
+                  <Td>{btnPicker(getDayOfMonth(3, week))}</Td>
+                  <Td>{btnPicker(getDayOfMonth(4, week))}</Td>
+                  <Td>{btnPicker(getDayOfMonth(5, week))}</Td>
+                  <Td>{btnPicker(getDayOfMonth(6, week))}</Td>
                 </Tr>
               );
             })}

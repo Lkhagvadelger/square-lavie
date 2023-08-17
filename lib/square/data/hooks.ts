@@ -5,8 +5,11 @@ import { ServiceItem } from "./types";
 
 // return ItemsResponse type
 
-export const useGetServices = () =>
-  useQuery<ServiceItem[]>([], API._query(Method.GET, `square/services`));
+export const useGetServices = (locationId: string) =>
+  useQuery<ServiceItem[]>(
+    [],
+    API._query(Method.GET, `square/${locationId}/services`)
+  );
 
 export const useAvailabilityAny = (locationId: string) =>
   useMutation(API._auth(Method.POST, `square/${locationId}/availability/any`));

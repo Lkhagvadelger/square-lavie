@@ -16,8 +16,9 @@ const ANY_STAFF_PARAMS = "anyStaffMember";
 handler.get(async (req, res) => {
   try {
     const serviceId = req.query.serviceId as string;
+    // only locationId comes from query
     const locationId = req.query.locationId as string;
-
+    // rest of the data should come from req.body
     if (
       locationId == "" ||
       locationId == undefined ||
@@ -63,12 +64,13 @@ handler.get(async (req, res) => {
       searchRequest.query.filter.segmentFilters[0].teamMemberIdFilter = {
         any: teamMembers,
       };
-      console.log(services, teamMembers);
+
       // get availability
       const { result } = await bookingsApi.searchAvailability(searchRequest);
       availabilities = result.availabilities;
       if (services == undefined)
         throw AppError.BadRequest("services is undefined");
+
       additionalInfo = {
         serviceItem: services.relatedObjects.filter(
           (relatedObject: any) => relatedObject.type === "ITEM"

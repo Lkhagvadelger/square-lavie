@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useGetServices, useLocalStorage } from "../data/hooks";
-import { ItemVariation } from "../data/types";
+import { CartModel, ItemVariation } from "../data/types";
 import { useRouter } from "next/router";
 import {
   AppLayout,
@@ -28,15 +28,9 @@ import {
 // name: serviceVariant.itemVariationData.name,
 // price: serviceVariant.itemVariationData.priceMoney.amount,
 // quantity: 1,
-type CartModel = {
-  serviceId: string;
-  variantId: string;
-  name: string;
-  price: number;
-  quantity: number;
-};
+
 export const Home = ({ locationId }: { locationId: string }) => {
-  const { data, isLoading } = useGetServices();
+  const { data, isLoading } = useGetServices(locationId);
   // removal gel polish, removal acrylic, dip
   const mustAskServiceIds = [
     "XPOMIFUBDR4XMOZWGV44ZJKE",
@@ -46,13 +40,7 @@ export const Home = ({ locationId }: { locationId: string }) => {
   const [mustAskServices, setMustAskServices] = useState<ServiceItem[]>([]);
   const [cart, setCart] = useLocalStorage("cart", []);
   const [total, setTotal] = useState({ totalPrice: 0, totalItems: 0 });
-  const isOneOfVariantSelected = (variantIds: string[]) => {
-    return variantIds.some((variantId) => {
-      return cart.some((item: any) => item.id === variantId)
-        ? variantId
-        : undefined;
-    });
-  };
+
   const addItemBySelectedVariantId = (
     serviceId: string,
     variantIdAsValue: {}
@@ -126,6 +114,7 @@ export const Home = ({ locationId }: { locationId: string }) => {
       ),
     });
   }, [cart]);
+
   useEffect(() => {
     if (data) {
       const mustAskServices = data.filter((service) =>
@@ -134,7 +123,7 @@ export const Home = ({ locationId }: { locationId: string }) => {
       setMustAskServices(mustAskServices);
     }
   }, [data]);
-  console.log(mustAskServices);
+
   return (
     <AppLayout>
       <>

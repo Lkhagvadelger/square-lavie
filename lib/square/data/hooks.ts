@@ -8,8 +8,8 @@ import { ServiceItem } from "./types";
 export const useGetServices = () =>
   useQuery<ServiceItem[]>([], API._query(Method.GET, `square/services`));
 
-export const useAvailability = (locationId: string) =>
-  useMutation(API._auth(Method.POST, `square/${locationId}/services`));
+export const useAvailabilityAny = (locationId: string) =>
+  useMutation(API._auth(Method.POST, `square/${locationId}/availability/any`));
 
 export const useLocalStorage = (key: string, initialValue: any) => {
   const [value, setValue] = useState(initialValue);

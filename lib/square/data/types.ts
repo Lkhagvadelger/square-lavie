@@ -43,7 +43,13 @@ export type ServiceItem = {
 export type CartModel = {
   serviceId: string;
   variantId: string;
+  teamMemberIds: string[];
   name: string;
   price: number;
   quantity: number;
+};
+export type RequiredServiceType = {
+  isServiceSelected: boolean;
+  isServiceAsked: boolean;
+  selectedServiceVariantIds: string[];
 };

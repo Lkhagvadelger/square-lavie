@@ -1,6 +1,5 @@
-import { Home } from "@lib/square/ui/home";
+import { Home } from "@lib/square/ui/Home1";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 
 export const SquareHomePage = () => {
   const router = useRouter();

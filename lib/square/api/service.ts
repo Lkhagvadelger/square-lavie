@@ -179,3 +179,16 @@ export const getStartAtDate = () => {
   date.setHours(date.getHours() + MIN_BOOKING_START_TIME_HOURS);
   return date;
 };
+export const displayServiceDuration = (serviceDuration: number) => {
+  const minutes = serviceDuration / 1000 / 60;
+  return `${minutes} minutes`;
+};
+export const displayServicePrice = (price: number) => {
+  return `$${price / 100}.00`;
+};
+export const setSelectedKey = (variantKey?: string) => {
+  if (!variantKey) return {};
+  var obj: any = {};
+  obj[variantKey] = variantKey;
+  return obj;
+};

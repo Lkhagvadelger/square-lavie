@@ -3,34 +3,43 @@ import { useEffect, useState } from "react";
 import { useAvailabilityAny, useLocalStorage } from "../data/hooks";
 import { SingleDatepicker } from "chakra-dayzed-datepicker";
 import { Calendar } from "@ui/components/calendar/calendar";
-import { CartModel } from "../data/types";
+import { CartModel, RequiredServiceType } from "../data/types";
 
 export const DatePage = ({ locationId }: { locationId: string }) => {
   const [cart, setCart] = useLocalStorage("cart", []);
   const [total, setTotal] = useState({ totalPrice: 0, totalItems: 0 });
   const availabitlyMutation = useAvailabilityAny(locationId);
-  // removal gel polish, removal acrylic, dip
-  const mustAskServiceIds = [
-    "XPOMIFUBDR4XMOZWGV44ZJKE",
-    "RL3GOHPQWBJHKWENFD3GHKDU",
-    "MF6RGWC2HAH6ZDH32BPUXTFZ",
-  ];
-  const [selectedVariantIds, setSelectedVariantIds] = useState<string[]>([]);
-  //manicure and manicure extras
-  const firstStaffService = [];
-  //pedicure and pedicure extras
-  const secondStaffSergivce = [];
 
+  const [selectedVariantIds, setSelectedVariantIds] = useState<any[]>([]);
+
+  // if user already selected muskAskServiceIds
+
+  // step: 1
   useEffect(() => {
     if (cart) {
       //Add variantId to selectedVariantIds array
-      setSelectedVariantIds(cart.map((item: CartModel) => item.variantId));
+      setSelectedVariantIds(
+        cart.map((item: CartModel) => ({
+          serviceVariationId: item.variantId,
+          teamMemberIdFilter: { any: item.teamMemberIds },
+        }))
+      );
     }
   }, [cart]);
+  //step: 2
   useEffect(() => {
     if (selectedVariantIds && selectedVariantIds.length > 0) {
       //call availability mutation
-      availabitlyMutation.mutate(selectedVariantIds);
+      console.log({ selectedVariantIds });
+      availabitlyMutation.mutate(
+        { selectedVariantIds },
+        {
+          onError: () => {},
+          onSuccess: (data) => {
+            console.log(data);
+          },
+        }
+      );
     }
   }, [selectedVariantIds]);
   //first must check first Staff calendar.

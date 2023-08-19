@@ -3,7 +3,7 @@ import useTranslation from "next-translate/useTranslation";
 import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { Md1KPlus, MdCheck, MdCheckCircle, MdPlusOne } from "react-icons/md";
-import { displayServicePrice, displayServiceDuration } from "./home";
+import { displayServicePrice, displayServiceDuration } from "../api/service";
 export type ChoicesType = {
   id: string;
   type: string;

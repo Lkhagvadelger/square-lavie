@@ -1,11 +1,6 @@
-import { useEffect, useState } from "react";
-import { useGetServices, useLocalStorage } from "../data/hooks";
-import { CartModel, ItemVariation } from "../data/types";
-import { useRouter } from "next/router";
 import {
   AppLayout,
   Box,
-  Button,
   Flex,
   HStack,
   Icon,
@@ -13,16 +8,13 @@ import {
   toaster,
   VStack,
 } from "@ui/index";
-import { groupBy } from "lodash";
-import { MdArrowRight, MdArrowRightAlt, MdInfoOutline } from "react-icons/md";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { BsChevronRight, BsReceiptCutoff } from "react-icons/bs";
+import { displayServicePrice, setSelectedKey } from "../api/service";
+import { useGetServices, useLocalStorage } from "../data/hooks";
+import { CartModel, ItemVariation, ServiceItem } from "../data/types";
 import { ChoiceList } from "./ChoiceList";
-import { FaArrowRight, FaReceipt } from "react-icons/fa";
-import {
-  BsArrowRight,
-  BsChevronRight,
-  BsReceipt,
-  BsReceiptCutoff,
-} from "react-icons/bs";
 // serviceId: serviceVariant.itemVariationData.itemId,
 // variantId: serviceVariant.id,
 // name: serviceVariant.itemVariationData.name,
@@ -31,6 +23,11 @@ import {
 
 export const Home = ({ locationId }: { locationId: string }) => {
   const { data, isLoading } = useGetServices(locationId);
+  const router = useRouter();
+  const goToCalendar = () => {
+    if (total.totalItems == 0) return;
+    router.push("/square/" + locationId + "/date");
+  };
   // removal gel polish, removal acrylic, dip
   const mustAskServiceIds = [
     "XPOMIFUBDR4XMOZWGV44ZJKE",
@@ -82,6 +79,7 @@ export const Home = ({ locationId }: { locationId: string }) => {
       name: serviceVariant.itemVariationData.name,
       price: serviceVariant.itemVariationData.priceMoney.amount as any,
       quantity: 1,
+      teamMemberIds: serviceVariant.itemVariationData.teamMemberIds,
     };
     const cartItemIndex = cart.findIndex(
       (item: { id: string }) => item.id === cartItem.variantId
@@ -169,6 +167,7 @@ export const Home = ({ locationId }: { locationId: string }) => {
           pos={"fixed"}
           w={"full"}
           zIndex="101"
+          onClick={goToCalendar}
         >
           <HStack
             border={"2px"}
@@ -214,44 +213,15 @@ export const Home = ({ locationId }: { locationId: string }) => {
                   </Box>
                 </HStack>
               </HStack>
-              <Text flexGrow={1} fontSize="32px" pt={2} textAlign={"right"}>
-                <Icon as={BsChevronRight} />
-              </Text>
+              {total.totalItems > 0 && (
+                <Text flexGrow={1} fontSize="32px" pt={2} textAlign={"right"}>
+                  <Icon as={BsChevronRight} />
+                </Text>
+              )}
             </Flex>
           </HStack>
         </Box>
       </>
     </AppLayout>
   );
-};
-type ServiceItem = {
-  type: string;
-  id: string;
-  updatedAt: string;
-  version: string;
-  isDeleted: boolean;
-  presentAtAllLocations: boolean;
-  itemData: {
-    name: string;
-    abbreviation: string;
-    labelColor: string;
-    categoryId: string;
-    taxIds: string[];
-    variations: ItemVariation[];
-    productType: string;
-    skipModifierScreen: boolean;
-  };
-};
-export const displayServiceDuration = (serviceDuration: number) => {
-  const minutes = serviceDuration / 1000 / 60;
-  return `${minutes} minutes`;
-};
-export const displayServicePrice = (price: number) => {
-  return `$${price / 100}.00`;
-};
-const setSelectedKey = (variantKey?: string) => {
-  if (!variantKey) return {};
-  var obj: any = {};
-  obj[variantKey] = variantKey;
-  return obj;
 };

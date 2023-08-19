@@ -1,10 +1,10 @@
-import { MobileAppLayout } from "@ui/components/MobileAppLayout";
+import { AppLayout } from "@ui/index";
 import { LoginScreen } from "../screens/LoginScreen";
 
 export const LoginPage = () => {
   return (
-    <MobileAppLayout>
+    <AppLayout>
       <LoginScreen onClose={() => {}} />
-    </MobileAppLayout>
+    </AppLayout>
   );
 };

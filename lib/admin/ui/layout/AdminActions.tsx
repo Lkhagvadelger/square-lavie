@@ -40,9 +40,7 @@ export const AdminActions = () => {
             <Text fontWeight={600}>
               This form will create new user with Selected role
             </Text>
-            <Box my={7}>
-            
-            </Box>
+            <Box my={7}></Box>
           </ModalBody>
         </ModalContent>
       </Modal>

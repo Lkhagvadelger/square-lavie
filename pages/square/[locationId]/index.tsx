@@ -1,4 +1,4 @@
-import { Home } from "@lib/square/ui/Home1";
+import { Home } from "@lib/square/ui/Home";
 import { useRouter } from "next/router";
 
 export const SquareHomePage = () => {

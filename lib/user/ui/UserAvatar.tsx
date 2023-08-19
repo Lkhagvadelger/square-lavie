@@ -29,18 +29,8 @@ export const UserAvatar = ({
       icon={
         role === UserRole.ADMIN ? (
           <FaCogs />
-        ) : role === UserRole.PATIENT_EXPERIENCE_MANAGER ? (
-          <FaShieldAlt />
-        ) : role === UserRole.SPECIALIST ? (
-          <FaGraduationCap />
-        ) : role === UserRole.HOSPITAL_ADMIN ? (
-          <FaHospital />
-        ) : role === UserRole.LOCAL_DOCTOR ? (
-          <FaStethoscope />
-        ) : role === UserRole.PATIENT ? (
+        ) : role === UserRole.USER ? (
           <FaUserInjured />
-        ) : role === "hospital" ? (
-          <FaHospitalAlt />
         ) : (
           <></>
         )

@@ -22,24 +22,12 @@ export const columns = [
     Header: "Specialty",
     Cell: (data: any) => (
       <>
-      
         <Text fontSize="xs" color="gray.800" mt="1">
           {data.profile?.specialistDesc}
         </Text>
       </>
     ),
   },
-  // {
-  //   Header: "Available visit",
-  //   Cell: (data: any) =>
-  //     data.role === UserRole.LOCAL_DOCTOR && (
-  //       <LocalDoctorVisitType
-  //         visitTypes={data.profile?.availableDaysTypes}
-  //         priceMin={data.profile?.priceMin}
-  //         priceMax={data.profile?.priceMax}
-  //       />
-  //     ),
-  // },
   {
     Header: "Hospital",
     Cell: (data: any) => <Text>{data.hospital?.hospitalName}</Text>,

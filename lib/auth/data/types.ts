@@ -1,14 +1,11 @@
 import { UserRole } from "@prisma/client";
 
 export const getRootUrl = (
-  user: { role: UserRole;  } | undefined | null
+  user: { role: UserRole } | undefined | null
 ): string => {
   if (!user || !user.role) return "";
-  if (user.role === UserRole.PATIENT) return "/patient";
-  if (user.role === UserRole.PATIENT_EXPERIENCE_MANAGER) return "/pxm";
-  if (user.role === UserRole.SPECIALIST) return "/specialist";
+  if (user.role === UserRole.USER) return "/";
   if (user.role === UserRole.ADMIN) return "/admin";
-  if (user.role === UserRole.HOSPITAL_ADMIN) return "/hospital";
   return "";
 };
 

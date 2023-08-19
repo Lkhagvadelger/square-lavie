@@ -1,7 +1,7 @@
 import { usePasswordCreate } from "@lib/auth/data/authHooks";
 import { validatePassword } from "@lib/user/data/validators";
-import { MobileAppLayout } from "@ui/components/MobileAppLayout";
 import {
+  AppLayout,
   Button,
   chakra,
   Flex,
@@ -74,7 +74,7 @@ export const CreatePasswordPage = () => {
   };
 
   return (
-    <MobileAppLayout>
+    <AppLayout>
       <chakra.form onSubmit={action}>
         <Flex flex="1" gap="3" flexDir="column">
           <FormControl isInvalid={!!error?.form}>
@@ -131,6 +131,6 @@ export const CreatePasswordPage = () => {
           </FormControl>
         </Flex>
       </chakra.form>
-    </MobileAppLayout>
+    </AppLayout>
   );
 };

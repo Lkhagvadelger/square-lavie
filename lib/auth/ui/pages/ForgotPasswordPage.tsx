@@ -1,6 +1,6 @@
 import { validateEmail, validatePassword } from "@lib/user/data/validators";
-import { MobileAppLayout } from "@ui/components/MobileAppLayout";
 import {
+  AppLayout,
   Button,
   chakra,
   Flex,
@@ -21,8 +21,7 @@ import {
 import useTranslation from "next-translate/useTranslation";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
-import { FiHash } from "react-icons/fi";
-import { IoAt, IoLockClosed, IoRefresh } from "react-icons/io5";
+import { IoLockClosed } from "react-icons/io5";
 import {
   usePasswordForgotCheck,
   usePasswordForgotRequest,
@@ -186,7 +185,7 @@ export const ForgotPasswordPage = () => {
   const loaderColor = useColorModeValue("gray.200", "gray.800");
 
   return (
-    <MobileAppLayout>
+    <AppLayout>
       <chakra.form onSubmit={action}>
         <Flex flex="1" gap="3" flexDir="column">
           <FormControl isInvalid={!!error?.form}>
@@ -327,6 +326,6 @@ export const ForgotPasswordPage = () => {
           </FormControl>
         </Flex>
       </chakra.form>
-    </MobileAppLayout>
+    </AppLayout>
   );
 };

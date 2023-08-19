@@ -58,15 +58,6 @@ export const RequireLogin = ({
     if (status === "error" && error?.statusCode === 401) {
       if (loggedIn) toaster.error(te("session-expired"));
       redirect("/auth/login");
-    } else if (
-      status === "success" &&
-      user &&
-      (!user.profile ||
-        (user.role === UserRole.LOCAL_DOCTOR &&
-          user.profile.specialistTypes &&
-          user.profile.specialistTypes.length === 0))
-    ) {
-      redirect("/account/personal-details");
     }
     if (isLoggedIn) setLoggedIn(isLoggedIn);
     // eslint-disable-next-line react-hooks/exhaustive-deps

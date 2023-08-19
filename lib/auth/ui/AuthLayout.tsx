@@ -26,7 +26,7 @@ export const AuthLayout = ({
   return (
     <>
       <SEO title={title} />
-      <AppHeader showProfileMenu={false} />
+      <AppHeader />
       <Box
         as="main"
         display="flex"

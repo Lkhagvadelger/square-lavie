@@ -1,9 +1,8 @@
-import { AppLayout, Box } from "@ui/index";
+import { Calendar } from "@ui/components/calendar/calendar";
+import { AppLayout } from "@ui/index";
 import { useEffect, useState } from "react";
 import { useAvailabilityAny, useLocalStorage } from "../data/hooks";
-import { SingleDatepicker } from "chakra-dayzed-datepicker";
-import { Calendar } from "@ui/components/calendar/calendar";
-import { CartModel, RequiredServiceType } from "../data/types";
+import { CartModel } from "../data/types";
 
 export const DatePage = ({ locationId }: { locationId: string }) => {
   const [cart, setCart] = useLocalStorage("cart", []);

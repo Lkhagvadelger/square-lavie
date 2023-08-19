@@ -42,15 +42,7 @@ export const UserListSelect = forwardRef(
 
     return (
       <>
-        <UsersTableActions
-          params={params}
-          setParam={setParam}
-          roles={[
-            UserRole.HOSPITAL_ADMIN,
-            UserRole.LOCAL_DOCTOR,
-            UserRole.PATIENT,
-          ]}
-        />
+        <UsersTableActions params={params} setParam={setParam} roles={[]} />
 
         <SelectionTable
           columns={[

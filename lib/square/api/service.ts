@@ -162,23 +162,95 @@ const MIN_BOOKING_START_TIME_HOURS = 4;
  * @returns date
  */
 
+
+// export const getEndAtDate = (startDate: any) => {
+//   let endDate = new Date(startDate);
+//   endDate.setMonth(endDate.getMonth() + 1);
+//   endDate.setDate(endDate.getDate()-1);
+
+//   // console.log(endDate,"endDatte");
+//   // only allow booking end time 30 days from start
+//   // endDate.setDate(endDate.getDate() + QUERY_RANGE_PERIOD_DAYS);
+//   return endDate;
+// };
+
+// /**
+//  * Generate start date for search
+//  * @returns date
+//  */
+// export const getStartAtDate = (startDate:any) => {
+//   let newDate = new Date(startDate.year,startDate.month-1,1);
+
+//   // console.log(newDate,'newDate');
+
+//   // only allow booking start time 4 hours from now
+//   newDate.setHours(newDate.getHours() + MIN_BOOKING_START_TIME_HOURS);
+//   return newDate;
+// };
+
+
+export const parseToTwoLength = (val:any)=>{
+
+  if(val){
+    if(val<10){
+      return "0"+val;
+    }
+    return val.toString();
+  }
+  return "00";
+}
+
+export const isThisMonth = (date:any)=>{
+  const nowDate = new Date();
+
+  if(date.month <=nowDate.getMonth()){
+    return true;
+  }
+  return false;
+}
+
 export const getEndAtDate = (startDate: any) => {
-  const endDate = new Date(startDate);
-  // only allow booking end time 30 days from start
-  endDate.setDate(endDate.getDate() + QUERY_RANGE_PERIOD_DAYS);
-  return endDate;
+
+  // if(isThisMonth(startDate)){
+  //   let theDate = new Date(`${startDate.year}-${parseToTwoLength(startDate.month+1)}-01T${parseToTwoLength(startDate.hours)}:${parseToTwoLength(startDate.minutes)}:01.000Z`);
+  //   theDate.setDate(theDate.getDate()-1);
+
+  //   return theDate
+  // }
+
+  console.log(startDate,'-endd start')
+
+  let theDate = new Date(`${startDate.year}-${parseToTwoLength(startDate.month)}-01T${parseToTwoLength(startDate.hours)}:${parseToTwoLength(startDate.minutes)}:01.000Z`);
+
+  theDate.setDate(theDate.getDate() -1);
+
+  console.log(theDate,'endd');
+  return theDate;
 };
 
 /**
  * Generate start date for search
  * @returns date
  */
-export const getStartAtDate = () => {
-  const date = new Date();
-  // only allow booking start time 4 hours from now
-  date.setHours(date.getHours() + MIN_BOOKING_START_TIME_HOURS);
-  return date;
+
+export const getStartAtDate = (startDate:any) => {
+  const nowDate = new Date();
+
+  if(isThisMonth(startDate)){
+    const rawDate = new Date(startDate.year, startDate.month,startDate.day);
+    console.log(rawDate,'raw');
+    
+    return nowDate;
+  }
+ 
+  
+  const theDate = new Date(`${startDate.year}-${parseToTwoLength(startDate.month)}-01T${parseToTwoLength(startDate.hours)}:${parseToTwoLength(startDate.minutes)}:01.000Z`);
+  
+  console.log(theDate,'start-date');
+
+  return theDate;
 };
+
 export const displayServiceDuration = (serviceDuration: number) => {
   const minutes = serviceDuration / 1000 / 60;
   return `${minutes} minutes`;

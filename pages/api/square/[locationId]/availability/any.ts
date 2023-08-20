@@ -126,6 +126,9 @@ handler
   .post(async (req, res) => {
     try {
       const serviceVariantIds = req.body.selectedVariantIds as any[];
+      const startDate = req.body.startDate as any;
+
+      console.log(startDate,'--start date');
 
       // only locationId comes from query
       const locationId = req.query.locationId as string;
@@ -141,11 +144,13 @@ handler
 
       // const serviceVersion = req.query.version;
       // const staffId = req.query.staffId as string;
-      const startAt = getStartAtDate();
+      const startAt = getStartAtDate(startDate);
+      const endAt = getEndAtDate(startDate);
+
       console.log(
         JSON.stringify(serviceVariantIds),
         startAt,
-        getEndAtDate(startAt).toISOString()
+        endAt
       );
 
       // segmentFilters: [
@@ -155,13 +160,14 @@ handler
       //   },
       // ],
 
+
       const searchRequest = {
         query: {
           filter: {
             locationId,
             segmentFilters: serviceVariantIds,
             startAtRange: {
-              endAt: getEndAtDate(startAt).toISOString(),
+              endAt: endAt.toISOString(),
               startAt: startAt.toISOString(),
             },
           },

@@ -64,6 +64,11 @@ export const Calendar = ({
       month: newDate.getMonth(),
       day: newDate.getDate(),
     });
+    onDatePicked({
+      year: newDate.getFullYear(),
+      month: newDate.getMonth(),
+      day: newDate.getDate()
+    });
   };
 
   const prevMonth = () => {
@@ -75,6 +80,12 @@ export const Calendar = ({
       year: newDate.getFullYear(),
       month: newDate.getMonth(),
       day: newDate.getDate(),
+    });
+
+    onDatePicked({
+      year: newDate.getFullYear(),
+      month: newDate.getMonth(),
+      day: newDate.getDate()
     });
   };
 

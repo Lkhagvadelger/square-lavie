@@ -209,7 +209,7 @@ export const isThisMonth = (date: any) => {
 export const getEndAtDate = (startDate: Date) => {
   const tempEndDate = new Date(
     startDate.getFullYear(),
-    startDate.getMonth(),
+    startDate.getMonth()+1,
     0,
     18,
     0,

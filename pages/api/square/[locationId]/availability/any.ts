@@ -127,9 +127,10 @@ handler
     try {
       const serviceVariantIds = req.body.selectedVariantIds as any[];
       const startDate = req.body.startDate as any;
-      const now = req.body.now as Date;
+      const now =new Date(req.body.now as any);
 
       console.log(startDate, "--start date");
+      console.log(now.getMonth(),'noww')
 
       // only locationId comes from query
       const locationId = req.query.locationId as string;
@@ -146,10 +147,13 @@ handler
       // const serviceVersion = req.query.version;
       // const staffId = req.query.staffId as string;
       const startAt =
-        now.getMonth() == startDate.month
+        now.getMonth() == startDate.month && now.getFullYear() == startDate.year
           ? now
           : new Date(startDate.year, startDate.month, 1);
-      const endAt = getEndAtDate(startDate);
+
+          console.log(startAt,'startAtt')
+
+      const endAt = getEndAtDate(startAt);
 
       console.log(JSON.stringify(serviceVariantIds), startAt, endAt);
 

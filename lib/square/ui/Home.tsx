@@ -112,15 +112,19 @@ export const Home = ({ locationId }: { locationId: string }) => {
     if (cart != null) {
       updateMustAskServices();
       return setTotal({
-        totalPrice: cart.reduce(
-          (acc: number, item: { price: number; quantity: number }) =>
-            acc + item.price * item.quantity,
-          0
-        ),
-        totalItems: cart.reduce(
-          (acc: number, item: { quantity: number }) => acc + item.quantity,
-          0
-        ),
+        totalPrice: !cart
+          ? 0
+          : cart.reduce(
+              (acc: number, item: { price: number; quantity: number }) =>
+                acc + item.price * item.quantity,
+              0
+            ),
+        totalItems: !cart
+          ? 0
+          : cart.reduce(
+              (acc: number, item: { quantity: number }) => acc + item.quantity,
+              0
+            ),
       });
     }
   }, [cart]);

@@ -2,8 +2,8 @@ export const offileData = () => [
   {
     type: "ITEM",
     id: "XDINYHJHK6MMXDR5ZKYPL4MY",
-    updatedAt: "2023-07-24T21:22:36.85Z",
-    version: "1690233756850",
+    updatedAt: "2023-08-18T03:34:30.852Z",
+    version: "1692329670852",
     isDeleted: false,
     presentAtAllLocations: true,
     itemData: {
@@ -16,8 +16,8 @@ export const offileData = () => [
         {
           type: "ITEM_VARIATION",
           id: "E5NYBHJ52LKM6AHRYMSV6LDN",
-          updatedAt: "2023-07-24T21:22:36.85Z",
-          version: "1690233756850",
+          updatedAt: "2023-08-18T03:34:30.852Z",
+          version: "1692329670852",
           isDeleted: false,
           presentAtAllLocations: true,
           itemVariationData: {
@@ -36,17 +36,17 @@ export const offileData = () => [
             teamMemberIds: [
               "TMSzK-FIQ2k6FSEU",
               "TMCwFyeMexqTdxw4",
-              "TMD0dhgfKdtWaico",
               "TMJjPtHVjfPG_dCo",
               "TMNWxmtV8EGB9S9F",
+              "TMZOXcfnaorAtnO-",
             ],
           },
         },
         {
           type: "ITEM_VARIATION",
           id: "JHUEK4SRHV3PXWZ7WAAL6NGX",
-          updatedAt: "2023-07-24T21:22:36.85Z",
-          version: "1690233756850",
+          updatedAt: "2023-08-18T03:34:30.852Z",
+          version: "1692329670852",
           isDeleted: false,
           presentAtAllLocations: true,
           itemVariationData: {
@@ -65,9 +65,9 @@ export const offileData = () => [
             teamMemberIds: [
               "TMSzK-FIQ2k6FSEU",
               "TMCwFyeMexqTdxw4",
-              "TMD0dhgfKdtWaico",
               "TMJjPtHVjfPG_dCo",
               "TMNWxmtV8EGB9S9F",
+              "TMZOXcfnaorAtnO-",
             ],
           },
         },
@@ -79,8 +79,8 @@ export const offileData = () => [
   {
     type: "ITEM",
     id: "46VW5CV5N7FEFETBWFRUWCMU",
-    updatedAt: "2023-07-24T21:22:36.85Z",
-    version: "1690233756850",
+    updatedAt: "2023-08-18T03:34:30.852Z",
+    version: "1692329670852",
     isDeleted: false,
     presentAtAllLocations: true,
     itemData: {
@@ -95,8 +95,8 @@ export const offileData = () => [
         {
           type: "ITEM_VARIATION",
           id: "QCYYVVONTEE6IERVEVD3NGLG",
-          updatedAt: "2023-07-24T21:22:36.85Z",
-          version: "1690233756850",
+          updatedAt: "2023-08-18T03:34:30.852Z",
+          version: "1692329670852",
           isDeleted: false,
           presentAtAllLocations: true,
           itemVariationData: {
@@ -115,16 +115,16 @@ export const offileData = () => [
             teamMemberIds: [
               "TMSzK-FIQ2k6FSEU",
               "TMCwFyeMexqTdxw4",
-              "TMD0dhgfKdtWaico",
               "TMNWxmtV8EGB9S9F",
+              "TMZOXcfnaorAtnO-",
             ],
           },
         },
         {
           type: "ITEM_VARIATION",
           id: "SQSZY2IK7ISZFILW5PSGXSAO",
-          updatedAt: "2023-07-24T21:22:36.85Z",
-          version: "1690233756850",
+          updatedAt: "2023-08-18T03:34:30.852Z",
+          version: "1692329670852",
           isDeleted: false,
           presentAtAllLocations: true,
           itemVariationData: {
@@ -143,8 +143,8 @@ export const offileData = () => [
             teamMemberIds: [
               "TMCwFyeMexqTdxw4",
               "TMSzK-FIQ2k6FSEU",
-              "TMD0dhgfKdtWaico",
               "TMNWxmtV8EGB9S9F",
+              "TMZOXcfnaorAtnO-",
             ],
           },
         },
@@ -160,8 +160,8 @@ export const offileData = () => [
   {
     type: "ITEM",
     id: "KB4EPIZOVAE77GWHQ2DIXHOA",
-    updatedAt: "2023-07-26T06:10:38.147Z",
-    version: "1690351838147",
+    updatedAt: "2023-08-18T03:34:30.852Z",
+    version: "1692329670852",
     isDeleted: false,
     presentAtAllLocations: true,
     itemData: {
@@ -179,8 +179,8 @@ export const offileData = () => [
         {
           type: "ITEM_VARIATION",
           id: "ULABSZTGZ3PCFGHLKQFXB2OY",
-          updatedAt: "2023-07-26T06:10:38.147Z",
-          version: "1690351838147",
+          updatedAt: "2023-08-18T03:34:30.852Z",
+          version: "1692329670852",
           isDeleted: false,
           presentAtAllLocations: true,
           itemVariationData: {
@@ -205,17 +205,17 @@ export const offileData = () => [
             teamMemberIds: [
               "TMCwFyeMexqTdxw4",
               "TMSzK-FIQ2k6FSEU",
-              "TMD0dhgfKdtWaico",
               "TMJjPtHVjfPG_dCo",
               "TMNWxmtV8EGB9S9F",
+              "TMZOXcfnaorAtnO-",
             ],
           },
         },
         {
           type: "ITEM_VARIATION",
           id: "7F6YCJSN23VBZHKB6ZHPVN4P",
-          updatedAt: "2023-07-26T06:10:38.147Z",
-          version: "1690351838147",
+          updatedAt: "2023-08-18T03:34:30.852Z",
+          version: "1692329670852",
           isDeleted: false,
           presentAtAllLocations: true,
           itemVariationData: {
@@ -240,9 +240,9 @@ export const offileData = () => [
             teamMemberIds: [
               "TMCwFyeMexqTdxw4",
               "TMSzK-FIQ2k6FSEU",
-              "TMD0dhgfKdtWaico",
               "TMJjPtHVjfPG_dCo",
               "TMNWxmtV8EGB9S9F",
+              "TMZOXcfnaorAtnO-",
             ],
           },
         },
@@ -258,8 +258,8 @@ export const offileData = () => [
   {
     type: "ITEM",
     id: "MF6RGWC2HAH6ZDH32BPUXTFZ",
-    updatedAt: "2023-07-24T21:22:36.85Z",
-    version: "1690233756850",
+    updatedAt: "2023-08-18T03:34:30.852Z",
+    version: "1692329670852",
     isDeleted: false,
     presentAtAllLocations: true,
     itemData: {
@@ -277,8 +277,8 @@ export const offileData = () => [
         {
           type: "ITEM_VARIATION",
           id: "QRU6WT52RAZA5OGZLM46OR3V",
-          updatedAt: "2023-07-24T21:22:36.85Z",
-          version: "1690233756850",
+          updatedAt: "2023-08-18T03:34:30.852Z",
+          version: "1692329670852",
           isDeleted: false,
           presentAtAllLocations: true,
           itemVariationData: {
@@ -303,9 +303,9 @@ export const offileData = () => [
             teamMemberIds: [
               "TMSzK-FIQ2k6FSEU",
               "TMCwFyeMexqTdxw4",
-              "TMD0dhgfKdtWaico",
               "TMJjPtHVjfPG_dCo",
               "TMNWxmtV8EGB9S9F",
+              "TMZOXcfnaorAtnO-",
             ],
           },
         },
@@ -321,8 +321,8 @@ export const offileData = () => [
   {
     type: "ITEM",
     id: "QHU3RHZTYBAE6HZDGTMVBT3A",
-    updatedAt: "2023-07-24T21:22:36.85Z",
-    version: "1690233756850",
+    updatedAt: "2023-08-18T03:34:30.852Z",
+    version: "1692329670852",
     isDeleted: false,
     presentAtAllLocations: true,
     itemData: {
@@ -337,8 +337,8 @@ export const offileData = () => [
         {
           type: "ITEM_VARIATION",
           id: "XV4THWU43IZB3FZKH6PJFJR2",
-          updatedAt: "2023-07-24T21:22:36.85Z",
-          version: "1690233756850",
+          updatedAt: "2023-08-18T03:34:30.852Z",
+          version: "1692329670852",
           isDeleted: false,
           presentAtAllLocations: true,
           itemVariationData: {
@@ -357,8 +357,8 @@ export const offileData = () => [
             teamMemberIds: [
               "TMSzK-FIQ2k6FSEU",
               "TMCwFyeMexqTdxw4",
-              "TMD0dhgfKdtWaico",
               "TMNWxmtV8EGB9S9F",
+              "TMZOXcfnaorAtnO-",
             ],
           },
         },
@@ -374,8 +374,8 @@ export const offileData = () => [
   {
     type: "ITEM",
     id: "SWITQPNXUX4YTF6MILBPSF23",
-    updatedAt: "2023-07-24T21:22:36.85Z",
-    version: "1690233756850",
+    updatedAt: "2023-08-18T03:34:30.852Z",
+    version: "1692329670852",
     isDeleted: false,
     presentAtAllLocations: true,
     itemData: {
@@ -389,8 +389,8 @@ export const offileData = () => [
         {
           type: "ITEM_VARIATION",
           id: "4TDOBB5Z54KAN4BLL2EC44BS",
-          updatedAt: "2023-07-24T21:22:36.85Z",
-          version: "1690233756850",
+          updatedAt: "2023-08-18T03:34:30.852Z",
+          version: "1692329670852",
           isDeleted: false,
           presentAtAllLocations: true,
           itemVariationData: {
@@ -409,9 +409,9 @@ export const offileData = () => [
             teamMemberIds: [
               "TMCwFyeMexqTdxw4",
               "TMSzK-FIQ2k6FSEU",
-              "TMD0dhgfKdtWaico",
               "TMJjPtHVjfPG_dCo",
               "TMNWxmtV8EGB9S9F",
+              "TMZOXcfnaorAtnO-",
             ],
           },
         },
@@ -425,8 +425,8 @@ export const offileData = () => [
   {
     type: "ITEM",
     id: "AVSWADHL5VNFQUBD3T7M2XO3",
-    updatedAt: "2023-07-24T21:22:36.85Z",
-    version: "1690233756850",
+    updatedAt: "2023-08-18T03:34:30.852Z",
+    version: "1692329670852",
     isDeleted: false,
     presentAtAllLocations: true,
     itemData: {
@@ -439,8 +439,8 @@ export const offileData = () => [
         {
           type: "ITEM_VARIATION",
           id: "HYI6DFLWDZDGI5NUPRA27IXJ",
-          updatedAt: "2023-07-24T21:22:36.85Z",
-          version: "1690233756850",
+          updatedAt: "2023-08-18T03:34:30.852Z",
+          version: "1692329670852",
           isDeleted: false,
           presentAtAllLocations: true,
           itemVariationData: {
@@ -459,9 +459,9 @@ export const offileData = () => [
             teamMemberIds: [
               "TMSzK-FIQ2k6FSEU",
               "TMCwFyeMexqTdxw4",
-              "TMD0dhgfKdtWaico",
               "TMJjPtHVjfPG_dCo",
               "TMNWxmtV8EGB9S9F",
+              "TMZOXcfnaorAtnO-",
             ],
           },
         },
@@ -473,8 +473,8 @@ export const offileData = () => [
   {
     type: "ITEM",
     id: "BAJDJMVWNPP4VCSEHNKEIKIQ",
-    updatedAt: "2023-07-24T21:22:36.85Z",
-    version: "1690233756850",
+    updatedAt: "2023-08-18T03:34:30.852Z",
+    version: "1692329670852",
     isDeleted: false,
     presentAtAllLocations: true,
     itemData: {
@@ -488,8 +488,8 @@ export const offileData = () => [
         {
           type: "ITEM_VARIATION",
           id: "3IIO6EVCEI6MPZ4HVQ2IZZKB",
-          updatedAt: "2023-07-24T21:22:36.85Z",
-          version: "1690233756850",
+          updatedAt: "2023-08-18T03:34:30.852Z",
+          version: "1692329670852",
           isDeleted: false,
           presentAtAllLocations: true,
           itemVariationData: {
@@ -508,8 +508,8 @@ export const offileData = () => [
             teamMemberIds: [
               "TMCwFyeMexqTdxw4",
               "TMSzK-FIQ2k6FSEU",
-              "TMD0dhgfKdtWaico",
               "TMNWxmtV8EGB9S9F",
+              "TMZOXcfnaorAtnO-",
             ],
           },
         },
@@ -523,8 +523,8 @@ export const offileData = () => [
   {
     type: "ITEM",
     id: "BZ2272T6N3TM7M2KX52H6TRC",
-    updatedAt: "2023-07-24T21:22:36.85Z",
-    version: "1690233756850",
+    updatedAt: "2023-08-18T03:34:30.852Z",
+    version: "1692329670852",
     isDeleted: false,
     catalogV1Ids: [
       {
@@ -544,8 +544,8 @@ export const offileData = () => [
         {
           type: "ITEM_VARIATION",
           id: "2YMEG4FJJKRYWJEBEFOMO6QN",
-          updatedAt: "2023-07-24T21:22:36.85Z",
-          version: "1690233756850",
+          updatedAt: "2023-08-18T03:34:30.852Z",
+          version: "1692329670852",
           isDeleted: false,
           catalogV1Ids: [
             {
@@ -572,6 +572,7 @@ export const offileData = () => [
               "TMCwFyeMexqTdxw4",
               "TMSzK-FIQ2k6FSEU",
               "TMNWxmtV8EGB9S9F",
+              "TMZOXcfnaorAtnO-",
             ],
           },
         },
@@ -582,8 +583,8 @@ export const offileData = () => [
   {
     type: "ITEM",
     id: "MOFVUHPGK3ZVSR7CNNJSNXRR",
-    updatedAt: "2023-07-29T22:48:32.388Z",
-    version: "1690670912388",
+    updatedAt: "2023-08-18T03:34:30.852Z",
+    version: "1692329670852",
     isDeleted: false,
     presentAtAllLocations: true,
     itemData: {
@@ -598,8 +599,8 @@ export const offileData = () => [
         {
           type: "ITEM_VARIATION",
           id: "7XYZHR4VA2F5GHXQ32HAJGXQ",
-          updatedAt: "2023-07-24T21:22:36.85Z",
-          version: "1690233756850",
+          updatedAt: "2023-08-18T03:34:30.852Z",
+          version: "1692329670852",
           isDeleted: false,
           presentAtAllLocations: true,
           itemVariationData: {
@@ -619,9 +620,9 @@ export const offileData = () => [
               "TMSzK-FIQ2k6FSEU",
               "TMIQc1wsPFZN1Omk",
               "TMCwFyeMexqTdxw4",
-              "TMD0dhgfKdtWaico",
               "TMJjPtHVjfPG_dCo",
               "TMNWxmtV8EGB9S9F",
+              "TMZOXcfnaorAtnO-",
             ],
           },
         },
@@ -637,8 +638,8 @@ export const offileData = () => [
   {
     type: "ITEM",
     id: "QTX6B446L6MJ4HZ6QAXEX55M",
-    updatedAt: "2023-07-29T22:48:42.629Z",
-    version: "1690670922629",
+    updatedAt: "2023-08-18T03:34:30.852Z",
+    version: "1692329670852",
     isDeleted: false,
     presentAtAllLocations: true,
     itemData: {
@@ -653,8 +654,8 @@ export const offileData = () => [
         {
           type: "ITEM_VARIATION",
           id: "4HOCHRSJUX7UVR7QXB6VLF23",
-          updatedAt: "2023-07-24T21:22:36.85Z",
-          version: "1690233756850",
+          updatedAt: "2023-08-18T03:34:30.852Z",
+          version: "1692329670852",
           isDeleted: false,
           presentAtAllLocations: true,
           itemVariationData: {
@@ -674,9 +675,9 @@ export const offileData = () => [
               "TMSzK-FIQ2k6FSEU",
               "TMIQc1wsPFZN1Omk",
               "TMCwFyeMexqTdxw4",
-              "TMD0dhgfKdtWaico",
               "TMJjPtHVjfPG_dCo",
               "TMNWxmtV8EGB9S9F",
+              "TMZOXcfnaorAtnO-",
             ],
           },
         },
@@ -692,8 +693,8 @@ export const offileData = () => [
   {
     type: "ITEM",
     id: "MTOERTVIAWN3QZYDDTJVS5A3",
-    updatedAt: "2023-07-24T21:22:36.85Z",
-    version: "1690233756850",
+    updatedAt: "2023-08-18T03:34:30.852Z",
+    version: "1692329670852",
     isDeleted: false,
     presentAtAllLocations: true,
     itemData: {
@@ -707,8 +708,8 @@ export const offileData = () => [
         {
           type: "ITEM_VARIATION",
           id: "6HEMZMSNWZOTGDZ2ZEIKBUTD",
-          updatedAt: "2023-07-24T21:22:36.85Z",
-          version: "1690233756850",
+          updatedAt: "2023-08-18T03:34:30.852Z",
+          version: "1692329670852",
           isDeleted: false,
           presentAtAllLocations: true,
           itemVariationData: {
@@ -727,8 +728,8 @@ export const offileData = () => [
             teamMemberIds: [
               "TMCwFyeMexqTdxw4",
               "TMSzK-FIQ2k6FSEU",
-              "TMD0dhgfKdtWaico",
               "TMNWxmtV8EGB9S9F",
+              "TMZOXcfnaorAtnO-",
             ],
           },
         },
@@ -743,8 +744,8 @@ export const offileData = () => [
   {
     type: "ITEM",
     id: "O3HDKBQMASS6LRPYRVWXVV53",
-    updatedAt: "2023-07-29T22:42:10.592Z",
-    version: "1690670530592",
+    updatedAt: "2023-08-18T03:34:30.852Z",
+    version: "1692329670852",
     isDeleted: false,
     catalogV1Ids: [
       {
@@ -764,8 +765,8 @@ export const offileData = () => [
         {
           type: "ITEM_VARIATION",
           id: "VESEQCYTSXXV6HKGFY6NAKEV",
-          updatedAt: "2023-07-24T21:22:36.85Z",
-          version: "1690233756850",
+          updatedAt: "2023-08-18T03:34:30.852Z",
+          version: "1692329670852",
           isDeleted: false,
           catalogV1Ids: [
             {
@@ -792,8 +793,8 @@ export const offileData = () => [
               "TMCwFyeMexqTdxw4",
               "TMIQc1wsPFZN1Omk",
               "TMSzK-FIQ2k6FSEU",
-              "TMD0dhgfKdtWaico",
               "TMNWxmtV8EGB9S9F",
+              "TMZOXcfnaorAtnO-",
             ],
           },
         },
@@ -805,8 +806,8 @@ export const offileData = () => [
   {
     type: "ITEM",
     id: "6BTEXMIZ56PEVBCPKRDPITVB",
-    updatedAt: "2023-07-10T21:28:44.858Z",
-    version: "1689024524858",
+    updatedAt: "2023-08-18T23:15:16.392Z",
+    version: "1692400516392",
     isDeleted: false,
     catalogV1Ids: [
       {
@@ -827,8 +828,8 @@ export const offileData = () => [
         {
           type: "ITEM_VARIATION",
           id: "O6OJXOYZLMX7LQ2N7WLUDBPP",
-          updatedAt: "2023-07-10T21:28:44.858Z",
-          version: "1689024524858",
+          updatedAt: "2023-08-18T23:15:16.392Z",
+          version: "1692400516392",
           isDeleted: false,
           catalogV1Ids: [
             {
@@ -847,7 +848,7 @@ export const offileData = () => [
               amount: "2000",
               currency: "USD",
             },
-            serviceDuration: "1800000",
+            serviceDuration: "600000",
             availableForBooking: true,
             sellable: true,
             stockable: true,
@@ -855,7 +856,7 @@ export const offileData = () => [
               "TMCwFyeMexqTdxw4",
               "TMIQc1wsPFZN1Omk",
               "TMSzK-FIQ2k6FSEU",
-              "TMD0dhgfKdtWaico",
+              "TMZOXcfnaorAtnO-",
             ],
           },
         },
@@ -871,8 +872,8 @@ export const offileData = () => [
   {
     type: "ITEM",
     id: "JCEYDL7ISDKNR2IEUBXEO4WT",
-    updatedAt: "2023-07-24T21:22:36.85Z",
-    version: "1690233756850",
+    updatedAt: "2023-08-18T03:34:30.852Z",
+    version: "1692329670852",
     isDeleted: false,
     catalogV1Ids: [
       {
@@ -891,8 +892,8 @@ export const offileData = () => [
         {
           type: "ITEM_VARIATION",
           id: "KCL5EBR65YTJ4WPA2FEF4YCH",
-          updatedAt: "2023-07-24T21:22:36.85Z",
-          version: "1690233756850",
+          updatedAt: "2023-08-18T03:34:30.852Z",
+          version: "1692329670852",
           isDeleted: false,
           catalogV1Ids: [
             {
@@ -918,10 +919,10 @@ export const offileData = () => [
             teamMemberIds: [
               "TMCwFyeMexqTdxw4",
               "TMIQc1wsPFZN1Omk",
-              "TMD0dhgfKdtWaico",
               "TMSzK-FIQ2k6FSEU",
               "TMJjPtHVjfPG_dCo",
               "TMNWxmtV8EGB9S9F",
+              "TMZOXcfnaorAtnO-",
             ],
           },
         },
@@ -932,8 +933,8 @@ export const offileData = () => [
   {
     type: "ITEM",
     id: "OP5RTYNTZ4TRHSII2KQQOB6E",
-    updatedAt: "2023-07-24T21:22:36.85Z",
-    version: "1690233756850",
+    updatedAt: "2023-08-18T03:34:30.852Z",
+    version: "1692329670852",
     isDeleted: false,
     presentAtAllLocations: true,
     itemData: {
@@ -948,8 +949,8 @@ export const offileData = () => [
         {
           type: "ITEM_VARIATION",
           id: "OALYBRBGG4OPIYRRLY6S65GB",
-          updatedAt: "2023-07-24T21:22:36.85Z",
-          version: "1690233756850",
+          updatedAt: "2023-08-18T03:34:30.852Z",
+          version: "1692329670852",
           isDeleted: false,
           presentAtAllLocations: true,
           itemVariationData: {
@@ -968,16 +969,16 @@ export const offileData = () => [
             teamMemberIds: [
               "TMSzK-FIQ2k6FSEU",
               "TMCwFyeMexqTdxw4",
-              "TMD0dhgfKdtWaico",
               "TMNWxmtV8EGB9S9F",
+              "TMZOXcfnaorAtnO-",
             ],
           },
         },
         {
           type: "ITEM_VARIATION",
           id: "EANQUEYQXUMFH4LKZ42TFMUC",
-          updatedAt: "2023-07-24T21:22:36.85Z",
-          version: "1690233756850",
+          updatedAt: "2023-08-18T03:34:30.852Z",
+          version: "1692329670852",
           isDeleted: false,
           presentAtAllLocations: true,
           itemVariationData: {
@@ -996,16 +997,16 @@ export const offileData = () => [
             teamMemberIds: [
               "TMSzK-FIQ2k6FSEU",
               "TMCwFyeMexqTdxw4",
-              "TMD0dhgfKdtWaico",
               "TMNWxmtV8EGB9S9F",
+              "TMZOXcfnaorAtnO-",
             ],
           },
         },
         {
           type: "ITEM_VARIATION",
           id: "ZONF2HKDE2RTT7TJKEFHMCGM",
-          updatedAt: "2023-07-24T21:22:36.85Z",
-          version: "1690233756850",
+          updatedAt: "2023-08-18T03:34:30.852Z",
+          version: "1692329670852",
           isDeleted: false,
           presentAtAllLocations: true,
           itemVariationData: {
@@ -1024,8 +1025,8 @@ export const offileData = () => [
             teamMemberIds: [
               "TMSzK-FIQ2k6FSEU",
               "TMCwFyeMexqTdxw4",
-              "TMD0dhgfKdtWaico",
               "TMNWxmtV8EGB9S9F",
+              "TMZOXcfnaorAtnO-",
             ],
           },
         },
@@ -1041,8 +1042,8 @@ export const offileData = () => [
   {
     type: "ITEM",
     id: "62JHCTZN5JGZ6KDLELNYBDJX",
-    updatedAt: "2023-07-24T21:22:36.85Z",
-    version: "1690233756850",
+    updatedAt: "2023-08-18T03:34:30.852Z",
+    version: "1692329670852",
     isDeleted: false,
     presentAtAllLocations: true,
     itemData: {
@@ -1057,8 +1058,8 @@ export const offileData = () => [
         {
           type: "ITEM_VARIATION",
           id: "OVUVMTNKQBPG2GOJW7IPPLYI",
-          updatedAt: "2023-07-24T21:22:36.85Z",
-          version: "1690233756850",
+          updatedAt: "2023-08-18T03:34:30.852Z",
+          version: "1692329670852",
           isDeleted: false,
           presentAtAllLocations: true,
           itemVariationData: {
@@ -1077,16 +1078,16 @@ export const offileData = () => [
             teamMemberIds: [
               "TMSzK-FIQ2k6FSEU",
               "TMCwFyeMexqTdxw4",
-              "TMD0dhgfKdtWaico",
               "TMNWxmtV8EGB9S9F",
+              "TMZOXcfnaorAtnO-",
             ],
           },
         },
         {
           type: "ITEM_VARIATION",
           id: "7U34HUVGZ3CXXKQTN5SCYMWP",
-          updatedAt: "2023-07-24T21:22:36.85Z",
-          version: "1690233756850",
+          updatedAt: "2023-08-18T03:34:30.852Z",
+          version: "1692329670852",
           isDeleted: false,
           presentAtAllLocations: true,
           itemVariationData: {
@@ -1105,16 +1106,16 @@ export const offileData = () => [
             teamMemberIds: [
               "TMSzK-FIQ2k6FSEU",
               "TMCwFyeMexqTdxw4",
-              "TMD0dhgfKdtWaico",
               "TMNWxmtV8EGB9S9F",
+              "TMZOXcfnaorAtnO-",
             ],
           },
         },
         {
           type: "ITEM_VARIATION",
           id: "EBAGLNOIX4YVBQ6LV3MBQZ76",
-          updatedAt: "2023-07-24T21:22:36.85Z",
-          version: "1690233756850",
+          updatedAt: "2023-08-18T03:34:30.852Z",
+          version: "1692329670852",
           isDeleted: false,
           presentAtAllLocations: true,
           itemVariationData: {
@@ -1133,8 +1134,8 @@ export const offileData = () => [
             teamMemberIds: [
               "TMSzK-FIQ2k6FSEU",
               "TMCwFyeMexqTdxw4",
-              "TMD0dhgfKdtWaico",
               "TMNWxmtV8EGB9S9F",
+              "TMZOXcfnaorAtnO-",
             ],
           },
         },
@@ -1150,8 +1151,8 @@ export const offileData = () => [
   {
     type: "ITEM",
     id: "TJM4ZJRT7PJUKXURVM2NLRFP",
-    updatedAt: "2023-07-24T21:22:36.85Z",
-    version: "1690233756850",
+    updatedAt: "2023-08-18T03:34:30.852Z",
+    version: "1692329670852",
     isDeleted: false,
     presentAtAllLocations: true,
     itemData: {
@@ -1166,8 +1167,8 @@ export const offileData = () => [
         {
           type: "ITEM_VARIATION",
           id: "V4B26VUWS6JUKJEHYE7TAEVQ",
-          updatedAt: "2023-07-24T21:22:36.85Z",
-          version: "1690233756850",
+          updatedAt: "2023-08-18T03:34:30.852Z",
+          version: "1692329670852",
           isDeleted: false,
           presentAtAllLocations: true,
           itemVariationData: {
@@ -1187,8 +1188,8 @@ export const offileData = () => [
               "TMSzK-FIQ2k6FSEU",
               "TMIQc1wsPFZN1Omk",
               "TMCwFyeMexqTdxw4",
-              "TMD0dhgfKdtWaico",
               "TMNWxmtV8EGB9S9F",
+              "TMZOXcfnaorAtnO-",
             ],
           },
         },
@@ -1204,8 +1205,8 @@ export const offileData = () => [
   {
     type: "ITEM",
     id: "47ALKW4MDEWEDZB4RNI3NEYQ",
-    updatedAt: "2023-07-29T22:44:55.078Z",
-    version: "1690670695078",
+    updatedAt: "2023-08-18T03:34:30.852Z",
+    version: "1692329670852",
     isDeleted: false,
     catalogV1Ids: [
       {
@@ -1228,8 +1229,8 @@ export const offileData = () => [
         {
           type: "ITEM_VARIATION",
           id: "ABKN3CIGKM3PSTYTXTM73T6Y",
-          updatedAt: "2023-07-29T22:44:55.078Z",
-          version: "1690670695078",
+          updatedAt: "2023-08-18T03:34:30.852Z",
+          version: "1692329670852",
           isDeleted: false,
           catalogV1Ids: [
             {
@@ -1242,7 +1243,7 @@ export const offileData = () => [
           itemVariationData: {
             itemId: "47ALKW4MDEWEDZB4RNI3NEYQ",
             name: "Gel polish",
-            ordinal: 1,
+            ordinal: 0,
             pricingType: "FIXED_PRICING",
             priceMoney: {
               amount: "2500",
@@ -1255,20 +1256,24 @@ export const offileData = () => [
               },
             ],
             serviceDuration: "1500000",
+            availableForBooking: true,
             sellable: true,
             stockable: true,
             teamMemberIds: [
               "TMCwFyeMexqTdxw4",
               "TMJjPtHVjfPG_dCo",
               "TMNWxmtV8EGB9S9F",
+              "TMIQc1wsPFZN1Omk",
+              "TMSzK-FIQ2k6FSEU",
+              "TMZOXcfnaorAtnO-",
             ],
           },
         },
         {
           type: "ITEM_VARIATION",
           id: "GLWL46AGR3IKCPBXIQJ24GLB",
-          updatedAt: "2023-07-29T22:44:55.078Z",
-          version: "1690670695078",
+          updatedAt: "2023-08-18T03:34:30.852Z",
+          version: "1692329670852",
           isDeleted: false,
           presentAtAllLocations: false,
           presentAtLocationIds: ["LS1VH64H9SA5C"],
@@ -1276,23 +1281,23 @@ export const offileData = () => [
           itemVariationData: {
             itemId: "47ALKW4MDEWEDZB4RNI3NEYQ",
             name: "Regular polish",
-            ordinal: 2,
+            ordinal: 1,
             pricingType: "FIXED_PRICING",
             priceMoney: {
               amount: "1500",
               currency: "USD",
             },
-            serviceDuration: "1800000",
+            serviceDuration: "900000",
             availableForBooking: true,
             sellable: true,
             stockable: true,
             teamMemberIds: [
               "TMSzK-FIQ2k6FSEU",
-              "TMD0dhgfKdtWaico",
               "TMIQc1wsPFZN1Omk",
               "TMCwFyeMexqTdxw4",
               "TMNWxmtV8EGB9S9F",
               "TMJjPtHVjfPG_dCo",
+              "TMZOXcfnaorAtnO-",
             ],
           },
         },
@@ -1306,12 +1311,12 @@ export const offileData = () => [
   {
     type: "ITEM",
     id: "RL3GOHPQWBJHKWENFD3GHKDU",
-    updatedAt: "2023-07-24T21:22:36.85Z",
-    version: "1690233756850",
+    updatedAt: "2023-08-18T03:34:30.852Z",
+    version: "1692329670852",
     isDeleted: false,
     presentAtAllLocations: true,
     itemData: {
-      name: "Removal: acrylic, dip, hard gel",
+      name: "Removal: acrylic, dip, hard gel ( With Service )",
       abbreviation: "A-Rem",
       labelColor: "694F9C",
       categoryId: "6KFSXPVFALGRCVN4FD3NN4DI",
@@ -1320,14 +1325,14 @@ export const offileData = () => [
         {
           type: "ITEM_VARIATION",
           id: "XHRSG6GAPSX4BKIDSA6YQA5M",
-          updatedAt: "2023-07-24T21:22:36.85Z",
-          version: "1690233756850",
+          updatedAt: "2023-08-18T03:34:30.852Z",
+          version: "1692329670852",
           isDeleted: false,
           presentAtAllLocations: true,
           itemVariationData: {
             itemId: "RL3GOHPQWBJHKWENFD3GHKDU",
             name: "Regular",
-            ordinal: 1,
+            ordinal: 0,
             pricingType: "FIXED_PRICING",
             priceMoney: {
               amount: "1500",
@@ -1340,9 +1345,9 @@ export const offileData = () => [
             teamMemberIds: [
               "TMSzK-FIQ2k6FSEU",
               "TMCwFyeMexqTdxw4",
-              "TMD0dhgfKdtWaico",
               "TMJjPtHVjfPG_dCo",
               "TMNWxmtV8EGB9S9F",
+              "TMZOXcfnaorAtnO-",
             ],
           },
         },
@@ -1353,9 +1358,70 @@ export const offileData = () => [
   },
   {
     type: "ITEM",
+    id: "S5FQXYXLNNWXHQSKWISJ2NYS",
+    updatedAt: "2023-08-18T03:34:30.852Z",
+    version: "1692329670852",
+    isDeleted: false,
+    catalogV1Ids: [
+      {
+        catalogV1Id: "b7f5ced9-e4f7-4f50-aceb-a0cc1d7f63a9",
+        locationId: "LS1VH64H9SA5C",
+      },
+    ],
+    presentAtAllLocations: false,
+    presentAtLocationIds: ["LS1VH64H9SA5C"],
+    itemData: {
+      name: "Removal: acrylic, dip, hard gel ( Without Service )",
+      abbreviation: "Re",
+      categoryId: "6KFSXPVFALGRCVN4FD3NN4DI",
+      taxIds: ["U3KR6ER3VF5MWEM5OXEXK2TJ"],
+      variations: [
+        {
+          type: "ITEM_VARIATION",
+          id: "FT5SWQYAKCSOIQSO63WDGDEU",
+          updatedAt: "2023-08-18T03:34:30.852Z",
+          version: "1692329670852",
+          isDeleted: false,
+          catalogV1Ids: [
+            {
+              catalogV1Id: "f992915e-a35d-40fb-93f7-2bf8ba2680e3",
+              locationId: "LS1VH64H9SA5C",
+            },
+          ],
+          presentAtAllLocations: false,
+          presentAtLocationIds: ["LS1VH64H9SA5C"],
+          itemVariationData: {
+            itemId: "S5FQXYXLNNWXHQSKWISJ2NYS",
+            name: "Regular",
+            ordinal: 0,
+            pricingType: "FIXED_PRICING",
+            priceMoney: {
+              amount: "2500",
+              currency: "USD",
+            },
+            serviceDuration: "2400000",
+            availableForBooking: true,
+            sellable: true,
+            stockable: true,
+            teamMemberIds: [
+              "TMNWxmtV8EGB9S9F",
+              "TMCwFyeMexqTdxw4",
+              "TMJjPtHVjfPG_dCo",
+              "TMIQc1wsPFZN1Omk",
+              "TMSzK-FIQ2k6FSEU",
+              "TMZOXcfnaorAtnO-",
+            ],
+          },
+        },
+      ],
+      productType: "APPOINTMENTS_SERVICE",
+    },
+  },
+  {
+    type: "ITEM",
     id: "XPOMIFUBDR4XMOZWGV44ZJKE",
-    updatedAt: "2023-07-24T21:22:36.85Z",
-    version: "1690233756850",
+    updatedAt: "2023-08-18T03:34:30.852Z",
+    version: "1692329670852",
     isDeleted: false,
     presentAtAllLocations: true,
     itemData: {
@@ -1368,8 +1434,8 @@ export const offileData = () => [
         {
           type: "ITEM_VARIATION",
           id: "BNEC3KDSFO3D3DYPD7BQOYLW",
-          updatedAt: "2023-07-24T21:22:36.85Z",
-          version: "1690233756850",
+          updatedAt: "2023-08-18T03:34:30.852Z",
+          version: "1692329670852",
           isDeleted: false,
           presentAtAllLocations: true,
           itemVariationData: {
@@ -1388,9 +1454,9 @@ export const offileData = () => [
             teamMemberIds: [
               "TMCwFyeMexqTdxw4",
               "TMSzK-FIQ2k6FSEU",
-              "TMD0dhgfKdtWaico",
               "TMJjPtHVjfPG_dCo",
               "TMNWxmtV8EGB9S9F",
+              "TMZOXcfnaorAtnO-",
             ],
           },
         },
@@ -1402,8 +1468,8 @@ export const offileData = () => [
   {
     type: "ITEM",
     id: "ZGYJZBNCF7UOH7QOC6IM4YGU",
-    updatedAt: "2023-07-24T21:22:36.85Z",
-    version: "1690233756850",
+    updatedAt: "2023-08-18T03:34:30.852Z",
+    version: "1692329670852",
     isDeleted: false,
     presentAtAllLocations: true,
     itemData: {
@@ -1418,8 +1484,8 @@ export const offileData = () => [
         {
           type: "ITEM_VARIATION",
           id: "CVQOS44HKTDW5U4K23AIMV2O",
-          updatedAt: "2023-07-24T21:22:36.85Z",
-          version: "1690233756850",
+          updatedAt: "2023-08-18T03:34:30.852Z",
+          version: "1692329670852",
           isDeleted: false,
           presentAtAllLocations: true,
           itemVariationData: {
@@ -1438,16 +1504,16 @@ export const offileData = () => [
             teamMemberIds: [
               "TMSzK-FIQ2k6FSEU",
               "TMCwFyeMexqTdxw4",
-              "TMD0dhgfKdtWaico",
               "TMNWxmtV8EGB9S9F",
+              "TMZOXcfnaorAtnO-",
             ],
           },
         },
         {
           type: "ITEM_VARIATION",
           id: "DG74PZI7MBNY6ITBIHWADDEO",
-          updatedAt: "2023-07-24T21:22:36.85Z",
-          version: "1690233756850",
+          updatedAt: "2023-08-18T03:34:30.852Z",
+          version: "1692329670852",
           isDeleted: false,
           presentAtAllLocations: true,
           itemVariationData: {
@@ -1466,8 +1532,8 @@ export const offileData = () => [
             teamMemberIds: [
               "TMSzK-FIQ2k6FSEU",
               "TMCwFyeMexqTdxw4",
-              "TMD0dhgfKdtWaico",
               "TMNWxmtV8EGB9S9F",
+              "TMZOXcfnaorAtnO-",
             ],
           },
         },
@@ -1483,8 +1549,8 @@ export const offileData = () => [
   {
     type: "ITEM",
     id: "FECI7HYLOOHJULRHN5IPQVIY",
-    updatedAt: "2023-08-07T16:55:49.594Z",
-    version: "1691427349594",
+    updatedAt: "2023-08-18T03:34:30.852Z",
+    version: "1692329670852",
     isDeleted: false,
     presentAtAllLocations: true,
     itemData: {
@@ -1499,8 +1565,8 @@ export const offileData = () => [
         {
           type: "ITEM_VARIATION",
           id: "KBEJ4MVTDUJCXJ2FR5XKXGWJ",
-          updatedAt: "2023-08-07T16:55:49.594Z",
-          version: "1691427349594",
+          updatedAt: "2023-08-18T03:34:30.852Z",
+          version: "1692329670852",
           isDeleted: false,
           presentAtAllLocations: true,
           itemVariationData: {
@@ -1519,17 +1585,17 @@ export const offileData = () => [
             teamMemberIds: [
               "TMCwFyeMexqTdxw4",
               "TMSzK-FIQ2k6FSEU",
-              "TMD0dhgfKdtWaico",
               "TMJjPtHVjfPG_dCo",
               "TMNWxmtV8EGB9S9F",
+              "TMZOXcfnaorAtnO-",
             ],
           },
         },
         {
           type: "ITEM_VARIATION",
           id: "XFXQRN4JDNUHI7N3GTF6E3CI",
-          updatedAt: "2023-08-07T16:55:32.459Z",
-          version: "1691427332459",
+          updatedAt: "2023-08-18T03:34:30.852Z",
+          version: "1692329670852",
           isDeleted: false,
           presentAtAllLocations: true,
           itemVariationData: {
@@ -1548,9 +1614,9 @@ export const offileData = () => [
             teamMemberIds: [
               "TMSzK-FIQ2k6FSEU",
               "TMCwFyeMexqTdxw4",
-              "TMD0dhgfKdtWaico",
               "TMJjPtHVjfPG_dCo",
               "TMNWxmtV8EGB9S9F",
+              "TMZOXcfnaorAtnO-",
             ],
           },
         },
@@ -1566,8 +1632,8 @@ export const offileData = () => [
   {
     type: "ITEM",
     id: "MYHSHC25RQEDXV2DE7MJLMLG",
-    updatedAt: "2023-07-21T18:35:41.219Z",
-    version: "1689964541219",
+    updatedAt: "2023-08-18T03:34:30.852Z",
+    version: "1692329670852",
     isDeleted: false,
     presentAtAllLocations: true,
     itemData: {
@@ -1582,8 +1648,8 @@ export const offileData = () => [
         {
           type: "ITEM_VARIATION",
           id: "FURESAOPHXLC7DNCMA7PZHPC",
-          updatedAt: "2023-07-21T18:35:41.219Z",
-          version: "1689964541219",
+          updatedAt: "2023-08-18T03:34:30.852Z",
+          version: "1692329670852",
           isDeleted: false,
           presentAtAllLocations: true,
           itemVariationData: {
@@ -1602,7 +1668,7 @@ export const offileData = () => [
             teamMemberIds: [
               "TMSzK-FIQ2k6FSEU",
               "TMCwFyeMexqTdxw4",
-              "TMD0dhgfKdtWaico",
+              "TMZOXcfnaorAtnO-",
             ],
           },
         },
@@ -1618,8 +1684,8 @@ export const offileData = () => [
   {
     type: "ITEM",
     id: "Q5LXFJ6AJXCOM6ON4IFU6ZOR",
-    updatedAt: "2023-07-24T21:22:36.85Z",
-    version: "1690233756850",
+    updatedAt: "2023-08-18T03:34:30.852Z",
+    version: "1692329670852",
     isDeleted: false,
     presentAtAllLocations: true,
     itemData: {
@@ -1631,8 +1697,8 @@ export const offileData = () => [
         {
           type: "ITEM_VARIATION",
           id: "H6WKWYMUIP6X622YEWCS3IV3",
-          updatedAt: "2023-07-24T21:22:36.85Z",
-          version: "1690233756850",
+          updatedAt: "2023-08-18T03:34:30.852Z",
+          version: "1692329670852",
           isDeleted: false,
           presentAtAllLocations: true,
           itemVariationData: {
@@ -1651,8 +1717,8 @@ export const offileData = () => [
             teamMemberIds: [
               "TMCwFyeMexqTdxw4",
               "TMSzK-FIQ2k6FSEU",
-              "TMD0dhgfKdtWaico",
               "TMNWxmtV8EGB9S9F",
+              "TMZOXcfnaorAtnO-",
             ],
           },
         },

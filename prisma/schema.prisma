@@ -134,3 +134,11 @@ model FirebaseToken {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model AdditionServiceConfig {
+  id        String   @id @default(cuid())
+  name      String
+  data      Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

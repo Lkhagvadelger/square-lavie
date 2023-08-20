@@ -85,6 +85,7 @@ handler
         searchRequest.query.filter.segmentFilters[0].teamMemberIdFilter = {
           any: [staffId],
         };
+
         // get availability
         const availabilityPromise =
           bookingsApi.searchAvailability(searchRequest);
@@ -125,7 +126,6 @@ handler
   .post(async (req, res) => {
     try {
       const serviceVariantIds = req.body.selectedVariantIds as any[];
-      const userBrowserMonth = req.body.console.log(JSON.stringify(req.body));
 
       // only locationId comes from query
       const locationId = req.query.locationId as string;
@@ -139,14 +139,22 @@ handler
       if (serviceVariantIds.length == 0 || serviceVariantIds == undefined)
         throw AppError.BadRequest("selectedVariantIds is required");
 
-      const serviceVersion = req.query.version;
-      const staffId = req.query.staffId as string;
+      // const serviceVersion = req.query.version;
+      // const staffId = req.query.staffId as string;
       const startAt = getStartAtDate();
       console.log(
-        serviceVariantIds,
+        JSON.stringify(serviceVariantIds),
         startAt,
         getEndAtDate(startAt).toISOString()
       );
+
+      // segmentFilters: [
+      //   {
+      //     serviceVariationId: serviceId,
+      //     teamMemberIdFilter: {},
+      //   },
+      // ],
+
       const searchRequest = {
         query: {
           filter: {
@@ -159,16 +167,15 @@ handler
           },
         },
       };
+
       let availabilities;
       // search availability for the specific staff member if staff id is passed as a param
-      if (staffId === ANY_STAFF_PARAMS) {
         // get availability
         const { result } = await bookingsApi.searchAvailability(searchRequest);
         availabilities = result.availabilities;
-      }
-      res.sendSuccess({
+
+        res.sendSuccess({
         availabilities,
-        serviceVersion,
       });
     } catch (e) {
       res.sendError(e);

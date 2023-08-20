@@ -33,7 +33,7 @@ handler
 
       const serviceVersion = req.query.version;
       const staffId = req.query.staffId as string;
-      const startAt = getStartAtDate();
+      const startAt = new Date(); //getStartAtDate();
       const searchRequest = {
         query: {
           filter: {
@@ -127,8 +127,9 @@ handler
     try {
       const serviceVariantIds = req.body.selectedVariantIds as any[];
       const startDate = req.body.startDate as any;
+      const now = req.body.now as Date;
 
-      console.log(startDate,'--start date');
+      console.log(startDate, "--start date");
 
       // only locationId comes from query
       const locationId = req.query.locationId as string;
@@ -144,14 +145,13 @@ handler
 
       // const serviceVersion = req.query.version;
       // const staffId = req.query.staffId as string;
-      const startAt = getStartAtDate(startDate);
+      const startAt =
+        now.getMonth() == startDate.month
+          ? now
+          : new Date(startDate.year, startDate.month, 1);
       const endAt = getEndAtDate(startDate);
 
-      console.log(
-        JSON.stringify(serviceVariantIds),
-        startAt,
-        endAt
-      );
+      console.log(JSON.stringify(serviceVariantIds), startAt, endAt);
 
       // segmentFilters: [
       //   {
@@ -159,7 +159,6 @@ handler
       //     teamMemberIdFilter: {},
       //   },
       // ],
-
 
       const searchRequest = {
         query: {
@@ -176,11 +175,11 @@ handler
 
       let availabilities;
       // search availability for the specific staff member if staff id is passed as a param
-        // get availability
-        const { result } = await bookingsApi.searchAvailability(searchRequest);
-        availabilities = result.availabilities;
+      // get availability
+      const { result } = await bookingsApi.searchAvailability(searchRequest);
+      availabilities = result.availabilities;
 
-        res.sendSuccess({
+      res.sendSuccess({
         availabilities,
       });
     } catch (e) {

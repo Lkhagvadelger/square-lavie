@@ -162,7 +162,6 @@ const MIN_BOOKING_START_TIME_HOURS = 4;
  * @returns date
  */
 
-
 // export const getEndAtDate = (startDate: any) => {
 //   let endDate = new Date(startDate);
 //   endDate.setMonth(endDate.getMonth() + 1);
@@ -188,44 +187,35 @@ const MIN_BOOKING_START_TIME_HOURS = 4;
 //   return newDate;
 // };
 
-
-export const parseToTwoLength = (val:any)=>{
-
-  if(val){
-    if(val<10){
-      return "0"+val;
+export const parseToTwoLength = (val: any) => {
+  if (val) {
+    if (val < 10) {
+      return "0" + val;
     }
     return val.toString();
   }
   return "00";
-}
+};
 
-export const isThisMonth = (date:any)=>{
+export const isThisMonth = (date: any) => {
   const nowDate = new Date();
 
-  if(date.month <=nowDate.getMonth()){
+  if (date.month <= nowDate.getMonth()) {
     return true;
   }
   return false;
-}
+};
 
-export const getEndAtDate = (startDate: any) => {
-
-  // if(isThisMonth(startDate)){
-  //   let theDate = new Date(`${startDate.year}-${parseToTwoLength(startDate.month+1)}-01T${parseToTwoLength(startDate.hours)}:${parseToTwoLength(startDate.minutes)}:01.000Z`);
-  //   theDate.setDate(theDate.getDate()-1);
-
-  //   return theDate
-  // }
-
-  console.log(startDate,'-endd start')
-
-  let theDate = new Date(`${startDate.year}-${parseToTwoLength(startDate.month)}-01T${parseToTwoLength(startDate.hours)}:${parseToTwoLength(startDate.minutes)}:01.000Z`);
-
-  theDate.setDate(theDate.getDate() -1);
-
-  console.log(theDate,'endd');
-  return theDate;
+export const getEndAtDate = (startDate: Date) => {
+  const tempEndDate = new Date(
+    startDate.getFullYear(),
+    startDate.getMonth(),
+    0,
+    18,
+    0,
+    0
+  );
+  return tempEndDate;
 };
 
 /**
@@ -233,20 +223,25 @@ export const getEndAtDate = (startDate: any) => {
  * @returns date
  */
 
-export const getStartAtDate = (startDate:any) => {
+export const getStartAtDate = (startDate: any) => {
   const nowDate = new Date();
 
-  if(isThisMonth(startDate)){
-    const rawDate = new Date(startDate.year, startDate.month,startDate.day);
-    console.log(rawDate,'raw');
-    
+  if (isThisMonth(startDate)) {
+    const rawDate = new Date(startDate.year, startDate.month, startDate.day);
+    console.log(rawDate, "raw");
+
     return nowDate;
   }
- 
-  
-  const theDate = new Date(`${startDate.year}-${parseToTwoLength(startDate.month)}-01T${parseToTwoLength(startDate.hours)}:${parseToTwoLength(startDate.minutes)}:01.000Z`);
-  
-  console.log(theDate,'start-date');
+
+  const theDate = new Date(
+    `${startDate.year}-${parseToTwoLength(
+      startDate.month
+    )}-01T${parseToTwoLength(startDate.hours)}:${parseToTwoLength(
+      startDate.minutes
+    )}:01.000Z`
+  );
+
+  console.log(theDate, "start-date");
 
   return theDate;
 };

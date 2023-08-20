@@ -9,7 +9,13 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
   const [cart, setCart] = useLocalStorage("cart", []);
   const [total, setTotal] = useState({ totalPrice: 0, totalItems: 0 });
   const availabitlyMutation = useAvailabilityAny(locationId);
-  const [startDate, setStartDate] = useState({year:0,month:0,day:0,hours:0,minutes:0});
+  const [startDate, setStartDate] = useState({
+    year: 0,
+    month: 0,
+    day: 0,
+    hours: 0,
+    minutes: 0,
+  });
 
   const [selectedVariantIds, setSelectedVariantIds] = useState<any[]>([]);
 
@@ -27,23 +33,27 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
         }))
       );
 
-       //Month range between 0-11
+      //Month range between 0-11
       setStartDate({
-        year:nowDate.getFullYear(),
-        month:nowDate.getMonth(),
-        day:nowDate.getDate(),
-        hours:0,
-        minutes:0
+        year: nowDate.getFullYear(),
+        month: nowDate.getMonth(),
+        day: nowDate.getDate(),
+        hours: 0,
+        minutes: 0,
       });
     }
   }, [cart]);
   //step: 2
   useEffect(() => {
-    if (startDate.year > 0 &&selectedVariantIds && selectedVariantIds.length > 0) {
+    if (
+      startDate.year > 0 &&
+      selectedVariantIds &&
+      selectedVariantIds.length > 0
+    ) {
       //call availability mutation
       console.log({ selectedVariantIds });
       availabitlyMutation.mutate(
-        { selectedVariantIds,startDate },
+        { selectedVariantIds, startDate, now: new Date() },
         {
           onError: () => {},
           onSuccess: (data) => {
@@ -68,11 +78,9 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
   return (
     <AppLayout>
       <>
-        {startDate.year > 0  && <Calendar
-          startMonth={startDate}
-          onDatePicked={onDateChange}
-        />
-        }
+        {startDate.year > 0 && (
+          <Calendar startMonth={startDate} onDatePicked={onDateChange} />
+        )}
         <Button onClick={goBack}>Back</Button>
       </>
     </AppLayout>

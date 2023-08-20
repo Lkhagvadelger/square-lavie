@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Flex,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -93,6 +94,11 @@ export const AdditionalService = ({
               );
             })}
           </Box>
+          <Flex justifyContent={"end"} pb={4}>
+            <Button colorScheme={"blue"} onClick={goNext}>
+              Continue
+            </Button>
+          </Flex>
         </ModalBody>
       </ModalContent>
     </Modal>

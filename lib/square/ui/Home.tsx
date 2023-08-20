@@ -10,7 +10,12 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { setSelectedKey } from "../api/service";
 import { useGetServices, useLocalStorage } from "../data/hooks";
-import { CartModel, ItemVariation, ServiceItem } from "../data/types";
+import {
+  CartModel,
+  ItemVariation,
+  RequiredServiceType,
+  ServiceItem,
+} from "../data/types";
 import { AdditionalService } from "./AdditionalService";
 import { ChoiceList } from "./ChoiceList";
 import { FloatingCart } from "./FloatingCart";
@@ -26,23 +31,81 @@ export const Home = ({ locationId }: { locationId: string }) => {
       return;
     }
     //if mustAskServices still includes mustAskServiceIds then call onOpen
-    if (
-      mustAskServices.some((service) => mustAskServiceIds.includes(service.id))
-    ) {
+    if (mustAskServices.length > 0) {
       onOpen();
       return;
     }
 
     router.push("/square/" + locationId + "/date");
   };
-  // removal gel polish, removal acrylic, dip
-  // if this IDs are not selected in the cart we should ask they did it intentionally
-  // or tell them what will cost to them
-  const mustAskServiceIds = [
-    "XPOMIFUBDR4XMOZWGV44ZJKE",
-    "RL3GOHPQWBJHKWENFD3GHKDU",
-    "MF6RGWC2HAH6ZDH32BPUXTFZ",
-  ];
+  const answerRequiredServiceAnsweredTrue = (
+    answerRequiredServiceId: string
+  ) => {
+    if (data) {
+      //update specialServices
+      const specialServicesFiltered = specialServices.map((service) => {
+        if (service.answerRequiredServiceId === answerRequiredServiceId) {
+          return { ...service, answerRequiredServiceAnswered: true };
+        } else return service;
+      });
+
+      setSpecialServices(specialServicesFiltered);
+
+      //add to mustAskServices from specialServices that is answerRequiredServiceAnswered equals false
+      const mustAskServicesFiltered = specialServicesFiltered
+        .filter(
+          (service) =>
+            service.answerRequiredServiceAnswered === false &&
+            service.isServiceSelected === true
+        )
+        .map((service) => {
+          return data.find(
+            (item) => item.id === service.answerRequiredServiceId
+          );
+        })
+        .filter((item) => item !== undefined) as ServiceItem[];
+      const uniqueMustAskServicesFiltered = mustAskServicesFiltered.reduce(
+        (accumulator: any[], currentService: ServiceItem) => {
+          const found = accumulator.some(
+            (service: ServiceItem) => service.id === currentService.id
+          );
+          if (!found) {
+            accumulator.push(currentService);
+          }
+          return accumulator;
+        },
+        []
+      );
+      setMustAskServices(uniqueMustAskServicesFiltered);
+    }
+  };
+  const [specialServices, setSpecialServices] = useState<RequiredServiceType[]>(
+    [
+      {
+        isServiceSelected: false,
+        serviceId: "46VW5CV5N7FEFETBWFRUWCMU",
+        serviceName: "Basic manicure",
+        answerRequiredServiceId: "XPOMIFUBDR4XMOZWGV44ZJKE",
+        answerRequiredServiceAnswered: false,
+      },
+      {
+        isServiceSelected: false,
+        serviceId: "ZGYJZBNCF7UOH7QOC6IM4YGU",
+        serviceName: "Select manicure",
+        answerRequiredServiceId: "XPOMIFUBDR4XMOZWGV44ZJKE",
+        answerRequiredServiceAnswered: false,
+      },
+      {
+        isServiceSelected: false,
+        serviceId: "OP5RTYNTZ4TRHSII2KQQOB6E",
+        serviceName: "Luxe manicure",
+        answerRequiredServiceId: "XPOMIFUBDR4XMOZWGV44ZJKE",
+        answerRequiredServiceAnswered: false,
+      },
+    ]
+  );
+
+  //Unanswered services will be listed in here. Data will be shown in Confirmation Modal
   const [mustAskServices, setMustAskServices] = useState<ServiceItem[]>([]);
   const [cart, setCart] = useLocalStorage("cart", []);
   const [total, setTotal] = useState({ totalPrice: 0, totalItems: 0 });
@@ -127,26 +190,65 @@ export const Home = ({ locationId }: { locationId: string }) => {
             ),
       });
     }
-  }, [cart]);
+  }, [cart, data]);
 
   const updateMustAskServices = () => {
     if (data) {
-      const mustAskServices = data.filter((service) =>
-        mustAskServiceIds.includes(service.id)
+      //if cart Items included specialServiceIds than set isServiceSelected to true
+      const specialServicesFiltered = specialServices.map((service) => {
+        if (
+          cart.some(
+            (cartItem: CartModel) => cartItem.serviceId === service.serviceId
+          )
+        ) {
+          return { ...service, isServiceSelected: true };
+        } else return { ...service, isServiceSelected: false };
+      });
+      const specialServicesAnswerFiltered = specialServicesFiltered.map(
+        (service) => {
+          if (
+            cart.some(
+              (cartItem: CartModel) =>
+                cartItem.serviceId === service.answerRequiredServiceId
+            )
+          ) {
+            return { ...service, answerRequiredServiceAnswered: true };
+          } else return { ...service, answerRequiredServiceAnswered: false };
+        }
       );
-      //remove if service already select in cart
-      const mustAskServicesFiltered = mustAskServices.filter(
-        (service) =>
-          !cart.some((cartItem: CartModel) => cartItem.serviceId === service.id)
+      //if cart Items included answerRequiredServiceId than set answerRequiredServiceAnswered to true
+      console.log(specialServicesAnswerFiltered);
+      setSpecialServices(specialServicesAnswerFiltered);
+
+      //add to mustAskServices from specialServices that is answerRequiredServiceAnswered equals false
+      const mustAskServicesFiltered = specialServicesAnswerFiltered
+        .filter(
+          (service) =>
+            service.answerRequiredServiceAnswered === false &&
+            service.isServiceSelected === true
+        )
+        .map((service) => {
+          return data.find(
+            (item) => item.id === service.answerRequiredServiceId
+          );
+        })
+        .filter((item) => item !== undefined) as ServiceItem[];
+      const uniqueMustAskServicesFiltered = mustAskServicesFiltered.reduce(
+        (accumulator: any[], currentService: ServiceItem) => {
+          const found = accumulator.some(
+            (service: ServiceItem) => service.id === currentService.id
+          );
+          if (!found) {
+            accumulator.push(currentService);
+          }
+          return accumulator;
+        },
+        []
       );
-      setMustAskServices(mustAskServicesFiltered);
+      setMustAskServices(uniqueMustAskServicesFiltered);
     }
   };
 
-  useEffect(() => {
-    if (data) {
-    }
-  }, [data]);
   return (
     <AppLayout>
       <>
@@ -201,6 +303,8 @@ export const Home = ({ locationId }: { locationId: string }) => {
           isOpen={isOpen}
           additionalServices={mustAskServices}
           addItemBySelectedVariantId={addItemBySelectedVariantId}
+          answerRequiredServiceAnsweredTrue={answerRequiredServiceAnsweredTrue}
+          goNext={goToCalendar}
         />
       </>
     </AppLayout>

@@ -1,11 +1,6 @@
 import {
   AppLayout,
   Box,
-  Flex,
-  HStack,
-  Icon,
-  Skeleton,
-  Stack,
   Text,
   toaster,
   useDisclosure,
@@ -13,8 +8,7 @@ import {
 } from "@ui/index";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { BsChevronRight, BsReceiptCutoff } from "react-icons/bs";
-import { displayServicePrice, setSelectedKey } from "../api/service";
+import { setSelectedKey } from "../api/service";
 import { useGetServices, useLocalStorage } from "../data/hooks";
 import { CartModel, ItemVariation, ServiceItem } from "../data/types";
 import { AdditionalService } from "./AdditionalService";
@@ -26,11 +20,19 @@ export const Home = ({ locationId }: { locationId: string }) => {
   const { isOpen, onToggle, onClose, onOpen } = useDisclosure();
   const { data, isLoading } = useGetServices(locationId);
   const router = useRouter();
+
   const goToCalendar = () => {
     if (total.totalItems == 0) {
+      return;
+    }
+    //if mustAskServices still includes mustAskServiceIds then call onOpen
+    if (
+      mustAskServices.some((service) => mustAskServiceIds.includes(service.id))
+    ) {
       onOpen();
       return;
     }
+
     router.push("/square/" + locationId + "/date");
   };
   // removal gel polish, removal acrylic, dip
@@ -100,35 +102,47 @@ export const Home = ({ locationId }: { locationId: string }) => {
       if (indexToDelete !== -1) {
         const newCart = [...cart];
         newCart.splice(indexToDelete, 1);
-        setCart(newCart);
         setCart([...newCart, cartItem]);
       } else setCart([...cart, cartItem]);
     }
     toaster.info("Added to cart");
+    //remove if service already select in cart
   };
   useEffect(() => {
-    return setTotal({
-      totalPrice: cart.reduce(
-        (acc: number, item: { price: number; quantity: number }) =>
-          acc + item.price * item.quantity,
-        0
-      ),
-      totalItems: cart.reduce(
-        (acc: number, item: { quantity: number }) => acc + item.quantity,
-        0
-      ),
-    });
+    if (cart != null) {
+      updateMustAskServices();
+      return setTotal({
+        totalPrice: cart.reduce(
+          (acc: number, item: { price: number; quantity: number }) =>
+            acc + item.price * item.quantity,
+          0
+        ),
+        totalItems: cart.reduce(
+          (acc: number, item: { quantity: number }) => acc + item.quantity,
+          0
+        ),
+      });
+    }
   }, [cart]);
 
-  useEffect(() => {
+  const updateMustAskServices = () => {
     if (data) {
       const mustAskServices = data.filter((service) =>
         mustAskServiceIds.includes(service.id)
       );
-      setMustAskServices(mustAskServices);
+      //remove if service already select in cart
+      const mustAskServicesFiltered = mustAskServices.filter(
+        (service) =>
+          !cart.some((cartItem: CartModel) => cartItem.serviceId === service.id)
+      );
+      setMustAskServices(mustAskServicesFiltered);
+    }
+  };
+
+  useEffect(() => {
+    if (data) {
     }
   }, [data]);
-
   return (
     <AppLayout>
       <>
@@ -148,24 +162,28 @@ export const Home = ({ locationId }: { locationId: string }) => {
                 >
                   <Text>{service.itemData.name}</Text>
                   <VStack w="full" gap={0} fontSize="14px">
-                    <ChoiceList
-                      name={service.id}
-                      setValue={addItemBySelectedVariantId}
-                      value={setSelectedKey(
-                        cart?.find(
-                          (cartItem: CartModel) =>
-                            cartItem.serviceId === service.id
-                        )?.variantId
-                      )}
-                      choices={service.itemData.variations.map((variation) => {
-                        return {
-                          id: variation.itemVariationData.itemId,
-                          type: variation.itemVariationData.name,
-                          choice: variation.id,
-                          data: variation.itemVariationData,
-                        };
-                      })}
-                    />
+                    {cart != null && (
+                      <ChoiceList
+                        name={service.id}
+                        setValue={addItemBySelectedVariantId}
+                        value={setSelectedKey(
+                          cart?.find(
+                            (cartItem: CartModel) =>
+                              cartItem.serviceId === service.id
+                          )?.variantId
+                        )}
+                        choices={service.itemData.variations.map(
+                          (variation) => {
+                            return {
+                              id: variation.itemVariationData.itemId,
+                              type: variation.itemVariationData.name,
+                              choice: variation.id,
+                              data: variation.itemVariationData,
+                            };
+                          }
+                        )}
+                      />
+                    )}
                   </VStack>
                 </Box>
               );
@@ -173,7 +191,13 @@ export const Home = ({ locationId }: { locationId: string }) => {
           </Box>
         )}
         <FloatingCart goToCalendar={goToCalendar} total={total} />
-        <AdditionalService onClose={onClose} isOpen={isOpen} />
+        <AdditionalService
+          cart={cart}
+          onClose={onClose}
+          isOpen={isOpen}
+          additionalServices={mustAskServices}
+          addItemBySelectedVariantId={addItemBySelectedVariantId}
+        />
       </>
     </AppLayout>
   );

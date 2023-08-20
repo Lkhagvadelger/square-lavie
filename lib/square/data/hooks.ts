@@ -15,11 +15,12 @@ export const useAvailabilityAny = (locationId: string) =>
   useMutation(API._auth(Method.POST, `square/${locationId}/availability/any`));
 
 export const useLocalStorage = (key: string, initialValue: any) => {
-  const [value, setValue] = useState(initialValue);
+  const [value, setValue] = useState<any>(null);
 
   useEffect(() => {
     const storedValue = localStorage.getItem(key);
     if (storedValue) setValue(JSON.parse(storedValue));
+    else setValue(initialValue);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

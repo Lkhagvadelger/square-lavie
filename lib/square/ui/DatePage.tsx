@@ -1,5 +1,6 @@
 import { Calendar } from "@ui/components/calendar/calendar";
-import { AppLayout } from "@ui/index";
+import { AppLayout, Button } from "@ui/index";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useAvailabilityAny, useLocalStorage } from "../data/hooks";
 import { CartModel } from "../data/types";
@@ -48,13 +49,19 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
   const onDateChange = (pickedDate: any) => {
     console.log(pickedDate);
   };
-
+  const router = useRouter();
+  const goBack = () => {
+    router.push("/square/" + locationId);
+  };
   return (
     <AppLayout>
-      <Calendar
-        startMonth={{ year: 2023, month: 7, day: 1 }}
-        onDatePicked={onDateChange}
-      />
+      <>
+        <Calendar
+          startMonth={{ year: 2023, month: 7, day: 1 }}
+          onDatePicked={onDateChange}
+        />
+        <Button onClick={goBack}>Back</Button>
+      </>
     </AppLayout>
   );
 };

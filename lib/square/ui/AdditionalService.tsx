@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -21,12 +22,16 @@ export const AdditionalService = ({
   additionalServices,
   addItemBySelectedVariantId,
   cart,
+  answerRequiredServiceAnsweredTrue,
+  goNext,
 }: {
   isOpen: boolean;
   onClose: () => void;
   additionalServices: ServiceItem[];
   addItemBySelectedVariantId: (serviceId: string, variantIdAsValue: {}) => void;
   cart: any;
+  answerRequiredServiceAnsweredTrue: (answerRequiredServiceId: string) => void;
+  goNext: () => void;
 }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -76,6 +81,13 @@ export const AdditionalService = ({
                         )}
                       />
                     )}
+                    <Button
+                      onClick={() => {
+                        answerRequiredServiceAnsweredTrue(service.id);
+                      }}
+                    >
+                      I understand, I dont need this service
+                    </Button>
                   </VStack>
                 </Box>
               );

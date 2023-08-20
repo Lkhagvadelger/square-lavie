@@ -50,6 +50,8 @@ export type CartModel = {
 };
 export type RequiredServiceType = {
   isServiceSelected: boolean;
-  isServiceAsked: boolean;
-  selectedServiceVariantIds: string[];
+  serviceId: string;
+  serviceName: string;
+  answerRequiredServiceId: string;
+  answerRequiredServiceAnswered: boolean;
 };

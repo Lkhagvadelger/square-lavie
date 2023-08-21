@@ -13,7 +13,7 @@ import { offileData } from "./offlineData";
  */
 
 handler.get(async (req, res, next) => {
-  const locationId = process.env["SQUARE_LOCATION_ID"];
+  const locationId = req.query.locationId as string;
 
   try {
     // let {

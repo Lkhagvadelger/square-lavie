@@ -17,6 +17,7 @@ import {
 import { last } from "lodash";
 import { useState } from "react";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
+export type CalendatMonthType = { year: number; month: number; day: number };
 const getMonthName = (month: number) => {
   const months = [
     "January",
@@ -35,62 +36,43 @@ const getMonthName = (month: number) => {
   return months[month];
 };
 export const Calendar = ({
-  startMonth,
-  onDatePicked,
+  selectedDate,
+  setSelectedDate,
   hidePastDays = true,
 }: {
-  startMonth: { year: number; month: number; day: number };
-  onDatePicked: ({
-    year,
-    month,
-    day,
-  }: {
-    year: number;
-    month: number;
-    day: number;
-  }) => void;
+  selectedDate: CalendatMonthType;
+  setSelectedDate: (pickedDate: CalendatMonthType) => void;
   hidePastDays?: boolean;
 }) => {
   let day = 0;
   let canIncrease = false;
-  const [selectedMonth, setSelectedMonth] = useState(startMonth);
   const nextMonth = () => {
-    const newDate = new Date(selectedMonth.year, selectedMonth.month, 1);
+    const newDate = new Date(selectedDate.year, selectedDate.month, 1);
     // Decrease the month by one
     newDate.setMonth(newDate.getMonth() + 1);
 
-    setSelectedMonth({
+    const nextMonth = {
       year: newDate.getFullYear(),
       month: newDate.getMonth(),
       day: newDate.getDate(),
-    });
-    onDatePicked({
-      year: newDate.getFullYear(),
-      month: newDate.getMonth(),
-      day: newDate.getDate()
-    });
+    };
+    setSelectedDate(nextMonth);
   };
 
   const prevMonth = () => {
-    const newDate = new Date(selectedMonth.year, selectedMonth.month, 1);
+    const newDate = new Date(selectedDate.year, selectedDate.month, 1);
     // Decrease the month by one
     newDate.setMonth(newDate.getMonth() - 1);
-
-    setSelectedMonth({
+    const prevMonth = {
       year: newDate.getFullYear(),
       month: newDate.getMonth(),
       day: newDate.getDate(),
-    });
-
-    onDatePicked({
-      year: newDate.getFullYear(),
-      month: newDate.getMonth(),
-      day: newDate.getDate()
-    });
+    };
+    setSelectedDate(prevMonth);
   };
 
   const getDayOfMonth = (weekDay: number, weekNumber: number) => {
-    const firstDay = new Date(selectedMonth.year, selectedMonth.month, 1);
+    const firstDay = new Date(selectedDate.year, selectedDate.month, 1);
     const firstDayWeekDay = firstDay.getDay(); // 0 (Sunday) to 6 (Saturday)
 
     if (weekDay === firstDayWeekDay && weekNumber === 1) {
@@ -98,15 +80,15 @@ export const Calendar = ({
     }
     if (canIncrease) day++;
     const lastDayOfMonth = new Date(
-      selectedMonth.year,
-      selectedMonth.month,
+      selectedDate.year,
+      selectedDate.month,
       0
     ).getDate();
 
     if (hidePastDays) {
       const calculatedDay = new Date(
-        selectedMonth.year,
-        selectedMonth.month,
+        selectedDate.year,
+        selectedDate.month,
         day + 1
       );
       if (calculatedDay < new Date()) return 0;
@@ -132,20 +114,15 @@ export const Calendar = ({
     ) : (
       <Button
         p={0}
-        color={day == selectedMonth.day ? "white" : "green.500"}
-        bg={day == selectedMonth.day ? "green.500" : "white"}
+        color={day == selectedDate.day ? "white" : "green.500"}
+        bg={day == selectedDate.day ? "green.500" : "white"}
         borderRadius={"50%"}
         border="1px"
         borderColor={"green.500"}
         onClick={() => {
-          setSelectedMonth({
-            year: selectedMonth.year,
-            month: selectedMonth.month,
-            day: day,
-          });
-          onDatePicked({
-            year: selectedMonth.year,
-            month: selectedMonth.month,
+          setSelectedDate({
+            year: selectedDate.year,
+            month: selectedDate.month,
             day: day,
           });
         }}
@@ -162,9 +139,7 @@ export const Calendar = ({
             <Icon as={BsChevronLeft} />
           </Button>
         </Box>
-        <Box>
-          {getMonthName(selectedMonth.month) + " " + selectedMonth.year}
-        </Box>
+        <Box>{getMonthName(selectedDate.month) + " " + selectedDate.year}</Box>
         <Box>
           <Button onClick={nextMonth} fontSize="24px" textAlign={"right"}>
             <Icon as={BsChevronRight} />

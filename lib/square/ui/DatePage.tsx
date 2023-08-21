@@ -1,20 +1,18 @@
-import { Calendar } from "@ui/components/calendar/calendar";
-import { AppLayout, Button } from "@ui/index";
+import { Calendar, CalendatMonthType } from "@ui/components/calendar/calendar";
+import { AppLayout, Box, Button, Spinner } from "@ui/index";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useAvailabilityAny, useLocalStorage } from "../data/hooks";
 import { CartModel } from "../data/types";
 
 export const DatePage = ({ locationId }: { locationId: string }) => {
-  const [cart, setCart] = useLocalStorage("cart", []);
-  const [total, setTotal] = useState({ totalPrice: 0, totalItems: 0 });
+  const [cart] = useLocalStorage("cart", []);
   const availabitlyMutation = useAvailabilityAny(locationId);
-  const [startDate, setStartDate] = useState({
-    year: 0,
-    month: 0,
-    day: 0,
-    hours: 0,
-    minutes: 0,
+  const [availability, setAvailability] = useState<any>(undefined);
+  const [selectedDate, setSelectedDate] = useState<CalendatMonthType>({
+    year: new Date().getFullYear(),
+    month: new Date().getMonth(),
+    day: new Date().getDate(),
   });
 
   const [selectedVariantIds, setSelectedVariantIds] = useState<any[]>([]);
@@ -24,51 +22,60 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
   useEffect(() => {
     if (cart) {
       //Add variantId to selectedVariantIds array
-      const nowDate = new Date();
-
       setSelectedVariantIds(
         cart.map((item: CartModel) => ({
           serviceVariationId: item.variantId,
           teamMemberIdFilter: { any: item.teamMemberIds },
         }))
       );
-
-      //Month range between 0-11
-      setStartDate({
-        year: nowDate.getFullYear(),
-        month: nowDate.getMonth(),
-        day: nowDate.getDate(),
-        hours: 0,
-        minutes: 0,
-      });
     }
   }, [cart]);
   //step: 2
   useEffect(() => {
     if (
-      startDate.year > 0 &&
+      selectedDate.year > 0 &&
       selectedVariantIds &&
-      selectedVariantIds.length > 0
+      selectedVariantIds.length > 0 &&
+      !availability
     ) {
       //call availability mutation
-      console.log({ selectedVariantIds });
       availabitlyMutation.mutate(
-        { selectedVariantIds, startDate, now: new Date() },
+        { selectedVariantIds, startDate: selectedDate, now: new Date() },
         {
-          onError: () => {},
+          onError: (e) => {
+            console.log(e);
+          },
           onSuccess: (data) => {
+            setAvailability(data);
             console.log(data);
           },
         }
       );
     }
-  }, [startDate]);
-  //first must check first Staff calendar.
-  //let user select their start date.
-
-  //if selected time is free with second staff than create new order to second staff
-  const onDateChange = (pickedDate: any) => {
-    setStartDate(pickedDate);
+    if (
+      selectedDate.year > 0 &&
+      selectedVariantIds &&
+      selectedVariantIds.length > 0 &&
+      availability
+    ) {
+      if (availability.startDate.month != selectedDate.month)
+        availabitlyMutation.mutate(
+          { selectedVariantIds, startDate: selectedDate, now: new Date() },
+          {
+            onError: (e) => {
+              console.log(e);
+            },
+            onSuccess: (data) => {
+              setAvailability(data);
+              console.log(data);
+            },
+          }
+        );
+    }
+  }, [selectedVariantIds, selectedDate]);
+  const onDateChange = (pickedDate: any) => {};
+  const onMonthChange = (changedDate: any) => {
+    setSelectedDate(changedDate);
   };
   const router = useRouter();
   const goBack = () => {
@@ -78,10 +85,16 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
   return (
     <AppLayout>
       <>
-        {startDate.year > 0 && (
-          <Calendar startMonth={startDate} onDatePicked={onDateChange} />
+        {availabitlyMutation.isLoading && <Spinner></Spinner>}
+        {!availabitlyMutation.isLoading && availability && (
+          <Calendar
+            selectedDate={selectedDate}
+            setSelectedDate={setSelectedDate}
+          />
         )}
-        <Button onClick={goBack}>Back</Button>
+        <Box>
+          <Button onClick={goBack}>Back</Button>
+        </Box>
       </>
     </AppLayout>
   );

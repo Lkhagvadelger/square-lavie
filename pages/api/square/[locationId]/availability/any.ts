@@ -127,10 +127,10 @@ handler
     try {
       const serviceVariantIds = req.body.selectedVariantIds as any[];
       const startDate = req.body.startDate as any;
-      const now =new Date(req.body.now as any);
+      const now = new Date(req.body.now as any);
 
       console.log(startDate, "--start date");
-      console.log(now.getMonth(),'noww')
+      console.log(now.getMonth(), "noww");
 
       // only locationId comes from query
       const locationId = req.query.locationId as string;
@@ -151,7 +151,7 @@ handler
           ? now
           : new Date(startDate.year, startDate.month, 1);
 
-          console.log(startAt,'startAtt')
+      console.log(startAt, "startAtt");
 
       const endAt = getEndAtDate(startAt);
 
@@ -184,6 +184,7 @@ handler
       availabilities = result.availabilities;
 
       res.sendSuccess({
+        startDate,
         availabilities,
       });
     } catch (e) {

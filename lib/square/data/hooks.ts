@@ -10,6 +10,8 @@ export const useGetServices = (locationId: string) =>
     [],
     API._query(Method.GET, `square/${locationId}/services`)
   );
+export const useGetLocationInfo = (locationId: string) =>
+  useQuery<any>([], API._query(Method.GET, `square/${locationId}/location`));
 
 export const useAvailabilityAny = (locationId: string) =>
   useMutation(API._auth(Method.POST, `square/${locationId}/availability/any`));

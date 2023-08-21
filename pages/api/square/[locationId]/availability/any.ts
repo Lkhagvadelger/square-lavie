@@ -5,7 +5,11 @@ import {
   getStartAtDate,
   searchActiveTeamMembers,
 } from "@lib/square/api/service";
-import { bookingsApi, catalogApi } from "@lib/square/api/squareClient";
+import {
+  bookingsApi,
+  catalogApi,
+  locationsApi,
+} from "@lib/square/api/squareClient";
 import { CartModel } from "@lib/square/data/types";
 import { AppError } from "@util/errors";
 
@@ -129,11 +133,9 @@ handler
       const startDate = req.body.startDate as any;
       const now = new Date(req.body.now as any);
 
-      console.log(startDate, "--start date");
-      console.log(now.getMonth(), "noww");
-
       // only locationId comes from query
       const locationId = req.query.locationId as string;
+
       // rest of the data should come from req.body
       if (
         locationId == "" ||
@@ -151,11 +153,7 @@ handler
           ? now
           : new Date(startDate.year, startDate.month, 1);
 
-      console.log(startAt, "startAtt");
-
       const endAt = getEndAtDate(startAt);
-
-      console.log(JSON.stringify(serviceVariantIds), startAt, endAt);
 
       // segmentFilters: [
       //   {
@@ -181,6 +179,11 @@ handler
       // search availability for the specific staff member if staff id is passed as a param
       // get availability
       const { result } = await bookingsApi.searchAvailability(searchRequest);
+      const { result: locationResult } = await locationsApi.retrieveLocation(
+        locationId
+      );
+      console.log(locationResult);
+
       availabilities = result.availabilities;
 
       res.sendSuccess({

@@ -182,7 +182,6 @@ handler
       const { result: locationResult } = await locationsApi.retrieveLocation(
         locationId
       );
-      console.log(locationResult);
 
       availabilities = result.availabilities;
 

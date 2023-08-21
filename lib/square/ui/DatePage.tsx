@@ -1,4 +1,7 @@
-import { Calendar, CalendatMonthType } from "@ui/components/calendar/calendar";
+import {
+  Calendar,
+  CalendatMonthType as CalendarMonthType,
+} from "@ui/components/calendar/calendar";
 import { AppLayout, Box, Text, Button, Spinner } from "@ui/index";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -7,14 +10,23 @@ import {
   useGetLocationInfo,
   useLocalStorage,
 } from "../data/hooks";
-import { CartModel } from "../data/types";
+import { Appointment, CartModel } from "../data/types";
 
 export const DatePage = ({ locationId }: { locationId: string }) => {
   const [cart] = useLocalStorage("cart", []);
   const availabitlyMutation = useAvailabilityAny(locationId);
   const { data: locationData, isLoading } = useGetLocationInfo(locationId);
-  const [availability, setAvailability] = useState<any>(undefined);
-  const [selectedDate, setSelectedDate] = useState<CalendatMonthType>({
+  const [selectedHour, setSelectedHour] = useState<string | undefined>(
+    undefined
+  );
+  const [availability, setAvailability] = useState<
+    | {
+        startDate: CalendarMonthType;
+        availabilities: Appointment[];
+      }
+    | undefined
+  >(undefined);
+  const [selectedDate, setSelectedDate] = useState<CalendarMonthType>({
     year: new Date().getFullYear(),
     month: new Date().getMonth(),
     day: new Date().getDate(),
@@ -48,7 +60,7 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
             onError: (e) => {
               console.log(e);
             },
-            onSuccess: (data) => {
+            onSuccess: (data: any) => {
               setAvailability(data);
               console.log(data);
             },
@@ -56,10 +68,6 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
         );
     }
   }, [selectedVariantIds, selectedDate]);
-  const onDateChange = (pickedDate: any) => {};
-  const onMonthChange = (changedDate: any) => {
-    setSelectedDate(changedDate);
-  };
 
   const userTimezone = () => {
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -88,9 +96,81 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
           </Text>
         )}
         <Box>
+          {availability?.availabilities
+            .filter(
+              (r) =>
+                ConvertToGivenTimezoneDate(r.startAt) ==
+                ConvertToGivenTimezone(selectedDate)
+            )
+            .map((item, key) => {
+              return (
+                <Box
+                  bg={selectedHour == item.startAt ? "green" : "none"}
+                  key={key}
+                  onClick={() => {
+                    setSelectedHour(item.startAt);
+                  }}
+                >
+                  <TimeBox dateString={item.startAt} />
+                </Box>
+              );
+            })}
+        </Box>
+        <Box>
           <Button onClick={goBack}>Back</Button>
         </Box>
       </>
     </AppLayout>
   );
+};
+export const TimeBox = ({ dateString }: { dateString: string }) => {
+  const date = new Date(dateString);
+
+  const options: Intl.DateTimeFormatOptions = {
+    // year: "numeric",
+    // month: "long",
+    // day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+    timeZone: "America/Los_Angeles",
+  };
+
+  const formattedTime = date.toLocaleString("en-US", options);
+  return (
+    <Box w="24" border="1px" p={1}>
+      {formattedTime}
+    </Box>
+  );
+};
+const ConvertToGivenTimezone = (dateString: CalendarMonthType) => {
+  const date = new Date(
+    dateString.year,
+    dateString.month,
+    dateString.day,
+    0,
+    0,
+    0
+  );
+
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    timeZone: "America/Los_Angeles",
+  };
+  return date.toLocaleString("en-US", options);
+};
+
+export const ConvertToGivenTimezoneDate = (dateString: string) => {
+  const date = new Date(dateString);
+
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    timeZone: "America/Los_Angeles",
+  };
+
+  return date.toLocaleString("en-US", options);
 };

@@ -55,3 +55,15 @@ export type RequiredServiceType = {
   answerRequiredServiceId: string;
   answerRequiredServiceAnswered: boolean;
 };
+export type AppointmentSegment = {
+  durationMinutes: number;
+  serviceVariationId: string;
+  teamMemberId: string;
+  serviceVariationVersion: string;
+};
+
+export type Appointment = {
+  startAt: string;
+  locationId: string;
+  appointmentSegments: AppointmentSegment[];
+};

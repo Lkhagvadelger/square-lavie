@@ -15,6 +15,8 @@ export const useGetLocationInfo = (locationId: string) =>
 
 export const useAvailabilityAny = (locationId: string) =>
   useMutation(API._auth(Method.POST, `square/${locationId}/availability/any`));
+export const useCreateBooking = (locationId: string) =>
+  useMutation(API._auth(Method.POST, `square/${locationId}/booking/create`));
 
 export const useLocalStorage = (key: string, initialValue: any) => {
   const [value, setValue] = useState<any>(null);

@@ -83,7 +83,7 @@ export const Completed = ({
               <Link href={"#"}>(925) 586-7488</Link>
             </Box>
             <Box>
-              <Button onClick={goBack}>Back</Button>
+              <Button onClick={() => {}}>Add to calendar</Button>
             </Box>
             <Box>
               <Link href={"#"}>Reschedule appointment</Link>

@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Availability } from "square";
+import { string } from "square/dist/types/schema";
 import {
   useAvailabilityAny,
   useCreateBooking,
@@ -150,8 +151,6 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
         "availability"
       )?.availabilities2.filter((r) => r.startAt == selectedTime.startAt)[0];
 
-      console.log("secondAvailability : ", secondAvailability);
-
       if (
         secondAvailability &&
         secondAvailability.appointmentSegments &&
@@ -208,13 +207,15 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
             setSelectedDate={setSelectedDate}
           />
         )}
-        {locationData && locationData.timezone != userTimezone() && (
-          <Text>
-            ⚠ HEADS UP! It looks like you are in a different timezone(
-            {userTimezone()}). Times below are shown in {locationData.timezone}{" "}
-            time.
-          </Text>
-        )}
+        {locationData &&
+          !isLoading &&
+          locationData.timezone != userTimezone() && (
+            <Text>
+              ⚠ HEADS UP! It looks like you are in a different timezone(
+              {userTimezone()}). Times below are shown in{" "}
+              {locationData.timezone} time.
+            </Text>
+          )}
 
         <Flex flexWrap={"wrap"} justifyContent={"flex-start"}>
           {getValues("availability")
@@ -279,6 +280,9 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
                 );
               })}
         </Flex>
+        <Box>
+          <Text></Text>
+        </Box>
       </>
     </AppLayout>
   );
@@ -340,4 +344,30 @@ export const ConvertToGivenTimezoneDate = (
   };
 
   return date.toLocaleString("en-US", options);
+};
+export const ConvertToGivenTimezoneDateTime = (
+  dateString: string | undefined | null
+) => {
+  if (!dateString) return "";
+  const date = new Date(dateString);
+
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: false,
+    timeZone: "America/Los_Angeles",
+  };
+
+  return date.toLocaleString("en-US", options);
+};
+export const addMinutesToGivenDate = (
+  dateTime: string,
+  totalMinutes: number
+) => {
+  const date = new Date(dateTime);
+  date.setMinutes(date.getMinutes() + totalMinutes);
+  return date;
 };

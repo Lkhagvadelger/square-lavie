@@ -22,10 +22,9 @@ import { FloatingCart } from "./FloatingCart";
 import { SkeletonLoading } from "./SkeletonLoading";
 
 export const Home = ({ locationId }: { locationId: string }) => {
-  const { isOpen, onToggle, onClose, onOpen } = useDisclosure();
+  const { isOpen, onClose, onOpen } = useDisclosure();
   const { data, isLoading } = useGetServices(locationId);
   const router = useRouter();
-
   const goToCalendar = () => {
     if (total.totalItems == 0) {
       return;
@@ -50,7 +49,6 @@ export const Home = ({ locationId }: { locationId: string }) => {
       });
 
       setSpecialServices(specialServicesFiltered);
-
       //add to mustAskServices from specialServices that is answerRequiredServiceAnswered equals false
       const mustAskServicesFiltered = specialServicesFiltered
         .filter(
@@ -79,6 +77,7 @@ export const Home = ({ locationId }: { locationId: string }) => {
       setMustAskServices(uniqueMustAskServicesFiltered);
     }
   };
+  const CategoryToSeparate = [];
   const [specialServices, setSpecialServices] = useState<RequiredServiceType[]>(
     [
       {
@@ -104,7 +103,6 @@ export const Home = ({ locationId }: { locationId: string }) => {
       },
     ]
   );
-
   //Unanswered services will be listed in here. Data will be shown in Confirmation Modal
   const [mustAskServices, setMustAskServices] = useState<ServiceItem[]>([]);
   const [cart, setCart] = useLocalStorage("cart", []);
@@ -129,8 +127,8 @@ export const Home = ({ locationId }: { locationId: string }) => {
       .flat()
       .find((variant) => variant.id === variantIdKey);
 
-    if (serviceVariant) {
-      addSelectedVariantToCart(serviceVariant);
+    if (serviceVariant && service) {
+      addSelectedVariantToCart(serviceVariant, service);
     }
   };
   const removeServiceByServiceIdFromCart = (serviceId: string) => {
@@ -144,11 +142,17 @@ export const Home = ({ locationId }: { locationId: string }) => {
       setCart(newCart);
     }
   };
-  const addSelectedVariantToCart = (serviceVariant: ItemVariation) => {
+  const addSelectedVariantToCart = (
+    serviceVariant: ItemVariation,
+    serviceItem: ServiceItem
+  ) => {
     const cartItem: CartModel = {
       serviceId: serviceVariant.itemVariationData.itemId,
       variantId: serviceVariant.id,
-      name: serviceVariant.itemVariationData.name,
+      serviceCategoryId: serviceItem.id,
+      name: `${serviceVariant.itemVariationData.name}${
+        " - " + serviceItem.itemData.name
+      }`,
       price: serviceVariant.itemVariationData.priceMoney.amount as any,
       quantity: 1,
       teamMemberIds: serviceVariant.itemVariationData.teamMemberIds,
@@ -217,7 +221,6 @@ export const Home = ({ locationId }: { locationId: string }) => {
         }
       );
       //if cart Items included answerRequiredServiceId than set answerRequiredServiceAnswered to true
-      console.log(specialServicesAnswerFiltered);
       setSpecialServices(specialServicesAnswerFiltered);
 
       //add to mustAskServices from specialServices that is answerRequiredServiceAnswered equals false
@@ -248,7 +251,6 @@ export const Home = ({ locationId }: { locationId: string }) => {
       setMustAskServices(uniqueMustAskServicesFiltered);
     }
   };
-
   return (
     <AppLayout>
       <>
@@ -256,44 +258,45 @@ export const Home = ({ locationId }: { locationId: string }) => {
           <SkeletonLoading />
         ) : (
           <Box p={2} pb={32}>
-            {data?.map((service: ServiceItem, key: number) => {
-              return (
-                <Box
-                  mb={2}
-                  key={key}
-                  p={3}
-                  border={"1px"}
-                  borderRadius={"4px"}
-                  w="full"
-                >
-                  <Text>{service.itemData.name}</Text>
-                  <VStack w="full" gap={0} fontSize="14px">
-                    {cart != null && (
-                      <ChoiceList
-                        name={service.id}
-                        setValue={addItemBySelectedVariantId}
-                        value={setSelectedKey(
-                          cart?.find(
-                            (cartItem: CartModel) =>
-                              cartItem.serviceId === service.id
-                          )?.variantId
-                        )}
-                        choices={service.itemData.variations.map(
-                          (variation) => {
-                            return {
-                              id: variation.itemVariationData.itemId,
-                              type: variation.itemVariationData.name,
-                              choice: variation.id,
-                              data: variation.itemVariationData,
-                            };
-                          }
-                        )}
-                      />
-                    )}
-                  </VStack>
-                </Box>
-              );
-            })}
+            {data?.map &&
+              data?.map((service: ServiceItem, key: number) => {
+                return (
+                  <Box
+                    mb={2}
+                    key={key}
+                    p={3}
+                    border={"1px"}
+                    borderRadius={"4px"}
+                    w="full"
+                  >
+                    <Text>{service.itemData.name}</Text>
+                    <VStack w="full" gap={0} fontSize="14px">
+                      {cart != null && (
+                        <ChoiceList
+                          name={service.id}
+                          setValue={addItemBySelectedVariantId}
+                          value={setSelectedKey(
+                            cart?.find(
+                              (cartItem: CartModel) =>
+                                cartItem.serviceId === service.id
+                            )?.variantId
+                          )}
+                          choices={service.itemData.variations.map(
+                            (variation) => {
+                              return {
+                                id: variation.itemVariationData.itemId,
+                                type: variation.itemVariationData.name,
+                                choice: variation.id,
+                                data: variation.itemVariationData,
+                              };
+                            }
+                          )}
+                        />
+                      )}
+                    </VStack>
+                  </Box>
+                );
+              })}
           </Box>
         )}
         <FloatingCart goToCalendar={goToCalendar} total={total} />

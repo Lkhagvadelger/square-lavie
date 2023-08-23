@@ -1,3 +1,4 @@
+import { isNull } from "@chakra-ui/utils";
 import {
   Calendar,
   CalendatMonthType as CalendarMonthType,
@@ -5,24 +6,28 @@ import {
 import { AppLayout, Box, Text, Button, Spinner } from "@ui/index";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { AppointmentSegment, Availability } from "square";
 import {
   useAvailabilityAny,
+  useCreateBooking,
   useGetLocationInfo,
   useLocalStorage,
 } from "../data/hooks";
-import { Appointment, CartModel } from "../data/types";
+import { CartModel } from "../data/types";
 
 export const DatePage = ({ locationId }: { locationId: string }) => {
   const [cart] = useLocalStorage("cart", []);
   const availabitlyMutation = useAvailabilityAny(locationId);
+  const createMutation = useCreateBooking(locationId);
   const { data: locationData, isLoading } = useGetLocationInfo(locationId);
-  const [selectedHour, setSelectedHour] = useState<string | undefined>(
-    undefined
-  );
+  const [selectedHourAndStaff, setSelectedHourAndStaff] = useState<
+    Availability | undefined
+  >(undefined);
+
   const [availability, setAvailability] = useState<
     | {
         startDate: CalendarMonthType;
-        availabilities: Appointment[];
+        availabilities: Availability[];
       }
     | undefined
   >(undefined);
@@ -33,7 +38,18 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
   });
 
   const [selectedVariantIds, setSelectedVariantIds] = useState<any[]>([]);
-
+  const onBook = () => {
+    if (selectedHourAndStaff) {
+      createMutation.mutate(selectedHourAndStaff, {
+        onSuccess: (data) => {
+          console.log(data);
+        },
+        onError: (e) => {
+          console.log(e);
+        },
+      });
+    }
+  };
   // if user already selected muskAskServiceIds
   // step: 1
   useEffect(() => {
@@ -105,10 +121,17 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
             .map((item, key) => {
               return (
                 <Box
-                  bg={selectedHour == item.startAt ? "green" : "none"}
+                  bg={
+                    selectedHourAndStaff?.startAt == item.startAt
+                      ? "green"
+                      : "none"
+                  }
                   key={key}
                   onClick={() => {
-                    setSelectedHour(item.startAt);
+                    setSelectedHourAndStaff({
+                      startAt: item.startAt,
+                      appointmentSegments: item.appointmentSegments,
+                    });
                   }}
                 >
                   <TimeBox dateString={item.startAt} />
@@ -118,12 +141,18 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
         </Box>
         <Box>
           <Button onClick={goBack}>Back</Button>
+          <Button onClick={onBook}>Book</Button>
         </Box>
       </>
     </AppLayout>
   );
 };
-export const TimeBox = ({ dateString }: { dateString: string }) => {
+export const TimeBox = ({
+  dateString,
+}: {
+  dateString: string | undefined | null;
+}) => {
+  if (!dateString) return <></>;
   const date = new Date(dateString);
 
   const options: Intl.DateTimeFormatOptions = {
@@ -161,8 +190,10 @@ const ConvertToGivenTimezone = (dateString: CalendarMonthType) => {
   };
   return date.toLocaleString("en-US", options);
 };
-
-export const ConvertToGivenTimezoneDate = (dateString: string) => {
+export const ConvertToGivenTimezoneDate = (
+  dateString: string | undefined | null
+) => {
+  if (!dateString) return "";
   const date = new Date(dateString);
 
   const options: Intl.DateTimeFormatOptions = {

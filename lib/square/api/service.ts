@@ -134,7 +134,7 @@ export const getCustomerID = async (
     familyName,
     givenName,
     idempotencyKey: uuidv4(),
-    referenceId: "BOOKINGS-SAMPLE-APP",
+    referenceId: "BOOKINGS-MARKA-APP",
   });
 
   return customer!.id;
@@ -209,7 +209,7 @@ export const isThisMonth = (date: any) => {
 export const getEndAtDate = (startDate: Date) => {
   const tempEndDate = new Date(
     startDate.getFullYear(),
-    startDate.getMonth()+1,
+    startDate.getMonth() + 1,
     0,
     18,
     0,

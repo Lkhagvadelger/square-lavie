@@ -12,10 +12,10 @@ import {
   VStack,
 } from "@ui/index";
 import { useState } from "react";
-import { setSelectedKey } from "../api/service";
-import { useLocalStorage } from "../data/hooks";
-import { ServiceItem, CartModel } from "../data/types";
-import { ChoiceList } from "./components/ChoiceList";
+import { setSelectedKey } from "../../api/service";
+import { useLocalStorage } from "../../data/hooks";
+import { ServiceItem, CartModel } from "../../data/types";
+import { ChoiceList } from "./ChoiceList";
 
 export const AdditionalService = ({
   isOpen,

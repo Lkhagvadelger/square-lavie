@@ -16,7 +16,7 @@ import {
   RequiredServiceType,
   ServiceItem,
 } from "../data/types";
-import { AdditionalService } from "./AdditionalService";
+import { AdditionalService } from "./components/AdditionalService";
 import { ChoiceList } from "./components/ChoiceList";
 import { FloatingCart } from "./components/FloatingCart";
 import { SkeletonLoading } from "./components/SkeletonLoading";

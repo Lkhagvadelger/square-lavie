@@ -139,7 +139,7 @@ handler
         throw AppError.BadRequest("locationId is required!");
       const serviceVariantIds2: AvailabilityReqModel[] = [];
 
-      const serviceVariantIds = req.body
+      let serviceVariantIds = req.body
         .selectedVariantIds as AvailabilityReqModel[];
 
       const startDate = req.body.startDate as any;
@@ -147,9 +147,9 @@ handler
 
       //[manicure serviceId, pedicure serviceId]
       const categoryToSeparate = [
-        { serviceId: "ZGYJZBNCF7UOH7QOC6IM4YGU", teamMemberIds: [""] },
+        { categoryId: "42Q7FDU26NEHTPIAL66WRWTA", teamMemberIds: [""] },
         {
-          serviceId: "FECI7HYLOOHJULRHN5IPQVIY",
+          categoryId: "CDCJXC5L5ZXRLEFKABSE7PVX",
           teamMemberIds:
             //first one is most likely selected for current service
             [
@@ -164,28 +164,38 @@ handler
       //if categoryToSeparate serviceIds both detected inside serviceVariantIds
 
       const isContainingBothCategory = categoryToSeparate
-        .map((r) => r.serviceId)
+        .map((r) => r.categoryId)
         .every((item) =>
-          serviceVariantIds.map((e) => e.serviceId).includes(item)
+          serviceVariantIds.map((e) => e.categoryId).includes(item)
         );
 
       if (isContainingBothCategory) {
         //create second serviceVariantIds
         serviceVariantIds
-          .filter((r) => r.serviceId == categoryToSeparate[1].serviceId)
+          .filter((r) => r.categoryId == categoryToSeparate[1].categoryId)
+          .filter((r) => r.teamMemberIdFilter.any.length > 1)
           .map((r) => {
             serviceVariantIds2.push({
               serviceVariationId: r.serviceVariationId,
-              serviceId: r.serviceId,
-              teamMemberIdFilter: { any: [r.teamMemberIdFilter.any[0]] },
+              categoryId: r.categoryId,
+              teamMemberIdFilter: { any: ["TMCwFyeMexqTdxw4"] },
             });
           });
+
+        serviceVariantIds = serviceVariantIds.map((r) => {
+          return {
+            serviceVariationId: r.serviceVariationId,
+            categoryId: r.categoryId,
+            teamMemberIdFilter: {
+              any: r.teamMemberIdFilter.any.filter(
+                (r1) => r1 != "TMCwFyeMexqTdxw4"
+              ),
+            },
+          };
+        });
       }
-      console.log(
-        JSON.stringify(serviceVariantIds),
-        serviceVariantIds2,
-        isContainingBothCategory
-      );
+      console.log(JSON.stringify(serviceVariantIds), isContainingBothCategory);
+      console.log(JSON.stringify(serviceVariantIds2));
 
       if (serviceVariantIds.length == 0 || serviceVariantIds == undefined)
         throw AppError.BadRequest("selectedVariantIds is required");

@@ -19,7 +19,12 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
   const availabitlyMutation = useAvailabilityAny(locationId);
   const createMutation = useCreateBooking(locationId);
   const { data: locationData, isLoading } = useGetLocationInfo(locationId);
+  const [isSecondBookingRequired, setIsSecondBookingRequired] =
+    useState<Boolean>(false);
   const [selectedHourAndStaff, setSelectedHourAndStaff] = useState<
+    Availability | undefined
+  >(undefined);
+  const [selectedHourAndStaffSecond, setSelectedHourAndStaffSecond] = useState<
     Availability | undefined
   >(undefined);
 
@@ -40,14 +45,22 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
   const [selectedVariantIds, setSelectedVariantIds] = useState<any[]>([]);
   const onBooking = () => {
     if (selectedHourAndStaff) {
-      createMutation.mutate(selectedHourAndStaff, {
-        onSuccess: (data) => {
-          console.log(data);
+      createMutation.mutate(
+        {
+          ...selectedHourAndStaff,
+          isSecondBookingRequired,
+          appointmentSegmentSecond:
+            selectedHourAndStaffSecond?.appointmentSegments,
         },
-        onError: (e) => {
-          console.log(e);
-        },
-      });
+        {
+          onSuccess: (data) => {
+            console.log(data);
+          },
+          onError: (e) => {
+            console.log(e);
+          },
+        }
+      );
     }
   };
   // if user already selected muskAskServiceIds
@@ -58,7 +71,7 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
       setSelectedVariantIds(
         cart.map((item: CartModel) => ({
           serviceVariationId: item.variantId,
-          serviceId: item.serviceCategoryId,
+          categoryId: item.serviceCategoryId,
           teamMemberIdFilter: { any: item.teamMemberIds },
         }))
       );
@@ -105,40 +118,55 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
   };
 
   const searchFromSecondOption = (selectedTime: Availability) => {
-    const secondAvailability = availability?.availabilities2.filter(
-      (r) => r.startAt == selectedTime.startAt
-    )[0];
-    if (
-      secondAvailability &&
-      secondAvailability.appointmentSegments &&
-      secondAvailability.appointmentSegments.length > 0
-    ) {
-      let firstAvailability: Availability = {
-        startAt: selectedTime.startAt,
-        //remove seconds
-        appointmentSegments: selectedTime.appointmentSegments?.filter(
-          (r) =>
-            !secondAvailability!
-              .appointmentSegments!.map((r) => r.serviceVariationId)
-              .includes(r.serviceVariationId)
-        ),
-      };
-      firstAvailability?.appointmentSegments?.concat(
-        secondAvailability!.appointmentSegments!
-      );
+    if (availability?.availabilities2) {
+      const secondAvailability = availability?.availabilities2.filter(
+        (r) => r.startAt == selectedTime.startAt
+      )[0];
 
-      setSelectedHourAndStaff({
-        startAt: selectedTime.startAt,
-        appointmentSegments: [
-          ...firstAvailability!.appointmentSegments!,
-          ...secondAvailability!.appointmentSegments,
-        ],
-      });
-      console.log(selectedHourAndStaff);
+      console.log("secondAvailability : ", secondAvailability);
+
+      if (
+        secondAvailability &&
+        secondAvailability.appointmentSegments &&
+        secondAvailability.appointmentSegments.length > 0
+      ) {
+        let firstAvailability: Availability = {
+          startAt: selectedTime.startAt,
+          //remove seconds
+          appointmentSegments: selectedTime.appointmentSegments?.filter(
+            (r) =>
+              !secondAvailability!
+                .appointmentSegments!.map((r) => r.serviceVariationId)
+                .includes(r.serviceVariationId)
+          ),
+        };
+        firstAvailability?.appointmentSegments?.concat(
+          secondAvailability!.appointmentSegments!
+        );
+        setIsSecondBookingRequired(true);
+        setSelectedHourAndStaff({
+          startAt: selectedTime.startAt,
+          appointmentSegments: [
+            ...firstAvailability!.appointmentSegments!,
+            ...secondAvailability!.appointmentSegments,
+          ],
+        });
+        setSelectedHourAndStaffSecond({
+          startAt: selectedTime.startAt,
+          appointmentSegments: [...secondAvailability!.appointmentSegments],
+        });
+      } else {
+        setSelectedHourAndStaff(selectedTime);
+        setIsSecondBookingRequired(false);
+      }
     } else {
       setSelectedHourAndStaff(selectedTime);
+      setIsSecondBookingRequired(false);
     }
   };
+  useEffect(() => {
+    console.log(selectedHourAndStaff);
+  }, [selectedHourAndStaff]);
   return (
     <AppLayout>
       <>
@@ -192,6 +220,34 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
           <Button onClick={goBack}>Back</Button>
           <Button onClick={onBooking}>Book</Button>
         </Box>
+        <Text>Just for visually make sure</Text>
+
+        <Flex flexWrap={"wrap"} justifyContent={"flex-start"}>
+          {availability?.availabilities2 &&
+            availability?.availabilities2
+              .filter(
+                (r) =>
+                  ConvertToGivenTimezoneDate(r.startAt) ==
+                  ConvertToGivenTimezone(selectedDate)
+              )
+              .map((item, key) => {
+                return (
+                  <Box
+                    mr="2"
+                    mb={2}
+                    w="24"
+                    bg={
+                      selectedHourAndStaff?.startAt == item.startAt
+                        ? "green"
+                        : "none"
+                    }
+                    key={key}
+                  >
+                    <TimeBox dateString={item.startAt} />
+                  </Box>
+                );
+              })}
+        </Flex>
       </>
     </AppLayout>
   );

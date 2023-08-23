@@ -114,7 +114,6 @@ export const Home = ({ locationId }: { locationId: string }) => {
   ) => {
     //get first key name from variantId
     const variantIdKey = Object.keys(variantIdAsValue)[0];
-
     // search by service id is service in the list
     const service = data?.find((service) => service.id === serviceId);
     // this is remove action, if variantIdKey is undefined
@@ -149,7 +148,7 @@ export const Home = ({ locationId }: { locationId: string }) => {
     const cartItem: CartModel = {
       serviceId: serviceVariant.itemVariationData.itemId,
       variantId: serviceVariant.id,
-      serviceCategoryId: serviceItem.id,
+      serviceCategoryId: serviceItem.itemData.categoryId,
       name: `${serviceVariant.itemVariationData.name}${
         " - " + serviceItem.itemData.name
       }`,

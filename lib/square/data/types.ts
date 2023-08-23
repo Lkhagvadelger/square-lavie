@@ -65,6 +65,14 @@ export type Appointment = {
 };
 export type AvailabilityReqModel = {
   serviceVariationId: string;
-  serviceId: string;
+  categoryId: string;
   teamMemberIdFilter: { any: string[] };
+};
+export type AvailabilityCustomModel = {
+  /** The RFC 3339 timestamp specifying the beginning time of the slot available for booking. */
+  startAt?: string | null;
+  /** The ID of the location available for booking. */
+  locationId?: string;
+  /** The list of appointment segments available for booking */
+  appointmentSegments?: AppointmentSegment[] | null;
 };

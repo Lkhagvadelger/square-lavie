@@ -1,17 +1,7 @@
-import {
-  Calendar,
-  CalendatMonthType as CalendarMonthType,
-} from "@ui/components/calendar/calendar";
+import { CalendatMonthType as CalendarMonthType } from "@ui/components/calendar/calendar";
 import { AppLayout, Box, Button, Flex, Spinner, Text } from "@ui/index";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { Availability } from "square";
-import {
-  useAvailabilityAny,
-  useGetBooking,
-  useLocalStorage,
-} from "../../data/hooks";
-import { CartModel } from "../../data/types";
+import { useGetBooking } from "../../data/hooks";
 
 export const Completed = ({
   locationId,
@@ -21,10 +11,6 @@ export const Completed = ({
   bookingId: string;
 }) => {
   const { data: bookingData, isLoading } = useGetBooking(locationId, bookingId);
-
-  useEffect(() => {
-    useGetBooking(locationId, bookingId);
-  }, []);
 
   const router = useRouter();
   const goBack = () => {

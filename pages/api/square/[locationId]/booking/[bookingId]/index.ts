@@ -12,53 +12,69 @@ const handler = createHandler();
  * 1. Get the booking associated with the given bookingID
  * 2. Get information about the team member, location, service, etc, based on the information from 1.
  */
+
+const getBookingDetail = async (bookingId: string) => {
+  // Retrieve the booking provided by the bookingId.
+  const {
+    result: { booking },
+  } = await bookingsApi.retrieveBooking(bookingId);
+  if (!booking) throw new Error("Booking not found");
+
+  const teamMemberIds = booking.appointmentSegments?.map((r) => r.teamMemberId);
+  const serviceIds = booking.appointmentSegments!.map(
+    (r) => r.serviceVariationId!
+  );
+  const catalogyRequest: BatchRetrieveCatalogObjectsRequest = {
+    objectIds: serviceIds,
+    includeRelatedObjects: true,
+  };
+
+  // Make API call to get service variation details
+  const { result: services } = await catalogApi.batchRetrieveCatalogObjects(
+    catalogyRequest
+  );
+
+  const serviceVariation = services.objects;
+  const serviceItems = services?.relatedObjects?.filter(
+    (relatedObject) => relatedObject.type === "ITEM"
+  );
+
+  let teamMembers = [];
+
+  if (teamMemberIds != null && teamMemberIds.length > 0) {
+    for (const teamMember of teamMemberIds) {
+      const {
+        result: { teamMemberBookingProfile },
+      } = await bookingsApi.retrieveTeamMemberBookingProfile(teamMember);
+
+      teamMembers.push(teamMemberBookingProfile);
+    }
+  }
+
+  return {
+    booking,
+    serviceVariation,
+    serviceItems,
+    teamMembers,
+  };
+};
+
 handler.get(async (req, res) => {
   const bookingId = req.query.bookingId as string;
   try {
-    // Retrieve the booking provided by the bookingId.
-    const {
-      result: { booking },
-    } = await bookingsApi.retrieveBooking(bookingId);
-    if (!booking) throw new Error("Booking not found");
+    const result = [];
 
-    const teamMemberIds = booking.appointmentSegments?.map(
-      (r) => r.teamMemberId
-    );
-    const serviceIds = booking.appointmentSegments!.map(
-      (r) => r.serviceVariationId!
-    );
-    const catalogyRequest: BatchRetrieveCatalogObjectsRequest = {
-      objectIds: serviceIds,
-      includeRelatedObjects: true,
-    };
+    if (bookingId != null) {
+      const bookingIds = bookingId.split(",");
 
-    // Make API call to get service variation details
-    const { result: services } = await catalogApi.batchRetrieveCatalogObjects(
-      catalogyRequest
-    );
-
-    const serviceVariation = services.objects;
-    const serviceItems = services?.relatedObjects?.filter(
-      (relatedObject) => relatedObject.type === "ITEM"
-    );
-
-    let teamMembers = [];
-
-    if (teamMemberIds != null && teamMemberIds.length > 0) {
-      for (const teamMember of teamMemberIds) {
-        const {
-          result: { teamMemberBookingProfile },
-        } = await bookingsApi.retrieveTeamMemberBookingProfile(teamMember);
-
-        teamMembers.push(teamMemberBookingProfile);
+      for (const bookId of bookingIds) {
+        const bookResult = await getBookingDetail(bookId);
+        result.push(bookResult);
       }
     }
 
     res.sendSuccess({
-      booking,
-      serviceVariation,
-      serviceItems,
-      teamMembers,
+      result,
     });
   } catch (e) {
     res.sendError(e);

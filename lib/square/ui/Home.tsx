@@ -17,9 +17,9 @@ import {
   ServiceItem,
 } from "../data/types";
 import { AdditionalService } from "./AdditionalService";
-import { ChoiceList } from "./ChoiceList";
-import { FloatingCart } from "./FloatingCart";
-import { SkeletonLoading } from "./SkeletonLoading";
+import { ChoiceList } from "./components/ChoiceList";
+import { FloatingCart } from "./components/FloatingCart";
+import { SkeletonLoading } from "./components/SkeletonLoading";
 
 export const Home = ({ locationId }: { locationId: string }) => {
   const { isOpen, onClose, onOpen } = useDisclosure();

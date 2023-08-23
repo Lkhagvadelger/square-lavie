@@ -55,6 +55,7 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
         {
           onSuccess: (data) => {
             console.log(data);
+            //go to booking date completed page
           },
           onError: (e) => {
             console.log(e);
@@ -164,9 +165,7 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
       setIsSecondBookingRequired(false);
     }
   };
-  useEffect(() => {
-    console.log(selectedHourAndStaff);
-  }, [selectedHourAndStaff]);
+
   return (
     <AppLayout>
       <>

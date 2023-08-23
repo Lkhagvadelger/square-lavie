@@ -15,7 +15,7 @@ import { useState } from "react";
 import { setSelectedKey } from "../api/service";
 import { useLocalStorage } from "../data/hooks";
 import { ServiceItem, CartModel } from "../data/types";
-import { ChoiceList } from "./ChoiceList";
+import { ChoiceList } from "./components/ChoiceList";
 
 export const AdditionalService = ({
   isOpen,

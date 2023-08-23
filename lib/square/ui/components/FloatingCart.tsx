@@ -1,6 +1,6 @@
 import { HStack, Flex, Text, Icon, Box } from "@chakra-ui/react";
 import { BsReceiptCutoff, BsChevronRight } from "react-icons/bs";
-import { displayServicePrice } from "../api/service";
+import { displayServicePrice } from "../../api/service";
 
 export const FloatingCart = ({
   total,

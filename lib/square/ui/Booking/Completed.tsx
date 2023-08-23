@@ -8,9 +8,7 @@ import { useEffect, useState } from "react";
 import { Availability } from "square";
 import {
   useAvailabilityAny,
-  useCreateBooking,
   useGetBooking,
-  useGetLocationInfo,
   useLocalStorage,
 } from "../../data/hooks";
 import { CartModel } from "../../data/types";
@@ -22,26 +20,11 @@ export const Completed = ({
   locationId: string;
   bookingId: string;
 }) => {
-  const [cart] = useLocalStorage("cart", []);
-  const availabitlyMutation = useAvailabilityAny(locationId);
   const { data: bookingData, isLoading } = useGetBooking(locationId, bookingId);
-  const [selectedHourAndStaff, setSelectedHourAndStaff] = useState<
-    Availability | undefined
-  >(undefined);
 
-  const [availability, setAvailability] = useState<
-    | {
-        startDate: CalendarMonthType;
-        availabilities: Availability[];
-        availabilities2: Availability[];
-      }
-    | undefined
-  >(undefined);
-  const [selectedDate, setSelectedDate] = useState<CalendarMonthType>({
-    year: new Date().getFullYear(),
-    month: new Date().getMonth(),
-    day: new Date().getDate(),
-  });
+  useEffect(() => {
+    useGetBooking(locationId, bookingId);
+  }, []);
 
   const router = useRouter();
   const goBack = () => {
@@ -51,55 +34,18 @@ export const Completed = ({
   return (
     <AppLayout>
       <>
-        {availabitlyMutation.isLoading && <Spinner></Spinner>}
-        {!availabitlyMutation.isLoading && availability && (
-          <Calendar
-            selectedDate={selectedDate}
-            setSelectedDate={setSelectedDate}
-          />
-        )}
-        {locationData && locationData.timezone != userTimezone() && (
+        {isLoading && <Spinner></Spinner>}
+        {bookingData && (
           <Text>
-            ⚠ HEADS UP! It looks like you are in a different timezone(
-            {userTimezone()}). Times below are shown in {locationData.timezone}{" "}
-            time.
+            ⚠ HEADS UP! It looks like you are in a different timezone( time.
           </Text>
         )}
 
         <Flex flexWrap={"wrap"} justifyContent={"flex-start"}>
-          {availability?.availabilities
-            .filter(
-              (r) =>
-                ConvertToGivenTimezoneDate(r.startAt) ==
-                ConvertToGivenTimezone(selectedDate)
-            )
-            .map((item, key) => {
-              return (
-                <Box
-                  mr="2"
-                  mb={2}
-                  w="24"
-                  bg={
-                    selectedHourAndStaff?.startAt == item.startAt
-                      ? "green"
-                      : "none"
-                  }
-                  key={key}
-                  onClick={() => {
-                    onTimeSelectAndSearchSecondOption({
-                      startAt: item.startAt,
-                      appointmentSegments: item.appointmentSegments,
-                    });
-                  }}
-                >
-                  <TimeBox dateString={item.startAt} />
-                </Box>
-              );
-            })}
+          {bookingData != null && JSON.stringify(bookingData)}
         </Flex>
         <Box>
           <Button onClick={goBack}>Back</Button>
-          <Button onClick={onBooking}>Book</Button>
         </Box>
       </>
     </AppLayout>

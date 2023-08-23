@@ -20,8 +20,9 @@ handler.get(async (req, res) => {
       result: { booking },
     } = await bookingsApi.retrieveBooking(bookingId);
     if (!booking) throw new Error("Booking not found");
+
     const teamMemberIds = booking.appointmentSegments?.map(
-      (segment) => segment.teamMemberId
+      (r) => r.teamMemberId
     );
     const serviceIds = booking.appointmentSegments!.map(
       (r) => r.serviceVariationId!
@@ -30,35 +31,34 @@ handler.get(async (req, res) => {
       objectIds: serviceIds,
       includeRelatedObjects: true,
     };
+
     // Make API call to get service variation details
-    const retrieveServiceVariationPromise =
-      catalogApi.batchRetrieveCatalogObjects(catalogyRequest);
+    const { result: services } = await catalogApi.batchRetrieveCatalogObjects(
+      catalogyRequest
+    );
 
-    // Make API call to get team member details
-    const retrieveTeamMemberPromise =
-      bookingsApi.retrieveTeamMemberBookingProfile(teamMemberId);
+    const serviceVariation = services.objects;
+    const serviceItems = services?.relatedObjects?.filter(
+      (relatedObject) => relatedObject.type === "ITEM"
+    );
 
-    // Wait until all API calls have completed
-    const [
-      { result: service },
-      {
-        result: { teamMemberBookingProfile },
-      },
-    ] = await Promise.all([
-      retrieveServiceVariationPromise,
-      retrieveTeamMemberPromise,
-    ]);
+    let teamMembers = [];
 
-    const serviceVariation = service.object;
-    const serviceItem = service.relatedObjects.filter(
-      (relatedObject: any) => relatedObject.type === "ITEM"
-    )[0];
+    if (teamMemberIds != null && teamMemberIds.length > 0) {
+      for (const teamMember of teamMemberIds) {
+        const {
+          result: { teamMemberBookingProfile },
+        } = await bookingsApi.retrieveTeamMemberBookingProfile(teamMember);
+
+        teamMembers.push(teamMemberBookingProfile);
+      }
+    }
 
     res.sendSuccess({
       booking,
-      serviceItem,
       serviceVariation,
-      teamMemberBookingProfile,
+      serviceItems,
+      teamMembers,
     });
   } catch (e) {
     res.sendError(e);

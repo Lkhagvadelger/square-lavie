@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Availability } from "square";
 import { string } from "square/dist/types/schema";
+import addMinutes from "date-fns/addMinutes";
 import {
   useAvailabilityAny,
   useCreateBooking,
@@ -60,6 +61,11 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
     "selectedDate",
     "selectedVariantIds",
   ]);
+  useEffect(() => {
+    setValue("selectedHourAndStaff", undefined);
+    setValue("selectedHourAndStaffFirst", undefined);
+    setValue("selectedHourAndStaffSecond", undefined);
+  }, [getValues("selectedDate")]);
   const [cart] = useLocalStorage("cart", []);
   const availabitlyMutation = useAvailabilityAny(locationId);
   const createMutation = useCreateBooking(locationId);
@@ -281,7 +287,10 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
               })}
         </Flex>
         <Box>
-          <Text></Text>
+          <TotalDurationScreen
+            dateString={getValues("selectedHourAndStaff")?.startAt}
+            minutes={30}
+          />
         </Box>
       </>
     </AppLayout>
@@ -352,22 +361,48 @@ export const ConvertToGivenTimezoneDateTime = (
   const date = new Date(dateString);
 
   const options: Intl.DateTimeFormatOptions = {
+    weekday: "long",
     year: "numeric",
     month: "long",
     day: "numeric",
     hour: "numeric",
-    minute: "2-digit",
-    hour12: false,
+    minute: "numeric",
+    hour12: true,
     timeZone: "America/Los_Angeles",
   };
 
   return date.toLocaleString("en-US", options);
 };
-export const addMinutesToGivenDate = (
-  dateTime: string,
-  totalMinutes: number
+export const ConvertToGivenTimezoneTime = (
+  dateString: string | undefined | null
 ) => {
-  const date = new Date(dateTime);
-  date.setMinutes(date.getMinutes() + totalMinutes);
-  return date;
+  if (!dateString) return "";
+  const date = new Date(dateString);
+
+  const options: Intl.DateTimeFormatOptions = {
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true,
+    timeZone: "America/Los_Angeles",
+    timeZoneName: "short",
+  };
+
+  return date.toLocaleString("en-US", options);
+};
+const TotalDurationScreen = ({
+  dateString,
+  minutes,
+}: {
+  dateString: string | undefined | null;
+  minutes: number;
+}) => {
+  if (!dateString) return <></>;
+  const date = addMinutes(new Date(dateString), 30);
+
+  return (
+    <Box>
+      {ConvertToGivenTimezoneDateTime(dateString)} -{" "}
+      {ConvertToGivenTimezoneTime(date.toISOString())}
+    </Box>
+  );
 };

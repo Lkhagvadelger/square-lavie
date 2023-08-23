@@ -1,12 +1,11 @@
-import { isNull } from "@chakra-ui/utils";
 import {
   Calendar,
   CalendatMonthType as CalendarMonthType,
 } from "@ui/components/calendar/calendar";
-import { AppLayout, Box, Text, Button, Spinner, Flex } from "@ui/index";
+import { AppLayout, Box, Button, Flex, Spinner, Text } from "@ui/index";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { AppointmentSegment, Availability } from "square";
+import { Availability } from "square";
 import {
   useAvailabilityAny,
   useCreateBooking,
@@ -28,6 +27,7 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
     | {
         startDate: CalendarMonthType;
         availabilities: Availability[];
+        availabilities2: Availability[];
       }
     | undefined
   >(undefined);
@@ -38,7 +38,7 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
   });
 
   const [selectedVariantIds, setSelectedVariantIds] = useState<any[]>([]);
-  const onBook = () => {
+  const onBooking = () => {
     if (selectedHourAndStaff) {
       createMutation.mutate(selectedHourAndStaff, {
         onSuccess: (data) => {
@@ -58,6 +58,7 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
       setSelectedVariantIds(
         cart.map((item: CartModel) => ({
           serviceVariationId: item.variantId,
+          serviceId: item.serviceCategoryId,
           teamMemberIdFilter: { any: item.teamMemberIds },
         }))
       );
@@ -71,7 +72,11 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
         !availability
       )
         availabitlyMutation.mutate(
-          { selectedVariantIds, startDate: selectedDate, now: new Date() },
+          {
+            selectedVariantIds,
+            startDate: selectedDate,
+            now: new Date(),
+          },
           {
             onError: (e) => {
               console.log(e);
@@ -93,7 +98,47 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
   const goBack = () => {
     router.push("/square/" + locationId);
   };
+  const onTimeSelectAndSearchSecondOption = (selectedTime: Availability) => {
+    if (!selectedTime) return;
+    //setSelectedHourAndStaff(selectedTime);
+    searchFromSecondOption(selectedTime);
+  };
 
+  const searchFromSecondOption = (selectedTime: Availability) => {
+    const secondAvailability = availability?.availabilities2.filter(
+      (r) => r.startAt == selectedTime.startAt
+    )[0];
+    if (
+      secondAvailability &&
+      secondAvailability.appointmentSegments &&
+      secondAvailability.appointmentSegments.length > 0
+    ) {
+      let firstAvailability: Availability = {
+        startAt: selectedTime.startAt,
+        //remove seconds
+        appointmentSegments: selectedTime.appointmentSegments?.filter(
+          (r) =>
+            !secondAvailability!
+              .appointmentSegments!.map((r) => r.serviceVariationId)
+              .includes(r.serviceVariationId)
+        ),
+      };
+      firstAvailability?.appointmentSegments?.concat(
+        secondAvailability!.appointmentSegments!
+      );
+
+      setSelectedHourAndStaff({
+        startAt: selectedTime.startAt,
+        appointmentSegments: [
+          ...firstAvailability!.appointmentSegments!,
+          ...secondAvailability!.appointmentSegments,
+        ],
+      });
+      console.log(selectedHourAndStaff);
+    } else {
+      setSelectedHourAndStaff(selectedTime);
+    }
+  };
   return (
     <AppLayout>
       <>
@@ -132,7 +177,7 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
                   }
                   key={key}
                   onClick={() => {
-                    setSelectedHourAndStaff({
+                    onTimeSelectAndSearchSecondOption({
                       startAt: item.startAt,
                       appointmentSegments: item.appointmentSegments,
                     });
@@ -145,7 +190,7 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
         </Flex>
         <Box>
           <Button onClick={goBack}>Back</Button>
-          <Button onClick={onBook}>Book</Button>
+          <Button onClick={onBooking}>Book</Button>
         </Box>
       </>
     </AppLayout>

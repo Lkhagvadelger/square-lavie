@@ -63,3 +63,8 @@ export type Appointment = {
   locationId: string;
   appointmentSegments: AppointmentSegment[];
 };
+export type AvailabilityReqModel = {
+  serviceVariationId: string;
+  serviceId: string;
+  teamMemberIdFilter: { any: string[] };
+};

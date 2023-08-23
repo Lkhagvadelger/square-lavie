@@ -148,7 +148,18 @@ handler
       //[manicure serviceId, pedicure serviceId]
       const categoryToSeparate = [
         { serviceId: "ZGYJZBNCF7UOH7QOC6IM4YGU", teamMemberIds: [""] },
-        { serviceId: "FECI7HYLOOHJULRHN5IPQVIY", teamMemberIds: [""] },
+        {
+          serviceId: "FECI7HYLOOHJULRHN5IPQVIY",
+          teamMemberIds:
+            //first one is most likely selected for current service
+            [
+              "TMCwFyeMexqTdxw4",
+              "TMSzK-FIQ2k6FSEU",
+              "TMJjPtHVjfPG_dCo",
+              "TMNWxmtV8EGB9S9F",
+              "TMZOXcfnaorAtnO-",
+            ],
+        },
       ];
       //if categoryToSeparate serviceIds both detected inside serviceVariantIds
 
@@ -157,16 +168,21 @@ handler
         .every((item) =>
           serviceVariantIds.map((e) => e.serviceId).includes(item)
         );
+
       if (isContainingBothCategory) {
         //create second serviceVariantIds
         serviceVariantIds
           .filter((r) => r.serviceId == categoryToSeparate[1].serviceId)
           .map((r) => {
-            serviceVariantIds2.push(r);
+            serviceVariantIds2.push({
+              serviceVariationId: r.serviceVariationId,
+              serviceId: r.serviceId,
+              teamMemberIdFilter: { any: [r.teamMemberIdFilter.any[0]] },
+            });
           });
       }
       console.log(
-        serviceVariantIds,
+        JSON.stringify(serviceVariantIds),
         serviceVariantIds2,
         isContainingBothCategory
       );

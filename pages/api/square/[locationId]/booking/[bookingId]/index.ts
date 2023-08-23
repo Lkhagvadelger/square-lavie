@@ -1,5 +1,7 @@
 import { createHandler } from "@api/handler";
 import { getUploadKey } from "@lib/file/api/service";
+import { bookingsApi, catalogApi } from "@lib/square/api/squareClient";
+import { BatchRetrieveCatalogObjectsRequest, Booking } from "square";
 
 const handler = createHandler();
 /**
@@ -11,22 +13,26 @@ const handler = createHandler();
  * 2. Get information about the team member, location, service, etc, based on the information from 1.
  */
 handler.get(async (req, res) => {
-  const bookingId = req.query.bookingId;
+  const bookingId = req.query.bookingId as string;
   try {
     // Retrieve the booking provided by the bookingId.
     const {
       result: { booking },
     } = await bookingsApi.retrieveBooking(bookingId);
-
-    const serviceVariationId =
-      booking.appointmentSegments[0].serviceVariationId;
-    const teamMemberId = booking.appointmentSegments[0].teamMemberId;
-
-    // Make API call to get service variation details
-    const retrieveServiceVariationPromise = catalogApi.retrieveCatalogObject(
-      serviceVariationId,
-      true
+    if (!booking) throw new Error("Booking not found");
+    const teamMemberIds = booking.appointmentSegments?.map(
+      (segment) => segment.teamMemberId
     );
+    const serviceIds = booking.appointmentSegments!.map(
+      (r) => r.serviceVariationId!
+    );
+    const catalogyRequest: BatchRetrieveCatalogObjectsRequest = {
+      objectIds: serviceIds,
+      includeRelatedObjects: true,
+    };
+    // Make API call to get service variation details
+    const retrieveServiceVariationPromise =
+      catalogApi.batchRetrieveCatalogObjects(catalogyRequest);
 
     // Make API call to get team member details
     const retrieveTeamMemberPromise =

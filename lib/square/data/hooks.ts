@@ -18,9 +18,10 @@ export const useAvailabilityAny = (locationId: string) =>
 export const useCreateBooking = (locationId: string) =>
   useMutation(API._auth(Method.POST, `square/${locationId}/booking/create`));
 
-export const useGetBooking = (locationId: string, bookingId: string) =>
-  useMutation(
-    API._auth(Method.POST, `square/${locationId}/booking/${bookingId}`)
+export const useGetBooking = (locationId: string, bookingIds: string) =>
+  useQuery<ServiceItem[]>(
+    [],
+    API._query(Method.GET, `square/${locationId}/booking/${bookingIds}`)
   );
 
 export const useLocalStorage = (key: string, initialValue: any) => {

@@ -3,7 +3,7 @@ import {
   Calendar,
   CalendatMonthType as CalendarMonthType,
 } from "@ui/components/calendar/calendar";
-import { AppLayout, Box, Text, Button, Spinner } from "@ui/index";
+import { AppLayout, Box, Text, Button, Spinner, Flex } from "@ui/index";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { AppointmentSegment, Availability } from "square";
@@ -111,7 +111,8 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
             time.
           </Text>
         )}
-        <Box>
+
+        <Flex flexWrap={"wrap"} justifyContent={"flex-start"}>
           {availability?.availabilities
             .filter(
               (r) =>
@@ -121,6 +122,9 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
             .map((item, key) => {
               return (
                 <Box
+                  mr="2"
+                  mb={2}
+                  w="24"
                   bg={
                     selectedHourAndStaff?.startAt == item.startAt
                       ? "green"
@@ -138,7 +142,7 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
                 </Box>
               );
             })}
-        </Box>
+        </Flex>
         <Box>
           <Button onClick={goBack}>Back</Button>
           <Button onClick={onBook}>Book</Button>

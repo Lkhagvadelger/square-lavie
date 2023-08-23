@@ -44,6 +44,7 @@ export type ServiceItem = {
 };
 export type CartModel = {
   serviceId: string;
+  serviceCategoryId: string;
   variantId: string;
   teamMemberIds: string[];
   name: string;

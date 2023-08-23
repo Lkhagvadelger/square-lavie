@@ -10,7 +10,7 @@ import {
   catalogApi,
   locationsApi,
 } from "@lib/square/api/squareClient";
-import { CartModel } from "@lib/square/data/types";
+import { AvailabilityReqModel, CartModel } from "@lib/square/data/types";
 import { AppError } from "@util/errors";
 
 const handler = createHandler();
@@ -128,13 +128,8 @@ handler
   })
   .post(async (req, res) => {
     try {
-      const serviceVariantIds = req.body.selectedVariantIds as any[];
-      const startDate = req.body.startDate as any;
-      const now = new Date(req.body.now as any);
-      console.log(JSON.stringify(serviceVariantIds));
       // only locationId comes from query
       const locationId = req.query.locationId as string;
-
       // rest of the data should come from req.body
       if (
         locationId == "" ||
@@ -142,6 +137,40 @@ handler
         locationId == "undefined"
       )
         throw AppError.BadRequest("locationId is required!");
+      const serviceVariantIds2: AvailabilityReqModel[] = [];
+
+      const serviceVariantIds = req.body
+        .selectedVariantIds as AvailabilityReqModel[];
+
+      const startDate = req.body.startDate as any;
+      const now = new Date(req.body.now as any);
+
+      //[manicure serviceId, pedicure serviceId]
+      const categoryToSeparate = [
+        { serviceId: "ZGYJZBNCF7UOH7QOC6IM4YGU", teamMemberIds: [""] },
+        { serviceId: "FECI7HYLOOHJULRHN5IPQVIY", teamMemberIds: [""] },
+      ];
+      //if categoryToSeparate serviceIds both detected inside serviceVariantIds
+
+      const isContainingBothCategory = categoryToSeparate
+        .map((r) => r.serviceId)
+        .every((item) =>
+          serviceVariantIds.map((e) => e.serviceId).includes(item)
+        );
+      if (isContainingBothCategory) {
+        //create second serviceVariantIds
+        serviceVariantIds
+          .filter((r) => r.serviceId == categoryToSeparate[1].serviceId)
+          .map((r) => {
+            serviceVariantIds2.push(r);
+          });
+      }
+      console.log(
+        serviceVariantIds,
+        serviceVariantIds2,
+        isContainingBothCategory
+      );
+
       if (serviceVariantIds.length == 0 || serviceVariantIds == undefined)
         throw AppError.BadRequest("selectedVariantIds is required");
 
@@ -160,33 +189,53 @@ handler
       //     teamMemberIdFilter: {},
       //   },
       // ],
-
-      const searchRequest = {
-        query: {
-          filter: {
-            locationId,
-            segmentFilters: serviceVariantIds,
-            startAtRange: {
-              endAt: endAt.toISOString(),
-              startAt: startAt.toISOString(),
+      const searchRequest: any[] = [
+        {
+          query: {
+            filter: {
+              locationId,
+              segmentFilters: serviceVariantIds,
+              startAtRange: {
+                endAt: endAt.toISOString(),
+                startAt: startAt.toISOString(),
+              },
             },
           },
         },
-      };
+        {
+          query: {
+            filter: {
+              locationId,
+              segmentFilters: serviceVariantIds2,
+              startAtRange: {
+                endAt: endAt.toISOString(),
+                startAt: startAt.toISOString(),
+              },
+            },
+          },
+        },
+      ];
 
-      let availabilities;
+      let availabilities = (
+        await bookingsApi.searchAvailability(searchRequest[0])
+      ).result.availabilities;
+
       // search availability for the specific staff member if staff id is passed as a param
       // get availability
-      const { result } = await bookingsApi.searchAvailability(searchRequest);
-      const { result: locationResult } = await locationsApi.retrieveLocation(
-        locationId
-      );
 
-      availabilities = result.availabilities;
-
-      res.sendSuccess({
+      if (serviceVariantIds2.length > 0) {
+        return res.sendSuccess({
+          startDate,
+          availabilities,
+          availabilities2: (
+            await bookingsApi.searchAvailability(searchRequest[1])
+          ).result.availabilities,
+        });
+      }
+      return res.sendSuccess({
         startDate,
         availabilities,
+        availabilities2: null,
       });
     } catch (e) {
       res.sendError(e);

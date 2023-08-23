@@ -193,6 +193,7 @@ export const Home = ({ locationId }: { locationId: string }) => {
             ),
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cart, data]);
 
   const updateMustAskServices = () => {

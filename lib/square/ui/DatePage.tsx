@@ -5,6 +5,7 @@ import {
 import { AppLayout, Box, Button, Flex, Spinner, Text } from "@ui/index";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { Availability } from "square";
 import {
   useAvailabilityAny,
@@ -13,44 +14,64 @@ import {
   useLocalStorage,
 } from "../data/hooks";
 import { CartModel } from "../data/types";
-
-export const DatePage = ({ locationId }: { locationId: string }) => {
-  const [cart] = useLocalStorage("cart", []);
-  const availabitlyMutation = useAvailabilityAny(locationId);
-  const createMutation = useCreateBooking(locationId);
-  const { data: locationData, isLoading } = useGetLocationInfo(locationId);
-  const [isSecondBookingRequired, setIsSecondBookingRequired] =
-    useState<Boolean>(false);
-  const [selectedHourAndStaff, setSelectedHourAndStaff] = useState<
-    Availability | undefined
-  >(undefined);
-  const [selectedHourAndStaffSecond, setSelectedHourAndStaffSecond] = useState<
-    Availability | undefined
-  >(undefined);
-
-  const [availability, setAvailability] = useState<
+export type DatePageType = {
+  isSecondBookingRequired: boolean;
+  selectedHourAndStaff: Availability | undefined;
+  selectedHourAndStaffFirst: Availability | undefined;
+  selectedHourAndStaffSecond: Availability | undefined;
+  availability:
     | {
         startDate: CalendarMonthType;
         availabilities: Availability[];
         availabilities2: Availability[];
       }
-    | undefined
-  >(undefined);
-  const [selectedDate, setSelectedDate] = useState<CalendarMonthType>({
-    year: new Date().getFullYear(),
-    month: new Date().getMonth(),
-    day: new Date().getDate(),
-  });
+    | undefined;
+  selectedDate: CalendarMonthType;
+  selectedVariantIds: any[];
+};
 
-  const [selectedVariantIds, setSelectedVariantIds] = useState<any[]>([]);
+export const DatePage = ({ locationId }: { locationId: string }) => {
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    setValue,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm<DatePageType>({
+    defaultValues: {
+      selectedDate: {
+        year: new Date().getFullYear(),
+        month: new Date().getMonth(),
+        day: new Date().getDate(),
+      },
+      selectedVariantIds: [],
+      isSecondBookingRequired: false,
+    },
+  });
+  watch([
+    "isSecondBookingRequired",
+    "selectedHourAndStaff",
+    "selectedHourAndStaffFirst",
+    "selectedHourAndStaffSecond",
+    "availability",
+    "selectedDate",
+    "selectedVariantIds",
+  ]);
+  const [cart] = useLocalStorage("cart", []);
+  const availabitlyMutation = useAvailabilityAny(locationId);
+  const createMutation = useCreateBooking(locationId);
+  const { data: locationData, isLoading } = useGetLocationInfo(locationId);
+
   const onBooking = () => {
-    if (selectedHourAndStaff) {
+    if (getValues("selectedHourAndStaff")) {
       createMutation.mutate(
         {
-          ...selectedHourAndStaff,
-          isSecondBookingRequired,
-          appointmentSegmentSecond:
-            selectedHourAndStaffSecond?.appointmentSegments,
+          ...getValues("selectedHourAndStaff"),
+          isSecondBookingRequired: getValues("isSecondBookingRequired"),
+          appointmentSegmentSecond: getValues("selectedHourAndStaffSecond")
+            ?.appointmentSegments,
         },
         {
           onSuccess: (data) => {
@@ -69,7 +90,8 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
   useEffect(() => {
     if (cart) {
       //Add variantId to selectedVariantIds array
-      setSelectedVariantIds(
+      setValue(
+        "selectedVariantIds",
         cart.map((item: CartModel) => ({
           serviceVariationId: item.variantId,
           categoryId: item.serviceCategoryId,
@@ -77,18 +99,21 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
         }))
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cart]);
   //step: 2
   useEffect(() => {
-    if (selectedVariantIds?.length > 0) {
+    if (getValues("selectedVariantIds")?.length > 0) {
       if (
-        (availability && availability.startDate.month != selectedDate.month) ||
-        !availability
+        (getValues("availability") &&
+          getValues("availability")?.startDate.month !=
+            getValues("selectedDate").month) ||
+        !getValues("availability")
       )
         availabitlyMutation.mutate(
           {
-            selectedVariantIds,
-            startDate: selectedDate,
+            selectedVariantIds: getValues("selectedVariantIds"),
+            startDate: getValues("selectedDate"),
             now: new Date(),
           },
           {
@@ -96,13 +121,14 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
               console.log(e);
             },
             onSuccess: (data: any) => {
-              setAvailability(data);
+              setValue("availability", data);
               console.log(data);
             },
           }
         );
     }
-  }, [selectedVariantIds, selectedDate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getValues("selectedVariantIds"), getValues("selectedDate")]);
 
   const userTimezone = () => {
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -119,10 +145,10 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
   };
 
   const searchFromSecondOption = (selectedTime: Availability) => {
-    if (availability?.availabilities2) {
-      const secondAvailability = availability?.availabilities2.filter(
-        (r) => r.startAt == selectedTime.startAt
-      )[0];
+    if (getValues("availability")?.availabilities2) {
+      const secondAvailability = getValues(
+        "availability"
+      )?.availabilities2.filter((r) => r.startAt == selectedTime.startAt)[0];
 
       console.log("secondAvailability : ", secondAvailability);
 
@@ -144,35 +170,41 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
         firstAvailability?.appointmentSegments?.concat(
           secondAvailability!.appointmentSegments!
         );
-        setIsSecondBookingRequired(true);
-        setSelectedHourAndStaff({
+        setValue("isSecondBookingRequired", true);
+        setValue("selectedHourAndStaff", {
           startAt: selectedTime.startAt,
           appointmentSegments: [
             ...firstAvailability!.appointmentSegments!,
             ...secondAvailability!.appointmentSegments,
           ],
         });
-        setSelectedHourAndStaffSecond({
+        setValue("selectedHourAndStaffFirst", {
+          startAt: selectedTime.startAt,
+          appointmentSegments: [...firstAvailability!.appointmentSegments!],
+        });
+        setValue("selectedHourAndStaffSecond", {
           startAt: selectedTime.startAt,
           appointmentSegments: [...secondAvailability!.appointmentSegments],
         });
       } else {
-        setSelectedHourAndStaff(selectedTime);
-        setIsSecondBookingRequired(false);
+        setValue("selectedHourAndStaff", selectedTime);
+        setValue("isSecondBookingRequired", false);
       }
     } else {
-      setSelectedHourAndStaff(selectedTime);
-      setIsSecondBookingRequired(false);
+      setValue("selectedHourAndStaff", selectedTime);
+      setValue("isSecondBookingRequired", false);
     }
   };
-
+  const setSelectedDate = (selectedDate: CalendarMonthType) => {
+    setValue("selectedDate", selectedDate);
+  };
   return (
     <AppLayout>
       <>
         {availabitlyMutation.isLoading && <Spinner></Spinner>}
-        {!availabitlyMutation.isLoading && availability && (
+        {!availabitlyMutation.isLoading && getValues("availability") && (
           <Calendar
-            selectedDate={selectedDate}
+            selectedDate={getValues("selectedDate")}
             setSelectedDate={setSelectedDate}
           />
         )}
@@ -185,11 +217,11 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
         )}
 
         <Flex flexWrap={"wrap"} justifyContent={"flex-start"}>
-          {availability?.availabilities
-            .filter(
+          {getValues("availability")
+            ?.availabilities.filter(
               (r) =>
                 ConvertToGivenTimezoneDate(r.startAt) ==
-                ConvertToGivenTimezone(selectedDate)
+                ConvertToGivenTimezone(getValues("selectedDate"))
             )
             .map((item, key) => {
               return (
@@ -198,7 +230,7 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
                   mb={2}
                   w="24"
                   bg={
-                    selectedHourAndStaff?.startAt == item.startAt
+                    getValues("selectedHourAndStaff")?.startAt == item.startAt
                       ? "green"
                       : "none"
                   }
@@ -222,12 +254,12 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
         <Text>Just for visually make sure</Text>
 
         <Flex flexWrap={"wrap"} justifyContent={"flex-start"}>
-          {availability?.availabilities2 &&
-            availability?.availabilities2
-              .filter(
+          {getValues("availability")?.availabilities2 &&
+            getValues("availability")
+              ?.availabilities2.filter(
                 (r) =>
                   ConvertToGivenTimezoneDate(r.startAt) ==
-                  ConvertToGivenTimezone(selectedDate)
+                  ConvertToGivenTimezone(getValues("selectedDate"))
               )
               .map((item, key) => {
                 return (
@@ -236,7 +268,7 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
                     mb={2}
                     w="24"
                     bg={
-                      selectedHourAndStaff?.startAt == item.startAt
+                      getValues("selectedHourAndStaff")?.startAt == item.startAt
                         ? "green"
                         : "none"
                     }

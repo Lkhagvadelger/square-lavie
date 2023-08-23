@@ -33,7 +33,6 @@ handler
         throw AppError.BadRequest("locationId is required!");
       if (serviceId == "" || serviceId == undefined || serviceId == "undefined")
         throw AppError.BadRequest("serviceId is required");
-      console.log(req.query, locationId, serviceId);
 
       const serviceVersion = req.query.version;
       const staffId = req.query.staffId as string;
@@ -132,7 +131,7 @@ handler
       const serviceVariantIds = req.body.selectedVariantIds as any[];
       const startDate = req.body.startDate as any;
       const now = new Date(req.body.now as any);
-
+      console.log(JSON.stringify(serviceVariantIds));
       // only locationId comes from query
       const locationId = req.query.locationId as string;
 

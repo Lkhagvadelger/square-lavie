@@ -2,6 +2,7 @@ import { createHandler } from "@api/handler";
 import { getUploadKey } from "@lib/file/api/service";
 import { convertMsToMins, getCustomerID } from "@lib/square/api/service";
 import { bookingsApi, catalogApi } from "@lib/square/api/squareClient";
+import { AppointmentSegment } from "square";
 const { v4: uuidv4 } = require("uuid");
 
 const handler = createHandler();
@@ -22,37 +23,23 @@ const locationId = process.env["SQUARE_LOCATION_ID"];
  */
 handler.post(async (req, res) => {
   try {
-    const serviceId = req.query.serviceId as string;
-    const serviceVariationVersion = req.query.version as any;
-    const staffId = req.query.staffId as string;
-    const startAt = req.query.startAt as string;
+    const appointmentSegment = req.body
+      .appointmentSegments as AppointmentSegment[];
+    const startAt = req.body.startAt as string;
+    const locationId = req.query.locationId as string;
 
-    const customerNote = req.body.customerNote;
-    const emailAddress = req.body.emailAddress;
-    const familyName = req.body.familyName;
-    const givenName = req.body.givenName;
-
-    // Retrieve catalog object by the variation ID
-    const {
-      result: { object: catalogItemVariation },
-    } = await catalogApi.retrieveCatalogObject(serviceId);
-    const durationMinutes = convertMsToMins(
-      catalogItemVariation!.itemVariationData!.serviceDuration
-    );
+    const customerNote = "customer note"; //req.body.customerNote;
+    const emailAddress = "g.lkhagvadelger+2@gmail.com";
+    req.body.emailAddress;
+    const familyName = "Is Family name required"; //req.body.familyName;
+    const givenName = "is given name is firstName + lastName"; //req.body.givenName;
 
     // Create booking
     const {
       result: { booking },
     } = await bookingsApi.createBooking({
       booking: {
-        appointmentSegments: [
-          {
-            durationMinutes,
-            serviceVariationId: serviceId,
-            serviceVariationVersion,
-            teamMemberId: staffId,
-          },
-        ],
+        appointmentSegments: appointmentSegment,
         customerId: await getCustomerID(givenName, familyName, emailAddress),
         customerNote,
         locationId,

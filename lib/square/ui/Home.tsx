@@ -77,7 +77,6 @@ export const Home = ({ locationId }: { locationId: string }) => {
       setMustAskServices(uniqueMustAskServicesFiltered);
     }
   };
-
   const [specialServices, setSpecialServices] = useState<RequiredServiceType[]>(
     [
       {

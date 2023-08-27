@@ -227,8 +227,8 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
           {getValues("availability")
             ?.availabilities.filter(
               (r) =>
-                ConvertToGivenTimezoneDate(r.startAt) ==
-                ConvertToGivenTimezone(getValues("selectedDate"))
+                toTimezoneDate(r.startAt) ==
+                toTimezoneDateNumeric(getValues("selectedDate"))
             )
             .map((item, key) => {
               return (
@@ -265,8 +265,8 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
             getValues("availability")
               ?.availabilities2.filter(
                 (r) =>
-                  ConvertToGivenTimezoneDate(r.startAt) ==
-                  ConvertToGivenTimezone(getValues("selectedDate"))
+                  toTimezoneDate(r.startAt) ==
+                  toTimezoneDateNumeric(getValues("selectedDate"))
               )
               .map((item, key) => {
                 return (
@@ -289,7 +289,49 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
         <Box>
           <TotalDurationScreen
             dateString={getValues("selectedHourAndStaff")?.startAt}
-            minutes={30}
+            minutes={
+              getValues("selectedHourAndStaffFirst")
+                ? getValues(
+                    "selectedHourAndStaffFirst"
+                  )?.appointmentSegments?.reduce(
+                    (accumulator, currentValue) => {
+                      return accumulator + currentValue.durationMinutes!;
+                    },
+                    0
+                  )! >
+                  getValues(
+                    "selectedHourAndStaffSecond"
+                  )?.appointmentSegments?.reduce(
+                    (accumulator, currentValue) => {
+                      return accumulator + currentValue.durationMinutes!;
+                    },
+                    0
+                  )!
+                  ? getValues(
+                      "selectedHourAndStaffFirst"
+                    )?.appointmentSegments?.reduce(
+                      (accumulator, currentValue) => {
+                        return accumulator + currentValue.durationMinutes!;
+                      },
+                      0
+                    )!
+                  : getValues(
+                      "selectedHourAndStaffSecond"
+                    )?.appointmentSegments?.reduce(
+                      (accumulator, currentValue) => {
+                        return accumulator + currentValue.durationMinutes!;
+                      },
+                      0
+                    )!
+                : getValues(
+                    "selectedHourAndStaff"
+                  )?.appointmentSegments?.reduce(
+                    (accumulator, currentValue) => {
+                      return accumulator + currentValue.durationMinutes!;
+                    },
+                    0
+                  )!
+            }
           />
         </Box>
       </>
@@ -321,7 +363,7 @@ export const TimeBox = ({
     </Box>
   );
 };
-const ConvertToGivenTimezone = (dateString: CalendarMonthType) => {
+const toTimezoneDateNumeric = (dateString: CalendarMonthType) => {
   const date = new Date(
     dateString.year,
     dateString.month,
@@ -339,9 +381,7 @@ const ConvertToGivenTimezone = (dateString: CalendarMonthType) => {
   };
   return date.toLocaleString("en-US", options);
 };
-export const ConvertToGivenTimezoneDate = (
-  dateString: string | undefined | null
-) => {
+export const toTimezoneDate = (dateString: string | undefined | null) => {
   if (!dateString) return "";
   const date = new Date(dateString);
 
@@ -354,9 +394,7 @@ export const ConvertToGivenTimezoneDate = (
 
   return date.toLocaleString("en-US", options);
 };
-export const ConvertToGivenTimezoneDateTime = (
-  dateString: string | undefined | null
-) => {
+export const toTimezoneDateTime = (dateString: string | undefined | null) => {
   if (!dateString) return "";
   const date = new Date(dateString);
 
@@ -373,9 +411,7 @@ export const ConvertToGivenTimezoneDateTime = (
 
   return date.toLocaleString("en-US", options);
 };
-export const ConvertToGivenTimezoneTime = (
-  dateString: string | undefined | null
-) => {
+export const toTimezoneTime_Name = (dateString: string | undefined | null) => {
   if (!dateString) return "";
   const date = new Date(dateString);
 
@@ -397,12 +433,12 @@ const TotalDurationScreen = ({
   minutes: number;
 }) => {
   if (!dateString) return <></>;
-  const date = addMinutes(new Date(dateString), 30);
+  const date = addMinutes(new Date(dateString), minutes);
 
   return (
     <Box>
-      {ConvertToGivenTimezoneDateTime(dateString)} -{" "}
-      {ConvertToGivenTimezoneTime(date.toISOString())}
+      {toTimezoneDateTime(dateString)} -{" "}
+      {toTimezoneTime_Name(date.toISOString())}
     </Box>
   );
 };

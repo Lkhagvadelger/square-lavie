@@ -22,6 +22,8 @@ export const useRefresh = () =>
 
 export const useLogin = () =>
   useMutation(API._auth(Method.POST, `auth/loginonetimecode`, true));
+export const useUpdateProfile = () =>
+  useMutation(API._auth(Method.POST, `users/profile`, true));
 
 export const useSignup = () =>
   useMutation(API._auth(Method.POST, `auth/signup`));

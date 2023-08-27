@@ -53,29 +53,26 @@ model Account {
 }
 
 model Profile {
-  id                 String    @id @default(cuid())
-  userId             String    @unique
-  firstName          String    @default("")
-  lastName           String    @default("")
-  latinName          String    @default("")
-  sex                String?
-  dob                String?
-  country            Country?
-  height             Int?
-  weight             Int?
-  picture            String?
-  priceMin           Int?
-  priceMax           Int?
-  notifyEmail        Boolean   @default(true)
-  notifyPush         Boolean   @default(true)
-  notifyBadge        Boolean   @default(true)
-  historyId          String?   @unique
-  createdAt          DateTime  @default(now())
-  updatedAt          DateTime  @updatedAt
-  specialistDesc     String?
-  patientCode        String?   @unique
-  allowPatientAssign DateTime?
-  user               User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  firstName   String   @default("")
+  lastName    String   @default("")
+  latinName   String   @default("")
+  sex         String?
+  dob         String?
+  country     Country?
+  height      Int?
+  weight      Int?
+  picture     String?
+  priceMin    Int?
+  priceMax    Int?
+  notifyEmail Boolean  @default(true)
+  notifyPush  Boolean  @default(true)
+  notifyBadge Boolean  @default(true)
+  historyId   String?  @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Session {
@@ -93,19 +90,17 @@ model SmsRequestAttempt {
 }
 
 model FileUpload {
-  id                   String    @id @default(cuid())
-  fileGroup            String?
-  fileLink             String
-  fileSource           String
-  removedAt            DateTime?
-  createdBy            String
-  createdAt            DateTime  @default(now())
-  updatedAt            DateTime  @updatedAt
-  fileCategory         String?
-  fileSourceDate       String?
-  patientNoteId        String?
-  fileMIMEType         String
-  specialistQuestionId String?
+  id             String    @id @default(cuid())
+  fileGroup      String?
+  fileLink       String
+  fileSource     String
+  removedAt      DateTime?
+  createdBy      String
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  fileCategory   String?
+  fileSourceDate String?
+  fileMIMEType   String
 }
 
 enum UserRole {
@@ -142,3 +137,12 @@ model AdditionServiceConfig {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model Booking {
+  id              String   @id @default(cuid())
+  squareBookingId String
+  data            Json
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+ 

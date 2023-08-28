@@ -146,19 +146,12 @@ handler
       const now = new Date(req.body.now as any);
 
       //[manicure serviceId, pedicure serviceId]
+      // Must get this data from Location settings
       const categoryToSeparate = [
-        { categoryId: "42Q7FDU26NEHTPIAL66WRWTA", teamMemberIds: [""] },
+        { categoryId: "42Q7FDU26NEHTPIAL66WRWTA", teamMemberIds: [] },
         {
           categoryId: "CDCJXC5L5ZXRLEFKABSE7PVX",
-          teamMemberIds:
-            //first one is most likely selected for current service
-            [
-              "TMCwFyeMexqTdxw4",
-              "TMSzK-FIQ2k6FSEU",
-              "TMJjPtHVjfPG_dCo",
-              "TMNWxmtV8EGB9S9F",
-              "TMZOXcfnaorAtnO-",
-            ],
+          teamMemberIds: [],
         },
       ];
       //if categoryToSeparate serviceIds both detected inside serviceVariantIds
@@ -194,8 +187,6 @@ handler
           };
         });
       }
-      console.log(JSON.stringify(serviceVariantIds), isContainingBothCategory);
-      console.log(JSON.stringify(serviceVariantIds2));
 
       if (serviceVariantIds.length == 0 || serviceVariantIds == undefined)
         throw AppError.BadRequest("selectedVariantIds is required");

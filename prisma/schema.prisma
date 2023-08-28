@@ -28,6 +28,7 @@ model User {
   accounts            Account[]
   profile             Profile?
   squareCustomerId    String?
+  bookings            Booking[]
 }
 
 model Account {
@@ -139,10 +140,58 @@ model AdditionServiceConfig {
 }
 
 model Booking {
-  id              String   @id @default(cuid())
-  squareBookingId String
-  data            Json
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id                String              @id @default(cuid())
+  squareBookingId   String
+  data              Json // Booking data from squareup API
+  personData        Json[] // Will store how many different customer is taking this services
+  startDate         DateTime // Will use to send confirmation action few hours before booking service start
+  userId            String
+  status            BookingStatus
+  updatedBy         String
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  user              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bookingStatusList BookingStatusList[]
 }
- 
+
+// list of booking status change
+model BookingStatusList {
+  id        String        @id @default(cuid())
+  bookingId String
+  booking   Booking       @relation(fields: [bookingId], references: [id])
+  status    BookingStatus
+  updateBy  String
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+// New staff should be have high priority
+model Staff {
+  id        String   @id @default(cuid())
+  staffId   String
+  priority  Int // Lower is highest priority StaffRoundingNumber.lastNumber
+  name      String // Staff name just for display
+  data      Json //Rest of the data
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model StaffRoundingNumber {
+  id         String @id @default(cuid())
+  lastNumber Int    @default(0)
+}
+
+model LocationSettings {
+  id               String   @id @default(cuid())
+  name             String
+  parallelCategory Json
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}

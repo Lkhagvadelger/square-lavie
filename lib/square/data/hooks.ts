@@ -1,14 +1,20 @@
 import { API, Method } from "@util/query";
 import { useState, useEffect } from "react";
 import { useMutation, useQuery } from "react-query";
+import { CatalogObject } from "square";
 import { ServiceItem } from "./types";
 
 // return ItemsResponse type
 
 export const useGetServices = (locationId: string) =>
   useQuery<ServiceItem[]>(
-    [],
+    "useGetServices",
     API._query(Method.GET, `square/${locationId}/services`)
+  );
+export const useGetCatalogs = (locationId: string) =>
+  useQuery<CatalogObject[]>(
+    "useGetCatalogs",
+    API._query(Method.GET, `square/${locationId}/catalog`)
   );
 export const useGetLocationInfo = (locationId: string) =>
   useQuery<any>([], API._query(Method.GET, `square/${locationId}/location`));

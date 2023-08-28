@@ -12,18 +12,11 @@ import { catalogApi } from "@lib/square/api/squareClient";
  */
 
 handler.get(async (req, res, next) => {
-  const locationId = process.env["SQUARE_LOCATION_ID"];
-  const cancel = req.query.cancel;
-
-  // if (cancel! || cancel == undefined)
-  //   throw AppError.BadRequest("cancel is required");
-
-  console.log("start hrer");
+  const locationId = req.query.locationId as string;
   try {
     let {
       result: { objects },
     } = await catalogApi.listCatalog(undefined, "CATEGORY");
-
     res.sendSuccess(objects);
   } catch (error) {
     res.sendError(error);

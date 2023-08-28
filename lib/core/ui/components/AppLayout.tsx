@@ -15,9 +15,19 @@ export const AppLayout = ({
   const { t: to } = useTranslation("common");
 
   return (
-    <Box as="main" bg={"white"} w={"full"} h="100vh" overflowY={"hidden"}>
-      <AppHeader />
-      <Box mx={"auto"}>{children}</Box>
+    <Box
+      as="main"
+      bg={"red"}
+      w={"full"}
+      h="100vh"
+      overflowY={"hidden"}
+      display="flex"
+      flexDirection="column"
+    >
+      {/* <AppHeader /> */}
+      <Box mx={"auto"} w="full" h="full" flex="1">
+        {children}
+      </Box>
       <LoginModal />
     </Box>
   );

@@ -204,28 +204,65 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
     setValue("selectedDate", selectedDate);
   };
   return (
-    <AppLayout>
-      <>
-        {availabitlyMutation.isLoading && <Spinner></Spinner>}
-        {!availabitlyMutation.isLoading && getValues("availability") && (
-          <Calendar
-            selectedDate={getValues("selectedDate")}
-            setSelectedDate={setSelectedDate}
-          />
+    <Box>
+      {availabitlyMutation.isLoading && <Spinner></Spinner>}
+      {!availabitlyMutation.isLoading && getValues("availability") && (
+        <Calendar
+          selectedDate={getValues("selectedDate")}
+          setSelectedDate={setSelectedDate}
+        />
+      )}
+      {locationData &&
+        !isLoading &&
+        locationData.timezone != userTimezone() && (
+          <Text>
+            ⚠ HEADS UP! It looks like you are in a different timezone(
+            {userTimezone()}). Times below are shown in {locationData.timezone}{" "}
+            time.
+          </Text>
         )}
-        {locationData &&
-          !isLoading &&
-          locationData.timezone != userTimezone() && (
-            <Text>
-              ⚠ HEADS UP! It looks like you are in a different timezone(
-              {userTimezone()}). Times below are shown in{" "}
-              {locationData.timezone} time.
-            </Text>
-          )}
 
-        <Flex flexWrap={"wrap"} justifyContent={"flex-start"}>
-          {getValues("availability")
-            ?.availabilities.filter(
+      <Flex flexWrap={"wrap"} justifyContent={"flex-start"}>
+        {getValues("availability")
+          ?.availabilities.filter(
+            (r) =>
+              toTimezoneDate(r.startAt) ==
+              toTimezoneDateNumeric(getValues("selectedDate"))
+          )
+          .map((item, key) => {
+            return (
+              <Box
+                mr="2"
+                mb={2}
+                w="24"
+                bg={
+                  getValues("selectedHourAndStaff")?.startAt == item.startAt
+                    ? "green"
+                    : "none"
+                }
+                key={key}
+                onClick={() => {
+                  onTimeSelectAndSearchSecondOption({
+                    startAt: item.startAt,
+                    appointmentSegments: item.appointmentSegments,
+                  });
+                }}
+              >
+                <TimeBox dateString={item.startAt} />
+              </Box>
+            );
+          })}
+      </Flex>
+      <Box>
+        <Button onClick={goBack}>Back</Button>
+        <Button onClick={onBooking}>Book</Button>
+      </Box>
+      <Text>Just for visually make sure</Text>
+
+      <Flex flexWrap={"wrap"} justifyContent={"flex-start"}>
+        {getValues("availability")?.availabilities2 &&
+          getValues("availability")
+            ?.availabilities2.filter(
               (r) =>
                 toTimezoneDate(r.startAt) ==
                 toTimezoneDateNumeric(getValues("selectedDate"))
@@ -242,55 +279,27 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
                       : "none"
                   }
                   key={key}
-                  onClick={() => {
-                    onTimeSelectAndSearchSecondOption({
-                      startAt: item.startAt,
-                      appointmentSegments: item.appointmentSegments,
-                    });
-                  }}
                 >
                   <TimeBox dateString={item.startAt} />
                 </Box>
               );
             })}
-        </Flex>
-        <Box>
-          <Button onClick={goBack}>Back</Button>
-          <Button onClick={onBooking}>Book</Button>
-        </Box>
-        <Text>Just for visually make sure</Text>
-
-        <Flex flexWrap={"wrap"} justifyContent={"flex-start"}>
-          {getValues("availability")?.availabilities2 &&
-            getValues("availability")
-              ?.availabilities2.filter(
-                (r) =>
-                  toTimezoneDate(r.startAt) ==
-                  toTimezoneDateNumeric(getValues("selectedDate"))
-              )
-              .map((item, key) => {
-                return (
-                  <Box
-                    mr="2"
-                    mb={2}
-                    w="24"
-                    bg={
-                      getValues("selectedHourAndStaff")?.startAt == item.startAt
-                        ? "green"
-                        : "none"
-                    }
-                    key={key}
-                  >
-                    <TimeBox dateString={item.startAt} />
-                  </Box>
-                );
-              })}
-        </Flex>
-        <Box>
-          <TotalDurationScreen
-            dateString={getValues("selectedHourAndStaff")?.startAt}
-            minutes={
-              getValues("selectedHourAndStaffFirst")
+      </Flex>
+      <Box>
+        <TotalDurationScreen
+          dateString={getValues("selectedHourAndStaff")?.startAt}
+          minutes={
+            getValues("selectedHourAndStaffFirst")
+              ? getValues(
+                  "selectedHourAndStaffFirst"
+                )?.appointmentSegments?.reduce((accumulator, currentValue) => {
+                  return accumulator + currentValue.durationMinutes!;
+                }, 0)! >
+                getValues(
+                  "selectedHourAndStaffSecond"
+                )?.appointmentSegments?.reduce((accumulator, currentValue) => {
+                  return accumulator + currentValue.durationMinutes!;
+                }, 0)!
                 ? getValues(
                     "selectedHourAndStaffFirst"
                   )?.appointmentSegments?.reduce(
@@ -298,8 +307,8 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
                       return accumulator + currentValue.durationMinutes!;
                     },
                     0
-                  )! >
-                  getValues(
+                  )!
+                : getValues(
                     "selectedHourAndStaffSecond"
                   )?.appointmentSegments?.reduce(
                     (accumulator, currentValue) => {
@@ -307,35 +316,16 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
                     },
                     0
                   )!
-                  ? getValues(
-                      "selectedHourAndStaffFirst"
-                    )?.appointmentSegments?.reduce(
-                      (accumulator, currentValue) => {
-                        return accumulator + currentValue.durationMinutes!;
-                      },
-                      0
-                    )!
-                  : getValues(
-                      "selectedHourAndStaffSecond"
-                    )?.appointmentSegments?.reduce(
-                      (accumulator, currentValue) => {
-                        return accumulator + currentValue.durationMinutes!;
-                      },
-                      0
-                    )!
-                : getValues(
-                    "selectedHourAndStaff"
-                  )?.appointmentSegments?.reduce(
-                    (accumulator, currentValue) => {
-                      return accumulator + currentValue.durationMinutes!;
-                    },
-                    0
-                  )!
-            }
-          />
-        </Box>
-      </>
-    </AppLayout>
+              : getValues("selectedHourAndStaff")?.appointmentSegments?.reduce(
+                  (accumulator, currentValue) => {
+                    return accumulator + currentValue.durationMinutes!;
+                  },
+                  0
+                )!
+          }
+        />
+      </Box>
+    </Box>
   );
 };
 export const TimeBox = ({

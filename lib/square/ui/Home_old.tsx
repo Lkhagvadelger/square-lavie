@@ -1,21 +1,6 @@
 import {
   AppLayout,
   Box,
-  Button,
-  Flex,
-  Heading,
-  Menu,
-  MenuButton,
-  MenuDivider,
-  MenuGroup,
-  MenuItem,
-  MenuList,
-  Stack,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
   Text,
   toaster,
   useDisclosure,
@@ -24,7 +9,7 @@ import {
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { setSelectedKey } from "../api/service";
-import { useGetCatalogs, useGetServices, useLocalStorage } from "../data/hooks";
+import { useGetServices, useLocalStorage } from "../data/hooks";
 import {
   CartModel,
   ItemVariation,
@@ -35,17 +20,10 @@ import { AdditionalService } from "./components/AdditionalService";
 import { ChoiceList } from "./components/ChoiceList";
 import { FloatingCart } from "./components/FloatingCart";
 import { SkeletonLoading } from "./components/SkeletonLoading";
-import _ from "lodash";
-import { IoArrowDownCircleOutline } from "react-icons/io5";
-import { BsChevronBarDown } from "react-icons/bs";
-import { BiChevronDown } from "react-icons/bi";
 
-export const Home = ({ locationId }: { locationId: string }) => {
+export const Home_Old = ({ locationId }: { locationId: string }) => {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const { data, isLoading } = useGetServices(locationId);
-  const categoryToHide = "6KFSXPVFALGRCVN4FD3NN4DI";
-  const { data: dataCatalog, isLoading: isLoadingCatalog } =
-    useGetCatalogs(locationId);
   const router = useRouter();
   const goToCalendar = () => {
     if (total.totalItems == 0) {
@@ -214,21 +192,11 @@ export const Home = ({ locationId }: { locationId: string }) => {
             ),
       });
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cart, data]);
-  const [items, setItems] = useState<{ [key: string]: ServiceItem[] }>({});
+
   const updateMustAskServices = () => {
     if (data) {
-      setItems(
-        _.groupBy(
-          data.filter((r) => r.itemData?.categoryId != categoryToHide),
-          (r) => {
-            return r.itemData.categoryId;
-          }
-        )
-      );
-
       //if cart Items included specialServiceIds than set isServiceSelected to true
       const specialServicesFiltered = specialServices.map((service) => {
         if (
@@ -283,146 +251,64 @@ export const Home = ({ locationId }: { locationId: string }) => {
     }
   };
   return (
-    <VStack flex="1" bg="#fff" w="full">
-      <VStack height={"full"} flex={1} w="full" align={"center"}>
-        <Box mb={"auto"}>Top</Box>
-        <Box mt={"auto"} p="2" w="full">
-          {isLoading ? (
-            <SkeletonLoading />
-          ) : (
-            <>
-              <Button variant="adminChatMessageBox">How many person?</Button>
-
-              <Box w="full" textAlign={"right"}>
-                <Button variant="userChatMessageBox">Show services</Button>
-              </Box>
-
-              <Button variant="adminChatMessageBox">
-                Select one or more services{" "}
-              </Button>
-              <Tabs
-                w="90%"
-                variant={"topbordered"}
-                flexDirection="column"
-                flex="1"
-              >
-                <TabPanels>
-                  {Object.keys(items).map((key) => {
-                    return (
-                      <TabPanel key={key}>
-                        {items[key].map((service: ServiceItem, key) => {
-                          return (
-                            <Box
-                              mb={2}
-                              key={key}
-                              px={2}
-                              pt={2}
-                              bg="#f1f1f1"
-                              borderRadius={"16px"}
-                            >
-                              <Text
-                                pl={2}
-                                py={1}
-                                fontSize={"12px"}
-                                textTransform="uppercase"
-                              >
-                                {service.itemData.name}
-                              </Text>
-                              <Box gap={0}>
-                                {cart != null && (
-                                  <ChoiceList
-                                    name={service.id}
-                                    setValue={addItemBySelectedVariantId}
-                                    value={setSelectedKey(
-                                      cart?.find(
-                                        (cartItem: CartModel) =>
-                                          cartItem.serviceId === service.id
-                                      )?.variantId
-                                    )}
-                                    choices={service.itemData.variations.map(
-                                      (variation) => {
-                                        return {
-                                          id: variation.itemVariationData
-                                            .itemId,
-                                          type: variation.itemVariationData
-                                            .name,
-                                          choice: variation.id,
-                                          data: variation.itemVariationData,
-                                        };
-                                      }
-                                    )}
-                                  />
-                                )}
-                              </Box>
-                            </Box>
-                          );
-                        })}
-                      </TabPanel>
-                    );
-                  })}
-                </TabPanels>
-                <TabList>
-                  {items &&
-                    Object.keys(items).map((key) => {
-                      return (
-                        <Tab key={key}>
-                          {
-                            dataCatalog?.filter((r) => r.id == key)[0]
-                              .categoryData?.name
-                          }
-                        </Tab>
-                      );
-                    })}
-                </TabList>
-              </Tabs>
-              <Button variant="adminChatMessageBox">
-                Please select your date
-              </Button>
-              <Box w="full" textAlign={"right"}>
-                <Button variant={"userChatMessageBox"}>
-                  Show available date
-                </Button>
-              </Box>
-            </>
-          )}
-          <Box
-            mt={4}
-            p={2}
-            w="full"
-            bg="#f1f1f1"
-            h="80px"
-            borderRadius={"16px"}
-          >
-            <Menu>
-              <MenuButton
-                as={Button}
-                px={3}
-                bg="#222222"
-                rightIcon={<BiChevronDown />}
-                borderRadius={"12px"}
-                _hover={{
-                  bg: "#181818",
-                }}
-              >
-                <Box borderRightWidth={"2px"} borderColor="gray.500" pr="3">
-                  Pick date{" "}
-                </Box>
-              </MenuButton>
-              <MenuList>
-                <MenuGroup title="Appointment">
-                  <MenuItem>Show Services</MenuItem>
-                  <MenuItem>Pick date</MenuItem>
-                  <MenuItem>Confirm Appointment</MenuItem>
-                </MenuGroup>
-                <MenuDivider />
-                <MenuGroup title="Account">
-                  <MenuItem>Login</MenuItem>
-                </MenuGroup>
-              </MenuList>
-            </Menu>
+    <AppLayout>
+      <>
+        {isLoading ? (
+          <SkeletonLoading />
+        ) : (
+          <Box p={2} pb={32}>
+            {data?.map &&
+              data?.map((service: ServiceItem, key: number) => {
+                return (
+                  <Box
+                    mb={2}
+                    key={key}
+                    p={3}
+                    border={"1px"}
+                    borderRadius={"4px"}
+                    w="full"
+                  >
+                    <Text>{service.itemData.name}</Text>
+                    <VStack w="full" gap={0} fontSize="14px">
+                      {cart != null && (
+                        <ChoiceList
+                          name={service.id}
+                          setValue={addItemBySelectedVariantId}
+                          value={setSelectedKey(
+                            cart?.find(
+                              (cartItem: CartModel) =>
+                                cartItem.serviceId === service.id
+                            )?.variantId
+                          )}
+                          choices={service.itemData.variations.map(
+                            (variation) => {
+                              return {
+                                id: variation.itemVariationData.itemId,
+                                type: variation.itemVariationData.name,
+                                choice: variation.id,
+                                data: variation.itemVariationData,
+                              };
+                            }
+                          )}
+                        />
+                      )}
+                    </VStack>
+                  </Box>
+                );
+              })}
           </Box>
-        </Box>
-      </VStack>
-    </VStack>
+        )}
+        <FloatingCart goToCalendar={goToCalendar} total={total} />
+        <AdditionalService
+          cart={cart}
+          onClose={onClose}
+          isOpen={isOpen}
+          additionalServices={mustAskServices}
+          addItemBySelectedVariantId={addItemBySelectedVariantId}
+          answerRequiredServiceAnsweredTrue={answerRequiredServiceAnsweredTrue}
+          goNext={goToCalendar}
+        />
+      </>
+    </AppLayout>
   );
 };

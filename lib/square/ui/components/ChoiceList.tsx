@@ -1,8 +1,17 @@
 import { Box, Button, Flex, Icon, Text, useCheckbox } from "@ui/index";
 import useTranslation from "next-translate/useTranslation";
 import { useEffect, useState } from "react";
-import { FaPlus } from "react-icons/fa";
-import { Md1KPlus, MdCheck, MdCheckCircle, MdPlusOne } from "react-icons/md";
+import { BiDotsVertical } from "react-icons/bi";
+import { BsClock, BsDot } from "react-icons/bs";
+import { FaClock, FaPlus, FaRegClock } from "react-icons/fa";
+import {
+  Md1KPlus,
+  MdCheck,
+  MdCheckCircle,
+  MdLockClock,
+  MdPlusOne,
+  MdSyncLock,
+} from "react-icons/md";
 import { displayServicePrice, displayServiceDuration } from "../../api/service";
 export type ChoicesType = {
   id: string;
@@ -44,68 +53,52 @@ export const ChoiceList = ({
     setSelectedChoice(_selectedTopics);
     setValue(name, _selectedTopics);
   };
-  const full = "full";
-  const { t: tn } = useTranslation("nourish");
 
   return (
-    <Box display={"flex"} flexDirection="column" w="full">
+    <Box
+      display={"flex"}
+      flexDirection="column"
+      w="full"
+      pb={2}
+      fontSize={"12px"}
+    >
       {choices.map((topic: any, index: number) => (
         <CheckboxCard
           key={`symptom-${topic.choice}`}
           value={topic.choice}
           isChecked={selectedTopics[topic.choice] === topic.choice}
           onChange={onChange}
-          borderTopRightRadius={index === 0 ? "md" : "none"}
-          borderTopLeftRadius={index === 0 ? "md" : "none"}
-          borderBottomLeftRadius={index === choices.length - 1 ? "md" : "none"}
-          borderBottomRightRadius={index === choices.length - 1 ? "md" : "none"}
-          width={"full"}
         >
-          <Flex w="full" justifyContent={"space-between"}>
-            <Box textAlign={"right"} w="full" mr={2}>
-              <Text> {topic.data.name}</Text>
-              <Text>
-                {displayServicePrice(topic.data.priceMoney.amount as any)},{" "}
-                {displayServiceDuration(topic.data.serviceDuration as any)}
+          <Flex
+            w="full"
+            bg={
+              selectedTopics[topic.choice] === topic.choice ? "#fae4cb" : "#fff"
+            }
+            color={"gray.900"}
+            justifyContent={"space-between"}
+            borderRadius={"8px"}
+            h={"32px"}
+            dropShadow="2xl"
+            boxShadow={"0px 1px 2px 1px rgba(0,0,0,0.16)"}
+          >
+            <Flex alignItems="center" pl={1}>
+              <Text
+                mt={"-4px"}
+                fontSize={"32px"}
+                color={
+                  selectedTopics[topic.choice] === topic.choice
+                    ? "gray.900"
+                    : "gray.200"
+                }
+              >
+                {"• "}
               </Text>
-            </Box>
-            <Text
-              minW="44px"
-              maxW="44px"
-              minH="44px"
-              maxH="44px"
-              p="0"
-              borderRadius={"4px"}
-              bg={
-                selectedTopics[topic.choice] === topic.choice
-                  ? "green.500"
-                  : "#fff"
-              }
-              border="1px"
-              borderColor={"green.500"}
-              color={"green.500"}
-              variant={"solid"}
-            >
-              {selectedTopics[topic.choice] === topic.choice ? (
-                <Icon
-                  ml="1"
-                  mt="1"
-                  fontSize={"32px"}
-                  color="#fff"
-                  fontWeight={"900"}
-                  as={MdCheck}
-                />
-              ) : (
-                <Icon
-                  ml="13px"
-                  mt="13px"
-                  fontSize={"16px"}
-                  color="green.500"
-                  fontWeight={"900"}
-                  as={FaPlus}
-                />
-              )}
-            </Text>
+              {`${topic.data.name}, ${displayServicePrice(
+                topic.data.priceMoney.amount as any
+              )}, `}
+              <Icon as={FaRegClock} mx={1} />
+              {" " + displayServiceDuration(topic.data.serviceDuration as any)}
+            </Flex>
           </Flex>
         </CheckboxCard>
       ))}
@@ -128,7 +121,7 @@ const CheckboxCard = (props: any) => {
         color="nourishGreen.500"
         borderColor={"nourishGreen.500"}
         {...props}
-        py={2}
+        py={"2px"}
       >
         {props.children}
       </Box>

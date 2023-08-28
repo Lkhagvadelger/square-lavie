@@ -13,30 +13,21 @@ const sizes: Record<string, SystemStyleObject> = {
 const variants = {
   topbordered: {
     root: {},
-    tabpanels: { pt: "5" },
+    tabpanels: { pt: "2" },
     tabpanel: {
       p: "0",
     },
     tab: {
-      fontWeight: "900",
+      fontWeight: "700",
       borderTop: "2px",
-      mt: "-3px",
-      pl: "0",
-      pb: "0",
+      px: "2",
       pt: "1",
-      mr: "3",
-      fontSize: "lg",
-      _light: {
-        color: "blue.100",
-        _selected: {
-          color: "blue.700",
-        },
-      },
-      _dark: {
-        color: "blue.100",
-        _selected: {
-          color: "blue.700",
-        },
+      mt: 2,
+      mb: 4,
+      fontSize: "md",
+      color: "gray.200",
+      _selected: {
+        color: "#181818",
       },
     },
   },

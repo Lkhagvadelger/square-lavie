@@ -1,7 +1,4 @@
-import {
-  Calendar,
-  CalendatMonthType as CalendarMonthType,
-} from "@ui/components/calendar/calendar";
+import { Calendar } from "@ui/components/calendar/calendar";
 import { AppLayout, Box, Button, Flex, Spinner, Text } from "@ui/index";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -15,7 +12,7 @@ import {
   useGetLocationInfo,
   useLocalStorage,
 } from "../data/hooks";
-import { CartModel } from "../data/types";
+import { CalendarMonthType, CartModel } from "../data/types";
 export type DatePageType = {
   isSecondBookingRequired: boolean;
   selectedHourAndStaff: Availability | undefined;

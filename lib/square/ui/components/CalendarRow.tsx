@@ -1,22 +1,5 @@
 import { CalendarMonthType } from "@lib/square/data/types";
-import {
-  Box,
-  Text,
-  BoxProps,
-  Heading,
-  HStack,
-  useColorModeValue,
-  VStack,
-  Icon,
-  Table,
-  Tr,
-  Td,
-  Button,
-  Flex,
-  Tbody,
-} from "@ui/index";
-import { last } from "lodash";
-import { useState } from "react";
+import { Box, Button, Flex, Icon, Table, Tbody, Td, Text, Tr } from "@ui/index";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 const getMonthName = (month: number) => {
   const months = [
@@ -35,7 +18,7 @@ const getMonthName = (month: number) => {
   ];
   return months[month];
 };
-export const Calendar = ({
+export const CalendarRow = ({
   selectedDate,
   setSelectedDate,
   hidePastDays = true,
@@ -146,31 +129,51 @@ export const Calendar = ({
           </Button>
         </Box>
       </Flex>
-      <Box w="full">
+      <Box w="full" overflow={"auto"}>
         <Table w="full" variant="calendar">
           <Tbody>
             <Tr>
-              <Td>Sun</Td>
-              <Td>Mon</Td>
-              <Td>Tue</Td>
-              <Td>Wed</Td>
-              <Td>Thu</Td>
-              <Td>Fri</Td>
-              <Td>Sat</Td>
+              {[1, 2, 3, 4, 5].map((week: number, key) => {
+                return (
+                  <>
+                    <Td>
+                      <Text>Sun</Text>
+                      {btnPicker(getDayOfMonth(0, week))}
+                    </Td>
+                    <Td>
+                      {" "}
+                      <Text>Mon</Text>
+                      {btnPicker(getDayOfMonth(1, week))}
+                    </Td>
+                    <Td>
+                      {" "}
+                      <Text>Tue</Text>
+                      {btnPicker(getDayOfMonth(2, week))}
+                    </Td>
+                    <Td>
+                      {" "}
+                      <Text>Wed</Text>
+                      {btnPicker(getDayOfMonth(3, week))}
+                    </Td>
+                    <Td>
+                      {" "}
+                      <Text>Thu</Text>
+                      {btnPicker(getDayOfMonth(4, week))}
+                    </Td>
+                    <Td>
+                      {" "}
+                      <Text>Fri</Text>
+                      {btnPicker(getDayOfMonth(5, week))}
+                    </Td>
+                    <Td>
+                      {" "}
+                      <Text>Sat</Text>
+                      {btnPicker(getDayOfMonth(6, week))}
+                    </Td>
+                  </>
+                );
+              })}
             </Tr>
-            {[1, 2, 3, 4, 5].map((week: number, key) => {
-              return (
-                <Tr key={key}>
-                  <Td>{btnPicker(getDayOfMonth(0, week))}</Td>
-                  <Td>{btnPicker(getDayOfMonth(1, week))}</Td>
-                  <Td>{btnPicker(getDayOfMonth(2, week))}</Td>
-                  <Td>{btnPicker(getDayOfMonth(3, week))}</Td>
-                  <Td>{btnPicker(getDayOfMonth(4, week))}</Td>
-                  <Td>{btnPicker(getDayOfMonth(5, week))}</Td>
-                  <Td>{btnPicker(getDayOfMonth(6, week))}</Td>
-                </Tr>
-              );
-            })}
           </Tbody>
         </Table>
       </Box>

@@ -76,3 +76,14 @@ export type AvailabilityCustomModel = {
   /** The list of appointment segments available for booking */
   appointmentSegments?: AppointmentSegment[] | null;
 };
+export type ChoicesType = {
+  id: string;
+  type: string;
+  choice: string;
+  data?: any;
+};
+export type CalendarMonthType = {
+  year: number;
+  month: number;
+  day: number;
+};

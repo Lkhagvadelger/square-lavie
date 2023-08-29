@@ -15,7 +15,7 @@ import {
 } from "react-icons/md";
 import { displayServicePrice, displayServiceDuration } from "../../api/service";
 
-export const ChoiceList = ({
+export const PersonChoiceList = ({
   choices,
   setValue,
   name,
@@ -89,11 +89,7 @@ export const ChoiceList = ({
               >
                 {"• "}
               </Text>
-              {`${topic.data.name}, ${displayServicePrice(
-                topic.data.priceMoney.amount as any
-              )}, `}
-              <Icon as={FaRegClock} mx={1} />
-              {" " + displayServiceDuration(topic.data.serviceDuration as any)}
+              <Text>{topic.choice}</Text>
             </Flex>
           </Flex>
         </CheckboxCard>

@@ -2,8 +2,11 @@ import {
   AppLayout,
   Box,
   Button,
+  Image,
+  ButtonGroup,
   Flex,
   Heading,
+  IconButton,
   Menu,
   MenuButton,
   MenuDivider,
@@ -27,9 +30,11 @@ import { setSelectedKey } from "../api/service";
 import { useGetCatalogs, useGetServices, useLocalStorage } from "../data/hooks";
 import {
   CartModel,
+  ChoicesType,
   ItemVariation,
   RequiredServiceType,
   ServiceItem,
+  CalendarMonthType,
 } from "../data/types";
 import { AdditionalService } from "./components/AdditionalService";
 import { ChoiceList } from "./components/ChoiceList";
@@ -39,8 +44,35 @@ import _ from "lodash";
 import { IoArrowDownCircleOutline } from "react-icons/io5";
 import { BsChevronBarDown } from "react-icons/bs";
 import { BiChevronDown } from "react-icons/bi";
+import { PersonChoiceList } from "./components/PersonChoiceList";
+import {
+  AdminChatMessageBox,
+  UserChatMessageBox,
+} from "./components/ChatTextBox";
+import { CalendarRow } from "./components/CalendarRow";
+import { DatePageType } from "./DatePage";
+import { useForm } from "react-hook-form";
 
 export const Home = ({ locationId }: { locationId: string }) => {
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    setValue,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm<DatePageType>({
+    defaultValues: {
+      selectedDate: {
+        year: new Date().getFullYear(),
+        month: new Date().getMonth(),
+        day: new Date().getDate(),
+      },
+      selectedVariantIds: [],
+      isSecondBookingRequired: false,
+    },
+  });
   const { isOpen, onClose, onOpen } = useDisclosure();
   const { data, isLoading } = useGetServices(locationId);
   const categoryToHide = "6KFSXPVFALGRCVN4FD3NN4DI";
@@ -124,10 +156,18 @@ export const Home = ({ locationId }: { locationId: string }) => {
       },
     ]
   );
+  const [totalCustomer, setTotalCustomer] = useState<ChoicesType>({
+    id: "1",
+    type: "1",
+    choice: "1",
+  });
   //Unanswered services will be listed in here. Data will be shown in Confirmation Modal
   const [mustAskServices, setMustAskServices] = useState<ServiceItem[]>([]);
   const [cart, setCart] = useLocalStorage("cart", []);
   const [total, setTotal] = useState({ totalPrice: 0, totalItems: 0 });
+  const setSelectedDate = (selectedDate: CalendarMonthType) => {
+    setValue("selectedDate", selectedDate);
+  };
 
   const addItemBySelectedVariantId = (
     serviceId: string,
@@ -290,102 +330,166 @@ export const Home = ({ locationId }: { locationId: string }) => {
           {isLoading ? (
             <SkeletonLoading />
           ) : (
-            <>
-              <Button variant="adminChatMessageBox">How many person?</Button>
-
-              <Box w="full" textAlign={"right"}>
-                <Button variant="userChatMessageBox">Show services</Button>
-              </Box>
-
-              <Button variant="adminChatMessageBox">
-                Select one or more services{" "}
-              </Button>
-              <Tabs
-                w="90%"
-                variant={"topbordered"}
-                flexDirection="column"
-                flex="1"
-              >
-                <TabPanels>
-                  {Object.keys(items).map((key) => {
-                    return (
-                      <TabPanel key={key}>
-                        {items[key].map((service: ServiceItem, key) => {
-                          return (
-                            <Box
-                              mb={2}
-                              key={key}
-                              px={2}
-                              pt={2}
-                              bg="#f1f1f1"
-                              borderRadius={"16px"}
-                            >
-                              <Text
-                                pl={2}
-                                py={1}
-                                fontSize={"12px"}
-                                textTransform="uppercase"
-                              >
-                                {service.itemData.name}
-                              </Text>
-                              <Box gap={0}>
-                                {cart != null && (
-                                  <ChoiceList
-                                    name={service.id}
-                                    setValue={addItemBySelectedVariantId}
-                                    value={setSelectedKey(
-                                      cart?.find(
-                                        (cartItem: CartModel) =>
-                                          cartItem.serviceId === service.id
-                                      )?.variantId
-                                    )}
-                                    choices={service.itemData.variations.map(
-                                      (variation) => {
-                                        return {
-                                          id: variation.itemVariationData
-                                            .itemId,
-                                          type: variation.itemVariationData
-                                            .name,
-                                          choice: variation.id,
-                                          data: variation.itemVariationData,
-                                        };
-                                      }
-                                    )}
-                                  />
-                                )}
-                              </Box>
-                            </Box>
-                          );
-                        })}
-                      </TabPanel>
-                    );
-                  })}
-                </TabPanels>
-                <TabList>
-                  {items &&
-                    Object.keys(items).map((key) => {
-                      return (
-                        <Tab key={key}>
+            <VStack flex="1" w="full" gap={1}>
+              <AdminChatMessageBox text={"Greetings"} />
+              <AdminChatMessageBox
+                text={
+                  "How many people?  at Array.sessionMiddleware (webpack-internal:///(api)/./lib/core/api/middlewares/session.ts:41:5) {"
+                }
+              />
+              <Flex alignSelf={"start"} w="full">
+                <Image
+                  borderRadius={"50%"}
+                  border="1px"
+                  h="7"
+                  src="/images/original.jpeg"
+                  alt=""
+                  mt="auto"
+                  mr="1"
+                />
+                <Box
+                  w="90%"
+                  mt={2}
+                  px={2}
+                  pt={2}
+                  bg="#f1f1f1"
+                  borderRadius={"16px"}
+                  alignSelf="start"
+                  borderBottomLeftRadius="0px"
+                >
+                  <Box gap={0}>
+                    {cart != null && (
+                      <PersonChoiceList
+                        name={"totalCustomer"}
+                        setValue={setTotalCustomer}
+                        value={totalCustomer}
+                        choices={[
+                          { id: "1", type: "1", choice: "Only me" },
                           {
-                            dataCatalog?.filter((r) => r.id == key)[0]
-                              .categoryData?.name
-                          }
-                        </Tab>
+                            id: "2",
+                            type: "2",
+                            choice: "with 1 friend (2 person)",
+                          },
+                          {
+                            id: "3",
+                            type: "3",
+                            choice: "with 2 friends (3 person)",
+                          },
+                          {
+                            id: "4",
+                            type: "4",
+                            choice: "with 3 friends (4 person)",
+                          },
+                        ]}
+                      />
+                    )}
+                  </Box>
+                </Box>
+              </Flex>
+              <UserChatMessageBox text={"Show services"} />
+              <AdminChatMessageBox
+                text={"Please select service for First person"}
+              />
+              <Flex alignSelf={"start"} w="full">
+                <Image
+                  borderRadius={"50%"}
+                  border="1px"
+                  h="7"
+                  src="/images/original.jpeg"
+                  alt=""
+                  mt="auto"
+                  mr="1"
+                />
+                <Tabs
+                  alignSelf={"start"}
+                  w="90%"
+                  variant={"topbordered"}
+                  flexDirection="column"
+                  flex="1"
+                >
+                  <TabPanels>
+                    {Object.keys(items).map((key) => {
+                      return (
+                        <TabPanel key={key}>
+                          {items[key].map((service: ServiceItem, key) => {
+                            return (
+                              <Box
+                                mb={2}
+                                key={key}
+                                px={2}
+                                pt={2}
+                                bg="#f1f1f1"
+                                borderRadius={"16px"}
+                                _last={{
+                                  borderBottomLeftRadius: "0px",
+                                }}
+                              >
+                                <Text
+                                  pl={2}
+                                  py={1}
+                                  fontSize={"12px"}
+                                  textTransform="uppercase"
+                                >
+                                  {service.itemData.name}
+                                </Text>
+                                <Box gap={0}>
+                                  {cart != null && (
+                                    <ChoiceList
+                                      name={service.id}
+                                      setValue={addItemBySelectedVariantId}
+                                      value={setSelectedKey(
+                                        cart?.find(
+                                          (cartItem: CartModel) =>
+                                            cartItem.serviceId === service.id
+                                        )?.variantId
+                                      )}
+                                      choices={service.itemData.variations.map(
+                                        (variation) => {
+                                          return {
+                                            id: variation.itemVariationData
+                                              .itemId,
+                                            type: variation.itemVariationData
+                                              .name,
+                                            choice: variation.id,
+                                            data: variation.itemVariationData,
+                                          };
+                                        }
+                                      )}
+                                    />
+                                  )}
+                                </Box>
+                              </Box>
+                            );
+                          })}
+                        </TabPanel>
                       );
                     })}
-                </TabList>
-              </Tabs>
-              <Button variant="adminChatMessageBox">
-                Please select your date
-              </Button>
-              <Box w="full" textAlign={"right"}>
-                <Button variant={"userChatMessageBox"}>
-                  Show available date
-                </Button>
-              </Box>
-            </>
+                  </TabPanels>
+                  <TabList>
+                    {items &&
+                      Object.keys(items).map((key) => {
+                        return (
+                          <Tab key={key}>
+                            {
+                              dataCatalog?.filter((r) => r.id == key)[0]
+                                .categoryData?.name
+                            }
+                          </Tab>
+                        );
+                      })}
+                  </TabList>
+                </Tabs>
+              </Flex>
+              <AdminChatMessageBox text={"Please select your date"} />
+              <UserChatMessageBox text={"Show available date"} />
+              <CalendarRow
+                selectedDate={getValues("selectedDate")}
+                setSelectedDate={setSelectedDate}
+              />
+            </VStack>
           )}
-          <Box
+          <Flex
+            flex="1"
             mt={4}
             p={2}
             w="full"
@@ -393,34 +497,45 @@ export const Home = ({ locationId }: { locationId: string }) => {
             h="80px"
             borderRadius={"16px"}
           >
-            <Menu>
-              <MenuButton
-                as={Button}
-                px={3}
+            <ButtonGroup size="sm" border="0px" color="#fff" isAttached>
+              <Button
+                border="0px"
                 bg="#222222"
-                rightIcon={<BiChevronDown />}
                 borderRadius={"12px"}
                 _hover={{
                   bg: "#181818",
                 }}
               >
-                <Box borderRightWidth={"2px"} borderColor="gray.500" pr="3">
-                  Pick date{" "}
-                </Box>
-              </MenuButton>
-              <MenuList>
-                <MenuGroup title="Appointment">
-                  <MenuItem>Show Services</MenuItem>
-                  <MenuItem>Pick date</MenuItem>
-                  <MenuItem>Confirm Appointment</MenuItem>
-                </MenuGroup>
-                <MenuDivider />
-                <MenuGroup title="Account">
-                  <MenuItem>Login</MenuItem>
-                </MenuGroup>
-              </MenuList>
-            </Menu>
-          </Box>
+                {" "}
+                Pick date
+              </Button>
+              <Menu>
+                <MenuButton
+                  border="0px"
+                  as={IconButton}
+                  px={3}
+                  bg="#222222"
+                  icon={<BiChevronDown />}
+                  borderRadius={"12px"}
+                  _hover={{
+                    bg: "#181818",
+                  }}
+                ></MenuButton>
+                <MenuList color="black">
+                  <MenuGroup title="Appointment">
+                    <MenuItem>Start Over</MenuItem>
+                    <MenuItem>Show Services</MenuItem>
+                    <MenuItem>Pick date</MenuItem>
+                    <MenuItem>Confirm Appointment</MenuItem>
+                  </MenuGroup>
+                  <MenuDivider />
+                  <MenuGroup title="Account">
+                    <MenuItem>Login</MenuItem>
+                  </MenuGroup>
+                </MenuList>
+              </Menu>
+            </ButtonGroup>
+          </Flex>
         </Box>
       </VStack>
     </VStack>

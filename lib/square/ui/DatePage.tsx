@@ -1,18 +1,32 @@
 import { Calendar } from "@ui/components/calendar/calendar";
-import { AppLayout, Box, Button, Flex, Spinner, Text } from "@ui/index";
+import { Box, Button, Flex, Spinner, Text } from "@ui/index";
+import addMinutes from "date-fns/addMinutes";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Availability } from "square";
-import { string } from "square/dist/types/schema";
-import addMinutes from "date-fns/addMinutes";
+import {
+  isMorningTimestamp,
+  isNoonTimestamp,
+  isEveningTimestamp,
+  toTimezoneDate,
+  toTimezoneDateNumeric,
+  toTimezoneDateTime,
+  toTimezoneTime_Name,
+} from "../api/filterFunctions";
+
 import {
   useAvailabilityAny,
   useCreateBooking,
   useGetLocationInfo,
   useLocalStorage,
 } from "../data/hooks";
-import { CalendarMonthType, CartModel } from "../data/types";
+import {
+  CalendarMonthType,
+  CartModel,
+  ChoicesType,
+  RequiredServiceType,
+} from "../data/types";
 export type DatePageType = {
   isSecondBookingRequired: boolean;
   selectedHourAndStaff: Availability | undefined;
@@ -28,7 +42,23 @@ export type DatePageType = {
   selectedDate: CalendarMonthType;
   selectedVariantIds: any[];
 };
-
+export type ChatPageType = {
+  specialServices: RequiredServiceType;
+  totalCustomer: ChoicesType;
+  isSecondBookingRequired: boolean;
+  selectedHourAndStaff: Availability | undefined;
+  selectedHourAndStaffFirst: Availability | undefined;
+  selectedHourAndStaffSecond: Availability | undefined;
+  availability:
+    | {
+        startDate: CalendarMonthType;
+        availabilities: Availability[];
+        availabilities2: Availability[];
+      }
+    | undefined;
+  selectedDate: CalendarMonthType;
+  selectedVariantIds: any[];
+};
 export const DatePage = ({ locationId }: { locationId: string }) => {
   const {
     register,
@@ -220,68 +250,71 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
         )}
 
       <Flex flexWrap={"wrap"} justifyContent={"flex-start"}>
+        <Box w="full">Morning</Box>
         {getValues("availability")
           ?.availabilities.filter(
             (r) =>
               toTimezoneDate(r.startAt) ==
               toTimezoneDateNumeric(getValues("selectedDate"))
           )
-          .map((item, key) => {
+          .filter((r) => r.startAt && isMorningTimestamp(r.startAt))
+          .map((item: Availability, key) => {
             return (
-              <Box
-                mr="2"
-                mb={2}
-                w="24"
-                bg={
-                  getValues("selectedHourAndStaff")?.startAt == item.startAt
-                    ? "green"
-                    : "none"
-                }
+              <TimeBox
                 key={key}
-                onClick={() => {
-                  onTimeSelectAndSearchSecondOption({
-                    startAt: item.startAt,
-                    appointmentSegments: item.appointmentSegments,
-                  });
-                }}
-              >
-                <TimeBox dateString={item.startAt} />
-              </Box>
+                availability={item}
+                selectedAt={getValues("selectedHourAndStaff")}
+                onTimeSelectAndSearchSecondOption={
+                  onTimeSelectAndSearchSecondOption
+                }
+              />
+            );
+          })}
+        <Box w="full">Noon</Box>
+        {getValues("availability")
+          ?.availabilities.filter(
+            (r) =>
+              toTimezoneDate(r.startAt) ==
+              toTimezoneDateNumeric(getValues("selectedDate"))
+          )
+          .filter((r) => r.startAt && isNoonTimestamp(r.startAt))
+          .map((item: Availability, key) => {
+            return (
+              <TimeBox
+                key={key}
+                availability={item}
+                selectedAt={getValues("selectedHourAndStaff")}
+                onTimeSelectAndSearchSecondOption={
+                  onTimeSelectAndSearchSecondOption
+                }
+              />
+            );
+          })}
+        <Box w="full">Evening</Box>
+        {getValues("availability")
+          ?.availabilities.filter(
+            (r) =>
+              toTimezoneDate(r.startAt) ==
+              toTimezoneDateNumeric(getValues("selectedDate"))
+          )
+          .filter((r) => r.startAt && isEveningTimestamp(r.startAt))
+          .map((item: Availability, key) => {
+            return (
+              <TimeBox
+                key={key}
+                availability={item}
+                selectedAt={getValues("selectedHourAndStaff")}
+                onTimeSelectAndSearchSecondOption={
+                  onTimeSelectAndSearchSecondOption
+                }
+              />
             );
           })}
       </Flex>
       <Box>
-        <Button onClick={goBack}>Back</Button>
         <Button onClick={onBooking}>Book</Button>
       </Box>
-      <Text>Just for visually make sure</Text>
 
-      <Flex flexWrap={"wrap"} justifyContent={"flex-start"}>
-        {getValues("availability")?.availabilities2 &&
-          getValues("availability")
-            ?.availabilities2.filter(
-              (r) =>
-                toTimezoneDate(r.startAt) ==
-                toTimezoneDateNumeric(getValues("selectedDate"))
-            )
-            .map((item, key) => {
-              return (
-                <Box
-                  mr="2"
-                  mb={2}
-                  w="24"
-                  bg={
-                    getValues("selectedHourAndStaff")?.startAt == item.startAt
-                      ? "green"
-                      : "none"
-                  }
-                  key={key}
-                >
-                  <TimeBox dateString={item.startAt} />
-                </Box>
-              );
-            })}
-      </Flex>
       <Box>
         <TotalDurationScreen
           dateString={getValues("selectedHourAndStaff")?.startAt}
@@ -326,12 +359,17 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
   );
 };
 export const TimeBox = ({
-  dateString,
+  availability,
+  selectedAt,
+  onTimeSelectAndSearchSecondOption,
 }: {
-  dateString: string | undefined | null;
+  availability: Availability | undefined | null;
+  selectedAt: Availability | undefined;
+  onTimeSelectAndSearchSecondOption: ({}: Availability) => void;
 }) => {
-  if (!dateString) return <></>;
-  const date = new Date(dateString);
+  if (!availability || !availability.startAt) return <></>;
+
+  const date = new Date(availability.startAt);
 
   const options: Intl.DateTimeFormatOptions = {
     // year: "numeric",
@@ -345,73 +383,25 @@ export const TimeBox = ({
 
   const formattedTime = date.toLocaleString("en-US", options);
   return (
-    <Box w="24" border="1px" p={1}>
-      {formattedTime}
+    <Box
+      mr="2"
+      mb={2}
+      w="24"
+      bg={selectedAt == availability.startAt ? "green" : "none"}
+      onClick={() => {
+        onTimeSelectAndSearchSecondOption({
+          startAt: availability.startAt,
+          appointmentSegments: availability.appointmentSegments,
+        });
+      }}
+    >
+      <Box w="24" border="1px" p={1}>
+        {formattedTime}
+      </Box>
     </Box>
   );
 };
-const toTimezoneDateNumeric = (dateString: CalendarMonthType) => {
-  const date = new Date(
-    dateString.year,
-    dateString.month,
-    dateString.day,
-    0,
-    0,
-    0
-  );
 
-  const options: Intl.DateTimeFormatOptions = {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    timeZone: "America/Los_Angeles",
-  };
-  return date.toLocaleString("en-US", options);
-};
-export const toTimezoneDate = (dateString: string | undefined | null) => {
-  if (!dateString) return "";
-  const date = new Date(dateString);
-
-  const options: Intl.DateTimeFormatOptions = {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    timeZone: "America/Los_Angeles",
-  };
-
-  return date.toLocaleString("en-US", options);
-};
-export const toTimezoneDateTime = (dateString: string | undefined | null) => {
-  if (!dateString) return "";
-  const date = new Date(dateString);
-
-  const options: Intl.DateTimeFormatOptions = {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-    hour12: true,
-    timeZone: "America/Los_Angeles",
-  };
-
-  return date.toLocaleString("en-US", options);
-};
-export const toTimezoneTime_Name = (dateString: string | undefined | null) => {
-  if (!dateString) return "";
-  const date = new Date(dateString);
-
-  const options: Intl.DateTimeFormatOptions = {
-    hour: "numeric",
-    minute: "numeric",
-    hour12: true,
-    timeZone: "America/Los_Angeles",
-    timeZoneName: "short",
-  };
-
-  return date.toLocaleString("en-US", options);
-};
 const TotalDurationScreen = ({
   dateString,
   minutes,

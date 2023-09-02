@@ -60,9 +60,8 @@ export const ChoiceList = ({
     >
       {choices.map((topic: any, index: number) => (
         <CheckboxCard
-          key={`symptom-${topic.choice}`}
+          key={`symptom-${index}`}
           value={topic.choice}
-          isChecked={selectedTopics[topic.choice] === topic.choice}
           onChange={onChange}
         >
           <Flex

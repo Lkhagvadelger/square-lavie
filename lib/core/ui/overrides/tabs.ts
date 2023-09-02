@@ -20,10 +20,9 @@ const variants = {
     tab: {
       fontWeight: "700",
       borderTop: "2px",
-      px: "2",
+
       pt: "1",
       mt: 2,
-      mb: 4,
       fontSize: "md",
       color: "gray.200",
       _selected: {

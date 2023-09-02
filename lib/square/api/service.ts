@@ -207,14 +207,8 @@ export const isThisMonth = (date: any) => {
 };
 
 export const getEndAtDate = (startDate: Date) => {
-  const tempEndDate = new Date(
-    startDate.getFullYear(),
-    startDate.getMonth() + 1,
-    0,
-    18,
-    0,
-    0
-  );
+  const tempEndDate = new Date();
+  tempEndDate.setDate(startDate.getDate() + 30);
   return tempEndDate;
 };
 

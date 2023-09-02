@@ -196,7 +196,7 @@ handler
       const startAt =
         now.getMonth() == startDate.month && now.getFullYear() == startDate.year
           ? now
-          : new Date(startDate.year, startDate.month, 1);
+          : new Date(startDate.year, startDate.month, 1, 0, 0, 0);
 
       const endAt = getEndAtDate(startAt);
 

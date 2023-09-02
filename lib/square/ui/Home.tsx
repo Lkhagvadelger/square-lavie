@@ -1,11 +1,9 @@
 import {
-  AppLayout,
   Box,
   Button,
   Image,
   ButtonGroup,
   Flex,
-  Heading,
   IconButton,
   Menu,
   MenuButton,
@@ -13,7 +11,6 @@ import {
   MenuGroup,
   MenuItem,
   MenuList,
-  Stack,
   Tab,
   TabList,
   TabPanel,
@@ -23,9 +20,10 @@ import {
   toaster,
   useDisclosure,
   VStack,
+  useSteps,
 } from "@ui/index";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { setSelectedKey } from "../api/service";
 import { useGetCatalogs, useGetServices, useLocalStorage } from "../data/hooks";
 import {
@@ -43,26 +41,23 @@ import { SkeletonLoading } from "./components/SkeletonLoading";
 import _ from "lodash";
 import { IoArrowDownCircleOutline } from "react-icons/io5";
 import { BsChevronBarDown } from "react-icons/bs";
-import { BiChevronDown } from "react-icons/bi";
+import { BiChevronDown, BiX } from "react-icons/bi";
 import { PersonChoiceList } from "./components/PersonChoiceList";
 import {
   AdminChatMessageBox,
   UserChatMessageBox,
 } from "./components/ChatTextBox";
 import { CalendarRow } from "./components/CalendarRow";
-import { DatePageType } from "./DatePage";
+import { ChatPageType, DatePage, DatePageType } from "./DatePage";
 import { useForm } from "react-hook-form";
+import next from "next";
 
 export const Home = ({ locationId }: { locationId: string }) => {
   const {
-    register,
-    handleSubmit,
     getValues,
     setValue,
-    watch,
-    reset,
     formState: { errors },
-  } = useForm<DatePageType>({
+  } = useForm<ChatPageType>({
     defaultValues: {
       selectedDate: {
         year: new Date().getFullYear(),
@@ -78,6 +73,15 @@ export const Home = ({ locationId }: { locationId: string }) => {
   const categoryToHide = "6KFSXPVFALGRCVN4FD3NN4DI";
   const { data: dataCatalog, isLoading: isLoadingCatalog } =
     useGetCatalogs(locationId);
+  const {
+    nextStep,
+    prevStep,
+    reset: resetStep,
+    activeStep,
+  } = useSteps({
+    initialStep: 0,
+  });
+
   const router = useRouter();
   const goToCalendar = () => {
     if (total.totalItems == 0) {
@@ -156,6 +160,15 @@ export const Home = ({ locationId }: { locationId: string }) => {
       },
     ]
   );
+  const memorizedItems = useMemo(() => {
+    return _.groupBy(
+      data?.filter((r) => r.itemData?.categoryId !== categoryToHide),
+      (r) => {
+        return r.itemData.categoryId;
+      }
+    );
+  }, [data]);
+
   const [totalCustomer, setTotalCustomer] = useState<ChoicesType>({
     id: "1",
     type: "1",
@@ -257,18 +270,8 @@ export const Home = ({ locationId }: { locationId: string }) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cart, data]);
-  const [items, setItems] = useState<{ [key: string]: ServiceItem[] }>({});
   const updateMustAskServices = () => {
     if (data) {
-      setItems(
-        _.groupBy(
-          data.filter((r) => r.itemData?.categoryId != categoryToHide),
-          (r) => {
-            return r.itemData.categoryId;
-          }
-        )
-      );
-
       //if cart Items included specialServiceIds than set isServiceSelected to true
       const specialServicesFiltered = specialServices.map((service) => {
         if (
@@ -322,6 +325,15 @@ export const Home = ({ locationId }: { locationId: string }) => {
       setMustAskServices(uniqueMustAskServicesFiltered);
     }
   };
+  const messageEl = useRef<any>(null);
+  useEffect(() => {
+    if (messageEl) {
+      messageEl.current?.addEventListener("DOMNodeInserted", (event: any) => {
+        const { currentTarget: target } = event;
+        target.scroll({ top: target.scrollHeight, behavior: "smooth" });
+      });
+    }
+  }, []);
   return (
     <VStack flex="1" bg="#fff" w="full">
       <VStack height={"full"} flex={1} w="full" align={"center"}>
@@ -331,161 +343,180 @@ export const Home = ({ locationId }: { locationId: string }) => {
             <SkeletonLoading />
           ) : (
             <VStack flex="1" w="full" gap={1}>
-              <AdminChatMessageBox text={"Greetings"} />
-              <AdminChatMessageBox
-                text={
-                  "How many people?  at Array.sessionMiddleware (webpack-internal:///(api)/./lib/core/api/middlewares/session.ts:41:5) {"
-                }
-              />
-              <Flex alignSelf={"start"} w="full">
-                <Image
-                  borderRadius={"50%"}
-                  border="1px"
-                  h="7"
-                  src="/images/original.jpeg"
-                  alt=""
-                  mt="auto"
-                  mr="1"
-                />
-                <Box
-                  w="90%"
-                  mt={2}
-                  px={2}
-                  pt={2}
-                  bg="#f1f1f1"
-                  borderRadius={"16px"}
-                  alignSelf="start"
-                  borderBottomLeftRadius="0px"
-                >
-                  <Box gap={0}>
-                    {cart != null && (
-                      <PersonChoiceList
-                        name={"totalCustomer"}
-                        setValue={setTotalCustomer}
-                        value={totalCustomer}
-                        choices={[
-                          { id: "1", type: "1", choice: "Only me" },
-                          {
-                            id: "2",
-                            type: "2",
-                            choice: "with 1 friend (2 person)",
-                          },
-                          {
-                            id: "3",
-                            type: "3",
-                            choice: "with 2 friends (3 person)",
-                          },
-                          {
-                            id: "4",
-                            type: "4",
-                            choice: "with 3 friends (4 person)",
-                          },
-                        ]}
-                      />
-                    )}
-                  </Box>
-                </Box>
-              </Flex>
-              <UserChatMessageBox text={"Show services"} />
-              <AdminChatMessageBox
-                text={"Please select service for First person"}
-              />
-              <Flex alignSelf={"start"} w="full">
-                <Image
-                  borderRadius={"50%"}
-                  border="1px"
-                  h="7"
-                  src="/images/original.jpeg"
-                  alt=""
-                  mt="auto"
-                  mr="1"
-                />
-                <Tabs
-                  alignSelf={"start"}
-                  w="90%"
-                  variant={"topbordered"}
-                  flexDirection="column"
-                  flex="1"
-                >
-                  <TabPanels>
-                    {Object.keys(items).map((key) => {
-                      return (
-                        <TabPanel key={key}>
-                          {items[key].map((service: ServiceItem, key) => {
+              {activeStep >= 1 && (
+                <>
+                  <AdminChatMessageBox text={"Greetings"} />
+                  <AdminChatMessageBox text={"How many people?"} />
+                  <Flex alignSelf={"start"} w="full">
+                    <Image
+                      borderRadius={"50%"}
+                      border="1px"
+                      h="7"
+                      src="/images/original.jpeg"
+                      alt=""
+                      mt="auto"
+                      mr="1"
+                    />
+                    <Box
+                      w="90%"
+                      px={2}
+                      pt={2}
+                      bg="#f1f1f1"
+                      borderRadius={"16px"}
+                      alignSelf="start"
+                      borderBottomLeftRadius="0px"
+                    >
+                      <Box gap={0}>
+                        {cart != null && (
+                          <PersonChoiceList
+                            name={"totalCustomer"}
+                            setValue={setTotalCustomer}
+                            value={totalCustomer}
+                            choices={[
+                              { id: "1", type: "1", choice: "Only me" },
+                              {
+                                id: "2",
+                                type: "2",
+                                choice: "with 1 friend (2 people)",
+                              },
+                              {
+                                id: "3",
+                                type: "3",
+                                choice: "with 2 friends (3 people)",
+                              },
+                              {
+                                id: "4",
+                                type: "4",
+                                choice: "with 3 friends (4 people)",
+                              },
+                            ]}
+                          />
+                        )}
+                      </Box>
+                    </Box>
+                  </Flex>
+                </>
+              )}
+              {activeStep >= 2 && (
+                <>
+                  <UserChatMessageBox text={"Show services"} />
+                </>
+              )}
+              {activeStep >= 3 && (
+                <>
+                  <AdminChatMessageBox
+                    text={"Please select service for First person"}
+                  />
+                  <Flex alignSelf={"start"} w="full" gap={0}>
+                    <Image
+                      borderRadius={"50%"}
+                      border="1px"
+                      h="7"
+                      src="/images/original.jpeg"
+                      alt=""
+                      mt="auto"
+                      mr="1"
+                    />
+                    <Tabs
+                      alignSelf={"start"}
+                      w="90%"
+                      variant={"topbordered"}
+                      flexDirection="column"
+                      flex="1"
+                      pt={0}
+                    >
+                      <TabPanels pt={0}>
+                        {Object.keys(memorizedItems).map((key) => {
+                          return (
+                            <TabPanel key={key}>
+                              {memorizedItems[key].map(
+                                (service: ServiceItem, key) => {
+                                  return (
+                                    <Box
+                                      mb={2}
+                                      key={key}
+                                      px={2}
+                                      pt={2}
+                                      bg="#f1f1f1"
+                                      borderRadius={"16px"}
+                                      _last={{
+                                        borderBottomLeftRadius: "0px",
+                                      }}
+                                    >
+                                      <Text
+                                        pl={2}
+                                        py={1}
+                                        fontSize={"12px"}
+                                        textTransform="uppercase"
+                                      >
+                                        {service.itemData.name}
+                                      </Text>
+                                      <Box gap={0}>
+                                        {cart != null && (
+                                          <ChoiceList
+                                            name={service.id}
+                                            setValue={
+                                              addItemBySelectedVariantId
+                                            }
+                                            value={setSelectedKey(
+                                              cart?.find(
+                                                (cartItem: CartModel) =>
+                                                  cartItem.serviceId ===
+                                                  service.id
+                                              )?.variantId
+                                            )}
+                                            choices={service.itemData.variations.map(
+                                              (variation) => {
+                                                return {
+                                                  id: variation
+                                                    .itemVariationData.itemId,
+                                                  type: variation
+                                                    .itemVariationData.name,
+                                                  choice: variation.id,
+                                                  data: variation.itemVariationData,
+                                                };
+                                              }
+                                            )}
+                                          />
+                                        )}
+                                      </Box>
+                                    </Box>
+                                  );
+                                }
+                              )}
+                            </TabPanel>
+                          );
+                        })}
+                      </TabPanels>
+                      <TabList>
+                        {memorizedItems &&
+                          Object.keys(memorizedItems).map((key) => {
                             return (
-                              <Box
-                                mb={2}
-                                key={key}
-                                px={2}
-                                pt={2}
-                                bg="#f1f1f1"
-                                borderRadius={"16px"}
-                                _last={{
-                                  borderBottomLeftRadius: "0px",
-                                }}
-                              >
-                                <Text
-                                  pl={2}
-                                  py={1}
-                                  fontSize={"12px"}
-                                  textTransform="uppercase"
-                                >
-                                  {service.itemData.name}
-                                </Text>
-                                <Box gap={0}>
-                                  {cart != null && (
-                                    <ChoiceList
-                                      name={service.id}
-                                      setValue={addItemBySelectedVariantId}
-                                      value={setSelectedKey(
-                                        cart?.find(
-                                          (cartItem: CartModel) =>
-                                            cartItem.serviceId === service.id
-                                        )?.variantId
-                                      )}
-                                      choices={service.itemData.variations.map(
-                                        (variation) => {
-                                          return {
-                                            id: variation.itemVariationData
-                                              .itemId,
-                                            type: variation.itemVariationData
-                                              .name,
-                                            choice: variation.id,
-                                            data: variation.itemVariationData,
-                                          };
-                                        }
-                                      )}
-                                    />
-                                  )}
-                                </Box>
-                              </Box>
+                              <Tab key={key}>
+                                {
+                                  dataCatalog?.filter((r) => r.id == key)[0]
+                                    .categoryData?.name
+                                }
+                              </Tab>
                             );
                           })}
-                        </TabPanel>
-                      );
-                    })}
-                  </TabPanels>
-                  <TabList>
-                    {items &&
-                      Object.keys(items).map((key) => {
-                        return (
-                          <Tab key={key}>
-                            {
-                              dataCatalog?.filter((r) => r.id == key)[0]
-                                .categoryData?.name
-                            }
-                          </Tab>
-                        );
-                      })}
-                  </TabList>
-                </Tabs>
-              </Flex>
-              <AdminChatMessageBox text={"Please select your date"} />
-              <UserChatMessageBox text={"Show available date"} />
-              <CalendarRow
-                selectedDate={getValues("selectedDate")}
-                setSelectedDate={setSelectedDate}
-              />
+                      </TabList>
+                    </Tabs>
+                  </Flex>
+                </>
+              )}
+              {activeStep >= 4 && (
+                <>
+                  <UserChatMessageBox text={"Show available date"} />
+                </>
+              )}
+              {activeStep >= 5 && (
+                <>
+                  <AdminChatMessageBox text={"Please select your date"} />
+                </>
+              )}
+
+              {/* <DatePage locationId={locationId} /> */}
             </VStack>
           )}
           <Flex
@@ -496,9 +527,17 @@ export const Home = ({ locationId }: { locationId: string }) => {
             bg="#f1f1f1"
             h="80px"
             borderRadius={"16px"}
+            ref={messageEl}
           >
-            <ButtonGroup size="sm" border="0px" color="#fff" isAttached>
+            <ButtonGroup
+              ml="auto"
+              size="sm"
+              border="0px"
+              color="#fff"
+              isAttached
+            >
               <Button
+                onClick={nextStep}
                 border="0px"
                 bg="#222222"
                 borderRadius={"12px"}
@@ -506,8 +545,7 @@ export const Home = ({ locationId }: { locationId: string }) => {
                   bg: "#181818",
                 }}
               >
-                {" "}
-                Pick date
+                Next
               </Button>
               <Menu>
                 <MenuButton

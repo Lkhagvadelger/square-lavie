@@ -515,8 +515,11 @@ export const Home = ({ locationId }: { locationId: string }) => {
                   <AdminChatMessageBox text={"Please select your date"} />
                 </>
               )}
-
-              {/* <DatePage locationId={locationId} /> */}
+              {activeStep >= 6 && (
+                <>
+                  <DatePage locationId={locationId} />
+                </>
+              )}
             </VStack>
           )}
           <Flex

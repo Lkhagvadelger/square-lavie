@@ -2,7 +2,7 @@ import { Calendar } from "@ui/components/calendar/calendar";
 import { Box, Button, Flex, Spinner, Text } from "@ui/index";
 import addMinutes from "date-fns/addMinutes";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Availability } from "square";
 import {
@@ -27,18 +27,13 @@ import {
   ChoicesType,
   RequiredServiceType,
 } from "../data/types";
+import { CalendarRow } from "./components/CalendarRow";
 export type DatePageType = {
   isSecondBookingRequired: boolean;
   selectedHourAndStaff: Availability | undefined;
   selectedHourAndStaffFirst: Availability | undefined;
   selectedHourAndStaffSecond: Availability | undefined;
-  availability:
-    | {
-        startDate: CalendarMonthType;
-        availabilities: Availability[];
-        availabilities2: Availability[];
-      }
-    | undefined;
+  availability: any[] | undefined;
   selectedDate: CalendarMonthType;
   selectedVariantIds: any[];
 };
@@ -49,16 +44,13 @@ export type ChatPageType = {
   selectedHourAndStaff: Availability | undefined;
   selectedHourAndStaffFirst: Availability | undefined;
   selectedHourAndStaffSecond: Availability | undefined;
-  availability:
-    | {
-        startDate: CalendarMonthType;
-        availabilities: Availability[];
-        availabilities2: Availability[];
-      }
-    | undefined;
+  availability: any[] | undefined;
   selectedDate: CalendarMonthType;
   selectedVariantIds: any[];
 };
+
+const maxDayRange = 90;
+
 export const DatePage = ({ locationId }: { locationId: string }) => {
   const {
     register,
@@ -97,6 +89,7 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
   const availabitlyMutation = useAvailabilityAny(locationId);
   const createMutation = useCreateBooking(locationId);
   const { data: locationData, isLoading } = useGetLocationInfo(locationId);
+  const [dayRange, setDayRange] = useState<number>(30);
 
   const onBooking = () => {
     if (getValues("selectedHourAndStaff")) {
@@ -135,34 +128,60 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cart]);
+
   //step: 2
+  let avialableSet = false;
+
   useEffect(() => {
-    if (getValues("selectedVariantIds")?.length > 0) {
-      if (
-        (getValues("availability") &&
-          getValues("availability")?.startDate.month !=
-            getValues("selectedDate").month) ||
-        !getValues("availability")
-      )
-        availabitlyMutation.mutate(
-          {
-            selectedVariantIds: getValues("selectedVariantIds"),
-            startDate: getValues("selectedDate"),
-            now: new Date(),
-          },
-          {
-            onError: (e) => {
-              console.log(e);
-            },
-            onSuccess: (data: any) => {
-              setValue("availability", data);
-              console.log(data);
-            },
-          }
-        );
+    if (
+      getValues("selectedVariantIds")?.length > 0 &&
+      getValues("availability") == undefined
+    ) {
+      console.log("first time call call Avlialablity");
+      callAvialablity(getValues("selectedVariantIds"));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getValues("selectedVariantIds"), getValues("selectedDate")]);
+  }, [getValues("selectedVariantIds")]);
+
+  useEffect(() => {
+    if (dayRange > 30) {
+      callAvialablity(getValues("selectedVariantIds"));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dayRange]);
+
+  // callAvialablity(getValues("selectedVariantIds"));
+
+  const callAvialablity = (selectedVariantIds: any[]) => {
+    let startDate = getValues("selectedDate");
+
+    if (dayRange <= 90) {
+      availabitlyMutation.mutate(
+        {
+          selectedVariantIds: selectedVariantIds,
+          startDate: startDate,
+          now: new Date(),
+          dayRange: dayRange,
+        },
+        {
+          onError: (e) => {
+            console.log(e);
+          },
+          onSuccess: (data: any) => {
+            const oldVal = getValues("availability");
+
+            if (oldVal != undefined) {
+              let mergeResult = oldVal.concat(data);
+              setValue("availability", mergeResult);
+            } else {
+              setValue("availability", data);
+            }
+            console.log(data);
+          },
+        }
+      );
+    }
+  };
 
   const userTimezone = () => {
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -234,9 +253,10 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
     <Box>
       {availabitlyMutation.isLoading && <Spinner></Spinner>}
       {!availabitlyMutation.isLoading && getValues("availability") && (
-        <Calendar
+        <CalendarRow
           selectedDate={getValues("selectedDate")}
           setSelectedDate={setSelectedDate}
+          hidePastDays={false}
         />
       )}
       {locationData &&
@@ -248,6 +268,16 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
             time.
           </Text>
         )}
+      <Button
+        disabled={dayRange == 90 ? true : false}
+        onClick={() => {
+          if (dayRange < 90) {
+            setDayRange(dayRange + 30);
+          }
+        }}
+      >
+        More
+      </Button>
 
       <Flex flexWrap={"wrap"} justifyContent={"flex-start"}>
         <Box w="full">Morning</Box>

@@ -48,7 +48,7 @@ handler
               },
             ],
             startAtRange: {
-              endAt: getEndAtDate(startAt).toISOString(),
+              endAt: getEndAtDate(startAt, 30).toISOString(),
               startAt: startAt.toISOString(),
             },
           },
@@ -144,6 +144,7 @@ handler
 
       const startDate = req.body.startDate as any;
       const now = new Date(req.body.now as any);
+      const dayRange = req.body.dayRange as number;
 
       //[manicure serviceId, pedicure serviceId]
       // Must get this data from Location settings
@@ -193,12 +194,15 @@ handler
 
       // const serviceVersion = req.query.version;
       // const staffId = req.query.staffId as string;
-      const startAt =
-        now.getMonth() == startDate.month && now.getFullYear() == startDate.year
-          ? now
-          : new Date(startDate.year, startDate.month, 1, 0, 0, 0);
 
-      const endAt = getEndAtDate(startAt);
+      let startAt = now;
+
+      if (dayRange > 30) startAt = getStartAtDate(now, dayRange);
+
+      const endAt = getEndAtDate(startAt, dayRange);
+
+      console.log(startAt, "Start AT");
+      console.log(endAt, "End At");
 
       // segmentFilters: [
       //   {

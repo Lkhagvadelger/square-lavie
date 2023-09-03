@@ -206,9 +206,9 @@ export const isThisMonth = (date: any) => {
   return false;
 };
 
-export const getEndAtDate = (startDate: Date) => {
+export const getEndAtDate = (startDate: Date, dayRange: number) => {
   const tempEndDate = new Date();
-  tempEndDate.setDate(startDate.getDate() + 30);
+  tempEndDate.setDate(startDate.getDate() + dayRange);
   return tempEndDate;
 };
 
@@ -217,27 +217,10 @@ export const getEndAtDate = (startDate: Date) => {
  * @returns date
  */
 
-export const getStartAtDate = (startDate: any) => {
-  const nowDate = new Date();
-
-  if (isThisMonth(startDate)) {
-    const rawDate = new Date(startDate.year, startDate.month, startDate.day);
-    console.log(rawDate, "raw");
-
-    return nowDate;
-  }
-
-  const theDate = new Date(
-    `${startDate.year}-${parseToTwoLength(
-      startDate.month
-    )}-01T${parseToTwoLength(startDate.hours)}:${parseToTwoLength(
-      startDate.minutes
-    )}:01.000Z`
-  );
-
-  console.log(theDate, "start-date");
-
-  return theDate;
+export const getStartAtDate = (nowDate: any, dayRange: number) => {
+  const tempEndDate = new Date();
+  tempEndDate.setDate(nowDate.getDate() + dayRange - 30);
+  return tempEndDate;
 };
 
 export const displayServiceDuration = (serviceDuration: number) => {

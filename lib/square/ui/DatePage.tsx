@@ -33,7 +33,7 @@ export type DatePageType = {
   selectedHourAndStaff: Availability | undefined;
   selectedHourAndStaffFirst: Availability | undefined;
   selectedHourAndStaffSecond: Availability | undefined;
-  availability: any[] | undefined;
+  availability: any | undefined;
   selectedDate: CalendarMonthType;
   selectedVariantIds: any[];
 };
@@ -44,7 +44,7 @@ export type ChatPageType = {
   selectedHourAndStaff: Availability | undefined;
   selectedHourAndStaffFirst: Availability | undefined;
   selectedHourAndStaffSecond: Availability | undefined;
-  availability: any[] | undefined;
+  availability: any | undefined;
   selectedDate: CalendarMonthType;
   selectedVariantIds: any[];
 };

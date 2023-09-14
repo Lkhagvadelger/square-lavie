@@ -201,7 +201,9 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
     if (getValues("availability")?.availabilities2) {
       const secondAvailability = getValues(
         "availability"
-      )?.availabilities2.filter((r) => r.startAt == selectedTime.startAt)[0];
+      )?.availabilities2.filter(
+        (r: any) => r.startAt == selectedTime.startAt
+      )[0];
 
       if (
         secondAvailability &&
@@ -214,7 +216,7 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
           appointmentSegments: selectedTime.appointmentSegments?.filter(
             (r) =>
               !secondAvailability!
-                .appointmentSegments!.map((r) => r.serviceVariationId)
+                .appointmentSegments!.map((r: any) => r.serviceVariationId)
                 .includes(r.serviceVariationId)
           ),
         };
@@ -249,14 +251,22 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
   const setSelectedDate = (selectedDate: CalendarMonthType) => {
     setValue("selectedDate", selectedDate);
   };
+
+  const nextClick = () => {
+    if (dayRange < 90) {
+      setDayRange(dayRange + 30);
+    }
+  };
+
   return (
     <Box>
-      {availabitlyMutation.isLoading && <Spinner></Spinner>}
+      {availabitlyMutation.isLoading && <Spinner />}
       {!availabitlyMutation.isLoading && getValues("availability") && (
         <CalendarRow
           selectedDate={getValues("selectedDate")}
           setSelectedDate={setSelectedDate}
           hidePastDays={false}
+          nextClick={nextClick}
         />
       )}
       {locationData &&
@@ -268,22 +278,11 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
             time.
           </Text>
         )}
-      <Button
-        disabled={dayRange == 90 ? true : false}
-        onClick={() => {
-          if (dayRange < 90) {
-            setDayRange(dayRange + 30);
-          }
-        }}
-      >
-        More
-      </Button>
-
       <Flex flexWrap={"wrap"} justifyContent={"flex-start"}>
         <Box w="full">Morning</Box>
         {getValues("availability")
           ?.availabilities.filter(
-            (r) =>
+            (r: any) =>
               toTimezoneDate(r.startAt) ==
               toTimezoneDateNumeric(getValues("selectedDate"))
           )
@@ -303,11 +302,11 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
         <Box w="full">Noon</Box>
         {getValues("availability")
           ?.availabilities.filter(
-            (r) =>
+            (r: any) =>
               toTimezoneDate(r.startAt) ==
               toTimezoneDateNumeric(getValues("selectedDate"))
           )
-          .filter((r) => r.startAt && isNoonTimestamp(r.startAt))
+          .filter((r: any) => r.startAt && isNoonTimestamp(r.startAt))
           .map((item: Availability, key) => {
             return (
               <TimeBox
@@ -323,11 +322,11 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
         <Box w="full">Evening</Box>
         {getValues("availability")
           ?.availabilities.filter(
-            (r) =>
+            (r: any) =>
               toTimezoneDate(r.startAt) ==
               toTimezoneDateNumeric(getValues("selectedDate"))
           )
-          .filter((r) => r.startAt && isEveningTimestamp(r.startAt))
+          .filter((r: any) => r.startAt && isEveningTimestamp(r.startAt))
           .map((item: Availability, key) => {
             return (
               <TimeBox

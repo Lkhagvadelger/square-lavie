@@ -13,50 +13,49 @@ const handler = createHandler();
  */
 handler
   .get(async (req, res) => {
-    const bookingId = req.query.bookingId as string;
-    if (bookingId === undefined)
-      throw AppError.BadRequest("bookingId is required");
-    try {
-      // Retrieve the booking provided by the bookingId.
-      const {
-        result: { booking },
-      } = await bookingsApi.retrieveBooking(bookingId);
-
-      const { serviceVariationId, teamMemberId, serviceVariationVersion } =
-        booking!.appointmentSegments![0];
-      const startAt = getStartAtDate(new Date(), 30);
-      const searchRequest: any = {
-        query: {
-          filter: {
-            locationId,
-            segmentFilters: [
-              {
-                serviceVariationId,
-                teamMemberIdFilter: {
-                  any: [teamMemberId],
-                },
-              },
-            ],
-            startAtRange: {
-              endAt: getEndAtDate(startAt).toISOString(),
-              startAt: startAt.toISOString(),
-            },
-          },
-        },
-      };
-      // get availability
-      const {
-        result: { availabilities },
-      } = await bookingsApi.searchAvailability(searchRequest);
-      res.sendSuccess({
-        availabilities,
-        bookingId,
-        serviceId: serviceVariationId,
-        serviceVersion: serviceVariationVersion,
-      });
-    } catch (e) {
-      res.sendError(e);
-    }
+    // const bookingId = req.query.bookingId as string;
+    // if (bookingId === undefined)
+    //   throw AppError.BadRequest("bookingId is required");
+    // try {
+    //   // Retrieve the booking provided by the bookingId.
+    //   const {
+    //     result: { booking },
+    //   } = await bookingsApi.retrieveBooking(bookingId);
+    //   const { serviceVariationId, teamMemberId, serviceVariationVersion } =
+    //     booking!.appointmentSegments![0];
+    //   const startAt = getStartAtDate();
+    //   const searchRequest: any = {
+    //     query: {
+    //       filter: {
+    //         locationId,
+    //         segmentFilters: [
+    //           {
+    //             serviceVariationId,
+    //             teamMemberIdFilter: {
+    //               any: [teamMemberId],
+    //             },
+    //           },
+    //         ],
+    //         startAtRange: {
+    //           endAt: getEndAtDate(startAt).toISOString(),
+    //           startAt: startAt.toISOString(),
+    //         },
+    //       },
+    //     },
+    //   };
+    //   // get availability
+    //   const {
+    //     result: { availabilities },
+    //   } = await bookingsApi.searchAvailability(searchRequest);
+    //   res.sendSuccess({
+    //     availabilities,
+    //     bookingId,
+    //     serviceId: serviceVariationId,
+    //     serviceVersion: serviceVariationVersion,
+    //   });
+    // } catch (e) {
+    //   res.sendError(e);
+    // }
   })
   /**
    * POST /booking/:bookingId/reschedule

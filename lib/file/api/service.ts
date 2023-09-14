@@ -73,13 +73,6 @@ export const deletePatientNoteFileToggle = async (fileData: {
   });
 };
 
-export const getPatientNoteFiles = async (patientNoteId: string) => {
-  return await prisma.fileUpload.findMany({
-    where: { patientNoteId, removedAt: null },
-    select: patientNotesSelect,
-  });
-};
-
 export const getFileById = async (id: string) => {
   return await prisma.fileUpload.findUnique({
     where: { id },

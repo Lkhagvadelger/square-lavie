@@ -7,7 +7,7 @@ export const ErrorCard = ({ error }: { error: AppError }) => {
   const title = `${error.statusCode} - ${error.message}`;
 
   return (
-    <AppLayout contentWidth="container.xl">
+    <AppLayout>
       <SEO title={title} />
       <Stack h="full" align="top" spacing={0}>
         <NavContentLayout>

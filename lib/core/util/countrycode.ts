@@ -4,9 +4,6 @@ import _ from "lodash";
 export const CountryPhoneCodes = [
   { country: Country.us, code: "+1" },
   { country: Country.mn, code: "+976" },
-  { country: Country.gt, code: "+502" },
-  { country: Country.es, code: "+503" },
-  { country: Country.hn, code: "+504" },
 ];
 
 export const getAllowedCountryPhoneCode = () =>

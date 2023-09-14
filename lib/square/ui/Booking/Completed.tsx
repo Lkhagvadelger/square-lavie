@@ -1,4 +1,3 @@
-import { CalendatMonthType as CalendarMonthType } from "@ui/components/calendar/calendar";
 import {
   AppLayout,
   Box,

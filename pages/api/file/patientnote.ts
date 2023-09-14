@@ -32,8 +32,7 @@ handler
   .get(async (req, res) => {
     try {
       if (!req.user) throw AppError.Unauthorized();
-      const patientNoteId: any = req.query.patientNoteId;
-      res.sendSuccess(await getPatientNoteFiles(patientNoteId));
+      res.sendSuccess({});
     } catch (e) {
       res.sendError(e);
     }

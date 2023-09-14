@@ -1,3 +1,5 @@
+import { CalendarMonthType } from "../data/types";
+
 const options: Intl.DateTimeFormatOptions = {
   // year: "numeric",
   // month: "long",

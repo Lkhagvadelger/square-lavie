@@ -16,9 +16,6 @@ import { selectInput } from "../data/types";
 const countryList: selectInput[] = [
   { label: "United States", value: Country.us },
   { label: "Mongolia", value: Country.mn },
-  { label: "El Salvador", value: Country.es },
-  { label: "Honduras", value: Country.hn },
-  { label: "Guatemala", value: Country.gt },
 ];
 
 export const UsersTableActions = ({

@@ -286,8 +286,8 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
               toTimezoneDate(r.startAt) ==
               toTimezoneDateNumeric(getValues("selectedDate"))
           )
-          .filter((r) => r.startAt && isMorningTimestamp(r.startAt))
-          .map((item: Availability, key) => {
+          .filter((r: any) => r.startAt && isMorningTimestamp(r.startAt))
+          .map((item: Availability, key: any) => {
             return (
               <TimeBox
                 key={key}
@@ -307,7 +307,7 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
               toTimezoneDateNumeric(getValues("selectedDate"))
           )
           .filter((r: any) => r.startAt && isNoonTimestamp(r.startAt))
-          .map((item: Availability, key) => {
+          .map((item: Availability, key: any) => {
             return (
               <TimeBox
                 key={key}
@@ -327,7 +327,7 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
               toTimezoneDateNumeric(getValues("selectedDate"))
           )
           .filter((r: any) => r.startAt && isEveningTimestamp(r.startAt))
-          .map((item: Availability, key) => {
+          .map((item: Availability, key: any) => {
             return (
               <TimeBox
                 key={key}

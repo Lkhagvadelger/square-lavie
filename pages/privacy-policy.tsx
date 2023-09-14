@@ -17,7 +17,7 @@ const TermsOfService = () => {
   const { t: to } = useTranslation("common");
 
   return (
-    <AppLayout title={to(`privacy-policy`)} contentWidth={"container.xl"}>
+    <AppLayout title={to(`privacy-policy`)}>
       <SEO title={to(`privacy-policy`)} />
       <Card my={6}>
         <Box></Box>

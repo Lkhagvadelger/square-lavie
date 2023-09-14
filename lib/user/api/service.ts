@@ -102,7 +102,6 @@ export const getUserList = async (filter: QueryParamType) => {
             lastName: true,
             latinName: true,
             country: true,
-            specialistDesc: true,
             priceMin: true,
             priceMax: true,
           },

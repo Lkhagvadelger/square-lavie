@@ -18,7 +18,6 @@ export const UserActions = ({
 }) => {
   const router = useRouter();
 
-
   return (
     <ButtonGroup
       spacing="0"
@@ -34,15 +33,6 @@ export const UserActions = ({
           onClick={() => router.push(`/admin/user/${rowData.id}`)}
         />
       </Tooltip>
-      {rowData.role === UserRole.PATIENT && (
-        <Tooltip label="Patient Overview">
-          <IconButton
-            icon={<RiProfileLine />}
-            aria-label="Patient Overview"
-            onClick={() => router.push(`/local-doctor/patient/${rowData.id}`)}
-          />
-        </Tooltip>
-      )}
     </ButtonGroup>
   );
 };

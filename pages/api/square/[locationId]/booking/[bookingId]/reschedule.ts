@@ -24,7 +24,7 @@ handler
 
       const { serviceVariationId, teamMemberId, serviceVariationVersion } =
         booking!.appointmentSegments![0];
-      const startAt = getStartAtDate();
+      const startAt = getStartAtDate(new Date(), 30);
       const searchRequest: any = {
         query: {
           filter: {

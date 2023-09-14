@@ -1,8 +1,5 @@
 import { createHandler } from "@api/handler";
-import {
-  deletePatientNoteFileToggle,
-  getPatientNoteFiles,
-} from "@lib/file/api/service";
+import { deletePatientNoteFileToggle } from "@lib/file/api/service";
 import { PatientNoteFileType } from "@lib/file/data/uploadHooks";
 import { AppError } from "@util/errors";
 

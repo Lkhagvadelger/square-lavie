@@ -22,10 +22,12 @@ export const CalendarRow = ({
   selectedDate,
   setSelectedDate,
   hidePastDays = true,
+  nextClick,
 }: {
   selectedDate: CalendarMonthType;
   setSelectedDate: (pickedDate: CalendarMonthType) => void;
   hidePastDays?: boolean;
+  nextClick: () => void;
 }) => {
   let day = 0;
   let canIncrease = false;
@@ -40,6 +42,7 @@ export const CalendarRow = ({
       day: newDate.getDate(),
     };
     setSelectedDate(nextMonth);
+    nextClick();
   };
 
   const prevMonth = () => {

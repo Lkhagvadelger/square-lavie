@@ -27,6 +27,7 @@ import {
   ChoicesType,
   RequiredServiceType,
 } from "../data/types";
+import { CalendarDays } from "./components/CalendarDays";
 import { CalendarRow } from "./components/CalendarRow";
 export type DatePageType = {
   isSecondBookingRequired: boolean;
@@ -262,9 +263,10 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
     <Box>
       {availabitlyMutation.isLoading && <Spinner />}
       {!availabitlyMutation.isLoading && getValues("availability") && (
-        <CalendarRow
+        <CalendarDays
           selectedDate={getValues("selectedDate")}
           setSelectedDate={setSelectedDate}
+          dayRange={dayRange}
           hidePastDays={false}
           nextClick={nextClick}
         />

@@ -2,23 +2,7 @@ import { CalendarMonthType } from "@lib/square/data/types";
 import { Box, Button, Flex, Icon, Table, Tbody, Td, Text, Tr } from "@ui/index";
 import { useEffect, useState } from "react";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
-const getMonthName = (month: number) => {
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "Jun",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-  return months[month];
-};
+
 export const CalendarDays = ({
   selectedDate,
   setSelectedDate,
@@ -32,211 +16,147 @@ export const CalendarDays = ({
   dayRange: number;
   nextClick: () => void;
 }) => {
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<any>([]);
+  const [lastDate, setLastDate] = useState<any>();
+  const [monthCount, setMonthCount] = useState(0);
   // const [startDate, setStartDate] = useState<Date>();
   // const [dayIndex, setDayIndex] = useState<number>(0);
   // const [thisMonthLastDay, setThisMonthLastDay] = useState<number>(0);
 
+  // Sunday - Saturday
   const dayNameByIndex = {
-    0: "Mon",
-    1: "Tue",
-    2: "Wed",
-    3: "Thu",
-    4: "Fri",
-    5: "Sat",
-    6: "Sun",
+    0: "Sun",
+    1: "Mon",
+    2: "Tue",
+    3: "Wed",
+    4: "Thu",
+    5: "Fri",
+    6: "Sat",
   };
 
+  // (January gives 0)
   const monthNameByIndex = {
-    1: "Jan",
-    2: "Feb",
-    3: "Mar",
-    4: "April",
-    5: "May",
-    6: "Jun",
-    7: "Jul",
-    8: "Aug",
-    9: "Sep",
-    10: "Oct",
-    11: "Nov",
-    12: "Dec",
+    0: "Jan",
+    1: "Feb",
+    2: "Mar",
+    3: "April",
+    4: "May",
+    5: "Jun",
+    6: "Jul",
+    7: "Aug",
+    8: "Sep",
+    9: "Oct",
+    10: "Nov",
+    11: "Dec",
   };
+
+  const maxMountCount = 3;
 
   useEffect(() => {
     if (selectedDate) {
-      const thisMonthDate = new Date(
-        selectedDate.year,
-        selectedDate.month + 1,
-        0
-      );
-
-      let dayIndex = thisMonthDate.getDay();
-      const lastDay = thisMonthDate.getDate();
-      const thisMonth = thisMonthDate.getMonth() + 1;
-
-      const rawStartDate = new Date(
-        selectedDate.year,
-        selectedDate.month,
-        selectedDate.day
-      );
-
-      const tempEndDate = new Date(
-        selectedDate.year,
-        selectedDate.month,
-        selectedDate.day
-      );
-      tempEndDate.setDate(tempEndDate.getDate() + dayRange);
-      const tempEndMonth = tempEndDate.getMonth() + 1;
-
-      console.log(thisMonthDate, "this dAte");
-      console.log(tempEndDate, "Temp End date");
-
-      let result: any = [];
-      let rawDay = selectedDate.day;
-      const rawEndDay = tempEndDate.getDay();
-
-      // until lastDay loop
-
-      console.log(lastDay, "-lastDay");
-
-      const checkDay = lastDay - rawDay;
-      const leftDay = lastDay - checkDay;
-
-      console.log(thisMonth, "--this Month");
-      console.log(tempEndMonth, "--this temp Month");
-
-      let rawNowMonth: any = {
-        name: (monthNameByIndex as any)[thisMonth],
-        data: [],
-      };
-
-      for (let i = 0; i <= checkDay; i++) {
-        rawNowMonth.data.push({
-          name: (dayNameByIndex as any)[dayIndex],
-          day: rawDay,
-        });
-
-        rawDay++;
-        dayIndex++;
-        if (dayIndex > 6) {
-          dayIndex = 0;
-        }
-      }
-      rawDay = 1;
-
-      let rawNextMonth: any = {
-        name: (monthNameByIndex as any)[tempEndMonth],
-        data: [],
-      };
-
-      //start for 1 day to endDate
-      for (let i = 1; i < leftDay; i++) {
-        rawNextMonth.data.push({
-          name: (dayNameByIndex as any)[dayIndex],
-          day: rawDay,
-        });
-
-        rawDay++;
-        dayIndex++;
-        if (dayIndex > 6) {
-          dayIndex = 0;
-        }
-      }
-
-      result.push(rawNowMonth);
-      result.push(rawNextMonth);
-      setData(result);
-      // setEndDate(tempEndDate);
+      dataReload(selectedDate);
     }
-  }, [selectedDate]);
+  }, []);
 
-  const nextMonth = () => {
-    const newDate = new Date(selectedDate.year, selectedDate.month, 1);
-    // Decrease the month by one
-    newDate.setMonth(newDate.getMonth() + 1);
+  const dataReload = (checkDate: any) => {
+    const startDate = new Date(checkDate.year, checkDate.month + 1, 0);
+    const lastDay = startDate.getDate();
+    const thisMonth = startDate.getMonth();
 
-    const nextMonth = {
-      year: newDate.getFullYear(),
-      month: newDate.getMonth(),
-      day: newDate.getDate(),
-    };
-
-    setSelectedDate(nextMonth);
-    nextClick();
-  };
-
-  const prevMonth = () => {
-    const newDate = new Date(selectedDate.year, selectedDate.month, 1);
-    // Decrease the month by one
-    newDate.setMonth(newDate.getMonth() - 1);
-    const prevMonth = {
-      year: newDate.getFullYear(),
-      month: newDate.getMonth(),
-      day: newDate.getDate(),
-    };
-    setSelectedDate(prevMonth);
-  };
-
-  // const getDayOfMonth = (weekDay: number, weekNumber: number) => {
-  //   const firstDay = new Date(selectedDate.year, selectedDate.month, 1);
-  //   const firstDayWeekDay = firstDay.getDay(); // 0 (Sunday) to 6 (Saturday)
-
-  //   if (weekDay === firstDayWeekDay && weekNumber === 1) {
-  //     canIncrease = true;
-  //   }
-  //   if (canIncrease) day++;
-  //   const lastDayOfMonth = new Date(
-  //     selectedDate.year,
-  //     selectedDate.month,
-  //     0
-  //   ).getDate();
-
-  //   if (hidePastDays) {
-  //     const calculatedDay = new Date(
-  //       selectedDate.year,
-  //       selectedDate.month,
-  //       day + 1
-  //     );
-  //     if (calculatedDay < new Date()) return 0;
-  //   }
-
-  //   if (day == lastDayOfMonth) {
-  //     canIncrease = false;
-  //     day = 0;
-  //     return lastDayOfMonth;
-  //   }
-  //   if (day <= lastDayOfMonth) return day;
-  //   return -1;
-  // };
-
-  const btnPicker = (day: number) => {
-    return day == 0 ? (
-      <Box
-        borderRadius={"50%"}
-        border="1px"
-        borderColor={"green.50"}
-        w={"10"}
-        h={"10"}
-      ></Box>
-    ) : (
-      <Button
-        p={0}
-        color={day == selectedDate.day ? "white" : "green.500"}
-        bg={day == selectedDate.day ? "green.500" : "white"}
-        borderRadius={"50%"}
-        border="1px"
-        borderColor={"green.500"}
-        onClick={() => {
-          // setSelectedDate({
-          //   year: selectedDate.year,
-          //   month: selectedDate.month,
-          //   day: day,
-          // });
-        }}
-      >
-        {day}
-      </Button>
+    const tempEndDate = new Date(
+      checkDate.year,
+      checkDate.month,
+      checkDate.day
     );
+
+    console.log(tempEndDate, "---startDate");
+
+    let dayIndex = tempEndDate.getDay();
+
+    tempEndDate.setDate(tempEndDate.getDate() + dayRange);
+    const tempEndMonth = tempEndDate.getMonth();
+
+    console.log(tempEndDate, "---tempEndDate");
+
+    let result: any = [];
+    let rawDay = checkDate.day;
+
+    // until lastDay loop
+    const checkDay = lastDay - rawDay;
+    const leftDay = lastDay - checkDay;
+
+    let rawNowMonth: any = {
+      name: (monthNameByIndex as any)[thisMonth],
+      month: thisMonth,
+      year: startDate.getFullYear(),
+      data: [],
+    };
+
+    for (let i = 0; i <= checkDay; i++) {
+      rawNowMonth.data.push({
+        name: (dayNameByIndex as any)[dayIndex],
+        day: rawDay,
+        month: startDate.getMonth(),
+        year: startDate.getFullYear(),
+      });
+
+      rawDay++;
+      dayIndex++;
+      if (dayIndex > 6) {
+        dayIndex = 0;
+      }
+    }
+    rawDay = 1;
+
+    let rawNextMonth: any = {
+      name: (monthNameByIndex as any)[tempEndMonth],
+      month: tempEndMonth,
+      year: tempEndDate.getFullYear(),
+      data: [],
+    };
+
+    //start for 1 day to endDate
+    for (let i = 1; i <= leftDay; i++) {
+      rawNextMonth.data.push({
+        name: (dayNameByIndex as any)[dayIndex],
+        day: rawDay,
+        month: tempEndDate.getMonth(),
+        year: tempEndDate.getFullYear(),
+      });
+
+      rawDay++;
+      dayIndex++;
+      if (dayIndex > 6) {
+        dayIndex = 0;
+      }
+    }
+
+    result.push(rawNowMonth);
+    result.push(rawNextMonth);
+
+    const oldData = data.concat(result);
+    setData(oldData);
+
+    tempEndDate.setDate(rawDay);
+
+    setLastDate(tempEndDate);
+    setMonthCount(monthCount + 1);
+  };
+
+  const nextMonth = async () => {
+    console.log("nextMonth clicked");
+
+    const theDate = {
+      year: lastDate.getFullYear(),
+      month: lastDate.getMonth(),
+      day: lastDate.getDate(),
+    };
+
+    dataReload(theDate);
+  };
+
+  const dayClicked = (selDay: number) => {
+    setSelectedDate(selDay);
   };
 
   return (
@@ -248,87 +168,90 @@ export const CalendarDays = ({
         background={"gray"}
         zIndex={999}
       >
-        <Flex
-          direction="row"
-          w="full"
-          justifyContent={"space-between"}
-          background={"red"}
-        >
-          <Box>
-            <Button onClick={prevMonth} fontSize="24px" textAlign={"left"}>
-              <Icon as={BsChevronLeft} />
-            </Button>
-          </Box>
-          <Box>
-            {getMonthName(selectedDate.month) + " " + selectedDate.year}
-          </Box>
-          <Box>
-            <Button onClick={nextMonth} fontSize="24px" textAlign={"right"}>
-              <Icon as={BsChevronRight} />
-            </Button>
-          </Box>
-        </Flex>
-        <Table maxWidth={"full"}>
-          {data?.length > 0 && (
-            <Tr>
-              {data.map((rows: any, i: number) => {
+        <Flex direction="row" w="full" justifyContent={"space-between"}>
+          <Table maxWidth={"full"}>
+            {data?.length > 0 && (
+              <Tr>
+                {data.map((rows: any, i: number) => {
+                  return (
+                    <Td padding={0} colSpan={rows.data.length}>
+                      <Box
+                        background={rows.month % 2 == 0 ? "gray" : "white"}
+                        w={"full"}
+                        height={"50px"}
+                        borderColor={"green.500"}
+                        verticalAlign={"center"}
+                        textAlign={"center"}
+                      >
+                        <h1>
+                          {rows.name}{" "}
+                          {rows.year > selectedDate.year && rows.year}
+                        </h1>
+                      </Box>
+                    </Td>
+                  );
+                })}
+              </Tr>
+            )}
+
+            {data?.length > 0 &&
+              data.map((rows: any) => {
                 return (
-                  <Td padding={0} colSpan={rows.data.length}>
-                    <Box
-                      background={i == 0 ? "gray" : "white"}
-                      w={"full"}
-                      borderColor={"green.500"}
-                    >
-                      <Flex direction={"column"} alignItems={"center"}>
-                        <span>{rows.name}</span>
-                      </Flex>
-                    </Box>
-                  </Td>
+                  <Tr>
+                    {rows.data?.map((item: any) => {
+                      return (
+                        <Td padding={0} rowSpan={rows.data.length}>
+                          <Box
+                            margin={1}
+                            width={"50px"}
+                            height={"50px"}
+                            color={
+                              item.day == selectedDate.day &&
+                              item.month == selectedDate.month &&
+                              item.year == selectedDate.year
+                                ? "white"
+                                : "green.500"
+                            }
+                            bg={
+                              item.day == selectedDate.day &&
+                              item.month == selectedDate.month &&
+                              item.year == selectedDate.year
+                                ? "green.500"
+                                : "white"
+                            }
+                            borderRadius={"50%"}
+                            border="1px"
+                            borderColor={"green.500"}
+                            onClick={() => {
+                              dayClicked(item);
+                            }}
+                          >
+                            <Flex direction={"column"} alignItems={"center"}>
+                              <span>{item.name}</span>
+                              <span>{item.day}</span>
+                            </Flex>
+                          </Box>
+                        </Td>
+                      );
+                    })}
+                  </Tr>
                 );
               })}
-            </Tr>
-          )}
+          </Table>
 
-          {data?.length > 0 &&
-            data.map((rows: any) => {
-              return (
-                <Tr>
-                  {rows.data?.map((item: any) => {
-                    return (
-                      <Td padding={0} rowSpan={rows.data.length}>
-                        <Box
-                          margin={1}
-                          width={"50px"}
-                          height={"50px"}
-                          color={
-                            item.day == selectedDate.day ? "white" : "green.500"
-                          }
-                          bg={
-                            item.day == selectedDate.day ? "green.500" : "white"
-                          }
-                          borderRadius={"50%"}
-                          border="1px"
-                          borderColor={"green.500"}
-                          onClick={() => {
-                            // setSelectedDate({
-                            //   year: selectedDate.year,
-                            //   month: selectedDate.month,
-                            //   day: item.day,
-                            // });
-                          }}
-                        >
-                          <Flex direction={"column"} alignItems={"center"}>
-                            <span>{item.name}</span>
-                            <span>{item.day}</span>
-                          </Flex>
-                        </Box>
-                      </Td>
-                    );
-                  })}
-                </Tr>
-              );
-            })}
-        </Table>
+          {monthCount <= maxMountCount && (
+            <Box>
+              <Button
+                alignSelf={""}
+                onClick={nextMonth}
+                fontSize="24px"
+                textAlign={"right"}
+              >
+                <Icon as={BsChevronRight} />
+              </Button>
+            </Box>
+          )}
+        </Flex>
       </Box>
     </>
   );

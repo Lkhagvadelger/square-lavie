@@ -79,7 +79,7 @@ export const Home = ({ locationId }: { locationId: string }) => {
     reset: resetStep,
     activeStep,
   } = useSteps({
-    initialStep: 0,
+    initialStep: 5,
   });
 
   const router = useRouter();

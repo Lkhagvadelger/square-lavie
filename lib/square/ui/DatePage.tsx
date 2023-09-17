@@ -260,7 +260,7 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
   };
 
   return (
-    <Box>
+    <Box width={"full"}>
       {availabitlyMutation.isLoading && <Spinner />}
       {!availabitlyMutation.isLoading && getValues("availability") && (
         <CalendarDays
@@ -271,6 +271,7 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
           nextClick={nextClick}
         />
       )}
+      <br />
       {locationData &&
         !isLoading &&
         locationData.timezone != userTimezone() && (

@@ -47,12 +47,32 @@ export const CalendarDays = ({
     6: "Sun",
   };
 
+  const monthNameByIndex = {
+    1: "Jan",
+    2: "Feb",
+    3: "Mar",
+    4: "April",
+    5: "May",
+    6: "Jun",
+    7: "Jul",
+    8: "Aug",
+    9: "Sep",
+    10: "Oct",
+    11: "Nov",
+    12: "Dec",
+  };
+
   useEffect(() => {
     if (selectedDate) {
-      const thisMonth = new Date(selectedDate.year, selectedDate.month, 0);
+      const thisMonthDate = new Date(
+        selectedDate.year,
+        selectedDate.month + 1,
+        0
+      );
 
-      let dayIndex = thisMonth.getDay();
-      const lastDay = thisMonth.getDate();
+      let dayIndex = thisMonthDate.getDay();
+      const lastDay = thisMonthDate.getDate();
+      const thisMonth = thisMonthDate.getMonth() + 1;
 
       const rawStartDate = new Date(
         selectedDate.year,
@@ -60,8 +80,16 @@ export const CalendarDays = ({
         selectedDate.day
       );
 
-      const tempEndDate = new Date();
-      tempEndDate.setDate(rawStartDate.getDate() + dayRange);
+      const tempEndDate = new Date(
+        selectedDate.year,
+        selectedDate.month,
+        selectedDate.day
+      );
+      tempEndDate.setDate(tempEndDate.getDate() + dayRange);
+      const tempEndMonth = tempEndDate.getMonth() + 1;
+
+      console.log(thisMonthDate, "this dAte");
+      console.log(tempEndDate, "Temp End date");
 
       let result: any = [];
       let rawDay = selectedDate.day;
@@ -74,8 +102,16 @@ export const CalendarDays = ({
       const checkDay = lastDay - rawDay;
       const leftDay = lastDay - checkDay;
 
+      console.log(thisMonth, "--this Month");
+      console.log(tempEndMonth, "--this temp Month");
+
+      let rawNowMonth: any = {
+        name: (monthNameByIndex as any)[thisMonth],
+        data: [],
+      };
+
       for (let i = 0; i <= checkDay; i++) {
-        result.push({
+        rawNowMonth.data.push({
           name: (dayNameByIndex as any)[dayIndex],
           day: rawDay,
         });
@@ -88,9 +124,14 @@ export const CalendarDays = ({
       }
       rawDay = 1;
 
+      let rawNextMonth: any = {
+        name: (monthNameByIndex as any)[tempEndMonth],
+        data: [],
+      };
+
       //start for 1 day to endDate
       for (let i = 1; i < leftDay; i++) {
-        result.push({
+        rawNextMonth.data.push({
           name: (dayNameByIndex as any)[dayIndex],
           day: rawDay,
         });
@@ -102,6 +143,8 @@ export const CalendarDays = ({
         }
       }
 
+      result.push(rawNowMonth);
+      result.push(rawNextMonth);
       setData(result);
       // setEndDate(tempEndDate);
     }
@@ -184,11 +227,11 @@ export const CalendarDays = ({
         border="1px"
         borderColor={"green.500"}
         onClick={() => {
-          setSelectedDate({
-            year: selectedDate.year,
-            month: selectedDate.month,
-            day: day,
-          });
+          // setSelectedDate({
+          //   year: selectedDate.year,
+          //   month: selectedDate.month,
+          //   day: day,
+          // });
         }}
       >
         {day}
@@ -197,63 +240,96 @@ export const CalendarDays = ({
   };
 
   return (
-    <Box w="full">
-      <Flex direction="row" w="full" justifyContent={"space-between"}>
-        <Box>
-          <Button onClick={prevMonth} fontSize="24px" textAlign={"left"}>
-            <Icon as={BsChevronLeft} />
-          </Button>
-        </Box>
-        <Box>{getMonthName(selectedDate.month) + " " + selectedDate.year}</Box>
-        <Box>
-          <Button onClick={nextMonth} fontSize="24px" textAlign={"right"}>
-            <Icon as={BsChevronRight} />
-          </Button>
-        </Box>
-      </Flex>
-      <Box w="full" overflow={"auto"}>
-        <Flex w="full" flexDirection={"row"} overflowX={"auto"}>
-          {" "}
+    <>
+      <Box
+        w={"full"}
+        overflowX="auto"
+        marginTop={"20px"}
+        background={"gray"}
+        zIndex={999}
+      >
+        <Flex
+          direction="row"
+          w="full"
+          justifyContent={"space-between"}
+          background={"red"}
+        >
+          <Box>
+            <Button onClick={prevMonth} fontSize="24px" textAlign={"left"}>
+              <Icon as={BsChevronLeft} />
+            </Button>
+          </Box>
+          <Box>
+            {getMonthName(selectedDate.month) + " " + selectedDate.year}
+          </Box>
+          <Box>
+            <Button onClick={nextMonth} fontSize="24px" textAlign={"right"}>
+              <Icon as={BsChevronRight} />
+            </Button>
+          </Box>
+        </Flex>
+        <Table maxWidth={"full"}>
+          {data?.length > 0 && (
+            <Tr>
+              {data.map((rows: any, i: number) => {
+                return (
+                  <Td padding={0} colSpan={rows.data.length}>
+                    <Box
+                      background={i == 0 ? "gray" : "white"}
+                      w={"full"}
+                      borderColor={"green.500"}
+                    >
+                      <Flex direction={"column"} alignItems={"center"}>
+                        <span>{rows.name}</span>
+                      </Flex>
+                    </Box>
+                  </Td>
+                );
+              })}
+            </Tr>
+          )}
+
           {data?.length > 0 &&
-            data.map((element: any) => {
+            data.map((rows: any) => {
               return (
-                <Box
-                  display={"inline-grid"}
-                  width={"50px"}
-                  // justifyContent={"center"}
-                  justifyItems={"center"}
-                  p={0}
-                  color={
-                    element.day == selectedDate.day ? "white" : "green.500"
-                  }
-                  bg={element.day == selectedDate.day ? "green.500" : "white"}
-                  borderRadius={"50%"}
-                  border="1px"
-                  margin={"5px"}
-                  borderColor={"green.500"}
-                  onClick={() => {
-                    setSelectedDate({
-                      year: selectedDate.year,
-                      month: selectedDate.month,
-                      day: element.day,
-                    });
-                  }}
-                >
-                  <span>{element.name}</span>
-                  <span>{element.day}</span>
-                  {/* <Box
-        borderRadius={"50%"}
-        border="1px"
-        borderColor={"green.50"}
-        w={"10"}
-        h={"10"}
-      ></Box>
-    ) */}
-                </Box>
+                <Tr>
+                  {rows.data?.map((item: any) => {
+                    return (
+                      <Td padding={0} rowSpan={rows.data.length}>
+                        <Box
+                          margin={1}
+                          width={"50px"}
+                          height={"50px"}
+                          color={
+                            item.day == selectedDate.day ? "white" : "green.500"
+                          }
+                          bg={
+                            item.day == selectedDate.day ? "green.500" : "white"
+                          }
+                          borderRadius={"50%"}
+                          border="1px"
+                          borderColor={"green.500"}
+                          onClick={() => {
+                            // setSelectedDate({
+                            //   year: selectedDate.year,
+                            //   month: selectedDate.month,
+                            //   day: item.day,
+                            // });
+                          }}
+                        >
+                          <Flex direction={"column"} alignItems={"center"}>
+                            <span>{item.name}</span>
+                            <span>{item.day}</span>
+                          </Flex>
+                        </Box>
+                      </Td>
+                    );
+                  })}
+                </Tr>
               );
             })}
-        </Flex>
+        </Table>
       </Box>
-    </Box>
+    </>
   );
 };

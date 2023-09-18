@@ -150,8 +150,8 @@
     },
     {
       "type": "text",
-      "version": 274,
-      "versionNonce": 1027824194,
+      "version": 275,
+      "versionNonce": 1901103400,
       "isDeleted": false,
       "id": "gTpbSyeLiED5GpihlZomM",
       "fillStyle": "hachure",
@@ -170,7 +170,7 @@
       "groupIds": [],
       "roundness": null,
       "boundElements": [],
-      "updated": 1695005904937,
+      "updated": 1695006378153,
       "link": null,
       "locked": false,
       "fontSize": 20,
@@ -181,7 +181,7 @@
       "containerId": "foVas6i9w_fHCixMICkcL",
       "originalText": "Only 2 staffs do every service",
       "lineHeight": 1.25,
-      "baseline": 42
+      "baseline": 43
     },
     {
       "type": "rectangle",
@@ -795,8 +795,8 @@
     },
     {
       "type": "text",
-      "version": 412,
-      "versionNonce": 804750686,
+      "version": 413,
+      "versionNonce": 1890975064,
       "isDeleted": false,
       "id": "z1fgtzGErp0oghjTKIRbA",
       "fillStyle": "hachure",
@@ -815,7 +815,7 @@
       "groupIds": [],
       "roundness": null,
       "boundElements": [],
-      "updated": 1695005904937,
+      "updated": 1695006378153,
       "link": null,
       "locked": false,
       "fontSize": 20,
@@ -826,7 +826,7 @@
       "containerId": "ttHLR0nwStTU1K7dKAeGj",
       "originalText": "Only 3 staffs do every service",
       "lineHeight": 1.25,
-      "baseline": 17
+      "baseline": 18
     },
     {
       "type": "rectangle",
@@ -863,8 +863,8 @@
     },
     {
       "type": "text",
-      "version": 505,
-      "versionNonce": 802892190,
+      "version": 506,
+      "versionNonce": 464856104,
       "isDeleted": false,
       "id": "QkQa4STTV97MtsSToz_XA",
       "fillStyle": "hachure",
@@ -883,7 +883,7 @@
       "groupIds": [],
       "roundness": null,
       "boundElements": [],
-      "updated": 1695005904937,
+      "updated": 1695006378154,
       "link": null,
       "locked": false,
       "fontSize": 20,
@@ -894,7 +894,7 @@
       "containerId": "0bORGWRtP2GzQidEEy2uR",
       "originalText": "Only 4 staffs do every service",
       "lineHeight": 1.25,
-      "baseline": 17
+      "baseline": 18
     },
     {
       "type": "rectangle",
@@ -1198,8 +1198,8 @@
     },
     {
       "type": "text",
-      "version": 605,
-      "versionNonce": 1482522114,
+      "version": 606,
+      "versionNonce": 12358232,
       "isDeleted": false,
       "id": "nZmO3yqDgPgKNX_0AyGxm",
       "fillStyle": "hachure",
@@ -1218,7 +1218,7 @@
       "groupIds": [],
       "roundness": null,
       "boundElements": [],
-      "updated": 1695005904937,
+      "updated": 1695006378154,
       "link": null,
       "locked": false,
       "fontSize": 20,
@@ -1229,7 +1229,7 @@
       "containerId": "nWftmQY509zijLGY802pU",
       "originalText": "Only 2 staffs do every service, 2 staffs do some",
       "lineHeight": 1.25,
-      "baseline": 17
+      "baseline": 18
     },
     {
       "type": "rectangle",
@@ -1561,8 +1561,8 @@
     },
     {
       "type": "text",
-      "version": 705,
-      "versionNonce": 452695170,
+      "version": 706,
+      "versionNonce": 1691246376,
       "isDeleted": false,
       "id": "3EO3bMDAAnXBYoOe8AbTo",
       "fillStyle": "hachure",
@@ -1581,7 +1581,7 @@
       "groupIds": [],
       "roundness": null,
       "boundElements": [],
-      "updated": 1695005904938,
+      "updated": 1695006378154,
       "link": null,
       "locked": false,
       "fontSize": 20,
@@ -1592,7 +1592,7 @@
       "containerId": "y8VzKHGpNjrJkTJ_y6IcR",
       "originalText": "Only 1 staff do every service, 2 staffs do some",
       "lineHeight": 1.25,
-      "baseline": 17
+      "baseline": 18
     },
     {
       "type": "rectangle",
@@ -2191,8 +2191,8 @@
     },
     {
       "type": "text",
-      "version": 466,
-      "versionNonce": 1830412062,
+      "version": 467,
+      "versionNonce": 1562937176,
       "isDeleted": false,
       "id": "0bEAHOOFu8iDRVteDj3We",
       "fillStyle": "hachure",
@@ -2211,7 +2211,7 @@
       "groupIds": [],
       "roundness": null,
       "boundElements": [],
-      "updated": 1695005904938,
+      "updated": 1695006378154,
       "link": null,
       "locked": false,
       "fontSize": 20,
@@ -2222,7 +2222,7 @@
       "containerId": "m_pau2nVm4siR_q8xnC30",
       "originalText": "Only 1 staff do every service, 1 staff some",
       "lineHeight": 1.25,
-      "baseline": 42
+      "baseline": 43
     },
     {
       "type": "rectangle",
@@ -2495,32 +2495,37 @@
       "locked": false
     },
     {
-      "id": "lR8-gYFv9sBOMURgCA99w",
       "type": "line",
-      "x": 2278.3170286245527,
-      "y": 1278.263057363099,
-      "width": 516.6985800708467,
-      "height": 626.4887288115729,
-      "angle": 0,
-      "strokeColor": "#c92a2a",
-      "backgroundColor": "transparent",
+      "version": 61,
+      "versionNonce": 197455390,
+      "isDeleted": false,
+      "id": "lR8-gYFv9sBOMURgCA99w",
       "fillStyle": "hachure",
       "strokeWidth": 4,
       "strokeStyle": "solid",
       "roughness": 1,
       "opacity": 100,
+      "angle": 0,
+      "x": 2278.3170286245527,
+      "y": 1278.263057363099,
+      "strokeColor": "#c92a2a",
+      "backgroundColor": "transparent",
+      "width": 516.6985800708467,
+      "height": 626.4887288115729,
+      "seed": 1556513410,
       "groupIds": [],
       "roundness": {
         "type": 2
       },
-      "seed": 1556513410,
-      "version": 61,
-      "versionNonce": 197455390,
-      "isDeleted": false,
-      "boundElements": null,
+      "boundElements": [],
       "updated": 1695005922259,
       "link": null,
       "locked": false,
+      "startBinding": null,
+      "endBinding": null,
+      "lastCommittedPoint": null,
+      "startArrowhead": null,
+      "endArrowhead": null,
       "points": [
         [
           0,
@@ -2530,12 +2535,7 @@
           516.6985800708467,
           -626.4887288115729
         ]
-      ],
-      "lastCommittedPoint": null,
-      "startBinding": null,
-      "endBinding": null,
-      "startArrowhead": null,
-      "endArrowhead": null
+      ]
     },
     {
       "type": "line",
@@ -2579,6 +2579,41 @@
           -542.1873960262038
         ]
       ]
+    },
+    {
+      "id": "jLEq-plT0r6Sk13fMJdgC",
+      "type": "text",
+      "x": -193.90791795043094,
+      "y": -171.52423031131883,
+      "width": 524.4195556640625,
+      "height": 225,
+      "angle": 0,
+      "strokeColor": "#000000",
+      "backgroundColor": "transparent",
+      "fillStyle": "hachure",
+      "strokeWidth": 1,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "roundness": null,
+      "seed": 1292384808,
+      "version": 2,
+      "versionNonce": 307092568,
+      "isDeleted": false,
+      "boundElements": null,
+      "updated": 1695006381585,
+      "link": null,
+      "locked": false,
+      "text": "- 1 hvn 1 category-s songoson 1 hvn l hiine\n- 1 hvn 2 category-s songoson bol 2 uur hvn hiine\n- 2 hvn 2 category-s songoson bol 4 hvn ajillaj bolno\n\n- 4 hvn max-daa zahialga ugnu\n- max-daa 7 hvn ajillana\n- 1 ajiltan sul zogsohgvi vrgeljlvvleed uur ajil hiine\n\n",
+      "fontSize": 20,
+      "fontFamily": 1,
+      "textAlign": "left",
+      "verticalAlign": "top",
+      "baseline": 218,
+      "containerId": null,
+      "originalText": "- 1 hvn 1 category-s songoson 1 hvn l hiine\n- 1 hvn 2 category-s songoson bol 2 uur hvn hiine\n- 2 hvn 2 category-s songoson bol 4 hvn ajillaj bolno\n\n- 4 hvn max-daa zahialga ugnu\n- max-daa 7 hvn ajillana\n- 1 ajiltan sul zogsohgvi vrgeljlvvleed uur ajil hiine\n\n",
+      "lineHeight": 1.25
     }
   ],
   "appState": {

@@ -1,4 +1,4 @@
-import { Completed } from "@lib/square/ui/Booking/Completed";
+import { Completed } from "@lib/square/ui/booking/Completed";
 import { useRouter } from "next/router";
 
 export const SquareDatePage = () => {

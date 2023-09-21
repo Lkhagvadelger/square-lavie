@@ -50,8 +50,6 @@ export type ChatPageType = {
   selectedVariantIds: any[];
 };
 
-const maxDayRange = 90;
-
 export const DatePage = ({ locationId }: { locationId: string }) => {
   const {
     register,
@@ -90,7 +88,6 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
   const availabitlyMutation = useAvailabilityAny(locationId);
   const createMutation = useCreateBooking(locationId);
   const { data: locationData, isLoading } = useGetLocationInfo(locationId);
-  const [dayRange, setDayRange] = useState<number>(30);
 
   const onBooking = () => {
     if (getValues("selectedHourAndStaff")) {
@@ -127,61 +124,57 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
         }))
       );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cart]);
 
   //step: 2
-  let avialableSet = false;
-
   useEffect(() => {
     if (
       getValues("selectedVariantIds")?.length > 0 &&
       getValues("availability") == undefined
     ) {
       console.log("first time call call Avlialablity");
-      callAvialablity(getValues("selectedVariantIds"));
+      callAvialablity(
+        getValues("selectedVariantIds"),
+        getValues("selectedDate")
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getValues("selectedVariantIds")]);
 
+  const callAvialablity = (
+    selectedVariantIds: any[],
+    selDate: CalendarMonthType
+  ) => {
+    availabitlyMutation.mutate(
+      {
+        selectedVariantIds: selectedVariantIds,
+        startDate: new Date(selDate.year, selDate.month, selDate.day),
+        dayRange: 2,
+      },
+      {
+        onError: (e) => {
+          console.log(e);
+        },
+        onSuccess: (data: any) => {
+          setValue("availability", data);
+        },
+      }
+    );
+  };
+
   useEffect(() => {
-    if (dayRange > 30) {
-      callAvialablity(getValues("selectedVariantIds"));
+    if (getValues("availability")?.length > 0) {
+      console.log("first time call call Avlialablity");
+      calculateServiceOrder();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dayRange]);
+  }, [getValues("availability")]);
 
-  // callAvialablity(getValues("selectedVariantIds"));
+  const calculateServiceOrder = () => {
+    const availability = getValues("availability");
 
-  const callAvialablity = (selectedVariantIds: any[]) => {
-    let startDate = getValues("selectedDate");
-
-    if (dayRange <= 90) {
-      availabitlyMutation.mutate(
-        {
-          selectedVariantIds: selectedVariantIds,
-          startDate: startDate,
-          now: new Date(),
-          dayRange: dayRange,
-        },
-        {
-          onError: (e) => {
-            console.log(e);
-          },
-          onSuccess: (data: any) => {
-            const oldVal = getValues("availability");
-
-            if (oldVal != undefined) {
-              let mergeResult = oldVal.concat(data);
-              setValue("availability", mergeResult);
-            } else {
-              setValue("availability", data);
-            }
-            console.log(data);
-          },
-        }
-      );
-    }
+    const firstAvail = getValues("availability").availabilities;
+    const secondAvail = getValues("availability").availabilities2;
   };
 
   const userTimezone = () => {
@@ -251,27 +244,23 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
   };
   const setSelectedDate = (selectedDate: CalendarMonthType) => {
     setValue("selectedDate", selectedDate);
+
+    callAvialablity(getValues("selectedVariantIds"), selectedDate);
   };
 
-  const nextClick = () => {
-    if (dayRange < 90) {
-      setDayRange(dayRange + 30);
-    }
-  };
+  const nextClick = () => {};
 
   return (
     <Box width={"full"}>
-      {availabitlyMutation.isLoading && <Spinner />}
-      {!availabitlyMutation.isLoading && getValues("availability") && (
-        <CalendarDays
-          selectedDate={getValues("selectedDate")}
-          setSelectedDate={setSelectedDate}
-          dayRange={dayRange}
-          hidePastDays={false}
-          nextClick={nextClick}
-        />
-      )}
+      <CalendarDays
+        selectedDate={getValues("selectedDate")}
+        setSelectedDate={setSelectedDate}
+        hidePastDays={false}
+        nextClick={nextClick}
+      />
       <br />
+      {availabitlyMutation.isLoading && <Spinner />}
+
       {locationData &&
         !isLoading &&
         locationData.timezone != userTimezone() && (
@@ -281,68 +270,71 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
             time.
           </Text>
         )}
-      <Flex flexWrap={"wrap"} justifyContent={"flex-start"}>
-        <Box w="full">Morning</Box>
-        {getValues("availability")
-          ?.availabilities.filter(
-            (r: any) =>
-              toTimezoneDate(r.startAt) ==
-              toTimezoneDateNumeric(getValues("selectedDate"))
-          )
-          .filter((r: any) => r.startAt && isMorningTimestamp(r.startAt))
-          .map((item: Availability, key: any) => {
-            return (
-              <TimeBox
-                key={key}
-                availability={item}
-                selectedAt={getValues("selectedHourAndStaff")}
-                onTimeSelectAndSearchSecondOption={
-                  onTimeSelectAndSearchSecondOption
-                }
-              />
-            );
-          })}
-        <Box w="full">Noon</Box>
-        {getValues("availability")
-          ?.availabilities.filter(
-            (r: any) =>
-              toTimezoneDate(r.startAt) ==
-              toTimezoneDateNumeric(getValues("selectedDate"))
-          )
-          .filter((r: any) => r.startAt && isNoonTimestamp(r.startAt))
-          .map((item: Availability, key: any) => {
-            return (
-              <TimeBox
-                key={key}
-                availability={item}
-                selectedAt={getValues("selectedHourAndStaff")}
-                onTimeSelectAndSearchSecondOption={
-                  onTimeSelectAndSearchSecondOption
-                }
-              />
-            );
-          })}
-        <Box w="full">Evening</Box>
-        {getValues("availability")
-          ?.availabilities.filter(
-            (r: any) =>
-              toTimezoneDate(r.startAt) ==
-              toTimezoneDateNumeric(getValues("selectedDate"))
-          )
-          .filter((r: any) => r.startAt && isEveningTimestamp(r.startAt))
-          .map((item: Availability, key: any) => {
-            return (
-              <TimeBox
-                key={key}
-                availability={item}
-                selectedAt={getValues("selectedHourAndStaff")}
-                onTimeSelectAndSearchSecondOption={
-                  onTimeSelectAndSearchSecondOption
-                }
-              />
-            );
-          })}
-      </Flex>
+      {!availabitlyMutation.isLoading && getValues("availability") && (
+        <Flex flexWrap={"wrap"} justifyContent={"flex-start"}>
+          <Box w="full">Morning</Box>
+          {getValues("availability")
+            ?.availabilities?.filter(
+              (r: any) =>
+                toTimezoneDate(r.startAt) ==
+                toTimezoneDateNumeric(getValues("selectedDate"))
+            )
+            .filter((r: any) => r.startAt && isMorningTimestamp(r.startAt))
+            .map((item: Availability, key: any) => {
+              return (
+                <TimeBox
+                  key={key}
+                  availability={item}
+                  selectedAt={getValues("selectedHourAndStaff")}
+                  onTimeSelectAndSearchSecondOption={
+                    onTimeSelectAndSearchSecondOption
+                  }
+                />
+              );
+            })}
+          <Box w="full">Noon</Box>
+          {getValues("availability")
+            ?.availabilities.filter(
+              (r: any) =>
+                toTimezoneDate(r.startAt) ==
+                toTimezoneDateNumeric(getValues("selectedDate"))
+            )
+            .filter((r: any) => r.startAt && isNoonTimestamp(r.startAt))
+            .map((item: Availability, key: any) => {
+              return (
+                <TimeBox
+                  key={key}
+                  availability={item}
+                  selectedAt={getValues("selectedHourAndStaff")}
+                  onTimeSelectAndSearchSecondOption={
+                    onTimeSelectAndSearchSecondOption
+                  }
+                />
+              );
+            })}
+          <Box w="full">Evening</Box>
+          {getValues("availability")
+            ?.availabilities.filter(
+              (r: any) =>
+                toTimezoneDate(r.startAt) ==
+                toTimezoneDateNumeric(getValues("selectedDate"))
+            )
+            .filter((r: any) => r.startAt && isEveningTimestamp(r.startAt))
+            .map((item: Availability, key: any) => {
+              return (
+                <TimeBox
+                  key={key}
+                  availability={item}
+                  selectedAt={getValues("selectedHourAndStaff")}
+                  onTimeSelectAndSearchSecondOption={
+                    onTimeSelectAndSearchSecondOption
+                  }
+                />
+              );
+            })}
+        </Flex>
+      )}
+
       <Box>
         <Button onClick={onBooking}>Book</Button>
       </Box>

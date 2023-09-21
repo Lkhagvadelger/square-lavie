@@ -12,6 +12,7 @@ import {
 } from "@lib/square/api/squareClient";
 import { AvailabilityReqModel, CartModel } from "@lib/square/data/types";
 import { AppError } from "@util/errors";
+import { offline1 } from "./offline1";
 
 const handler = createHandler();
 
@@ -142,9 +143,10 @@ handler
       let serviceVariantIds = req.body
         .selectedVariantIds as AvailabilityReqModel[];
 
-      const startDate = req.body.startDate as any;
-      const now = new Date(req.body.now as any);
+      const startDate = new Date(req.body.startDate as any);
       const dayRange = req.body.dayRange as number;
+
+      // return res.sendSuccess(offline1);
 
       //[manicure serviceId, pedicure serviceId]
       // Must get this data from Location settings
@@ -155,6 +157,9 @@ handler
           teamMemberIds: [],
         },
       ];
+
+      console.log(serviceVariantIds);
+      console.log(JSON.stringify(serviceVariantIds[0]));
       //if categoryToSeparate serviceIds both detected inside serviceVariantIds
 
       const isContainingBothCategory = categoryToSeparate
@@ -195,10 +200,7 @@ handler
       // const serviceVersion = req.query.version;
       // const staffId = req.query.staffId as string;
 
-      let startAt = now;
-
-      if (dayRange > 30) startAt = getStartAtDate(now, dayRange);
-
+      let startAt = startDate;
       const endAt = getEndAtDate(startAt, dayRange);
 
       console.log(startAt, "Start AT");

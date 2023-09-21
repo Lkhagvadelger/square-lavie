@@ -3,17 +3,43 @@ import { Box, Button, Flex, Icon, Table, Tbody, Td, Text, Tr } from "@ui/index";
 import { useEffect, useState } from "react";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 
+// Sunday - Saturday
+const dayNameByIndex = {
+  0: "Sun",
+  1: "Mon",
+  2: "Tue",
+  3: "Wed",
+  4: "Thu",
+  5: "Fri",
+  6: "Sat",
+};
+
+// (January gives 0)
+const monthNameByIndex = {
+  0: "Jan",
+  1: "Feb",
+  2: "Mar",
+  3: "April",
+  4: "May",
+  5: "Jun",
+  6: "Jul",
+  7: "Aug",
+  8: "Sep",
+  9: "Oct",
+  10: "Nov",
+  11: "Dec",
+};
+
+const dayRange = 30;
 export const CalendarDays = ({
   selectedDate,
   setSelectedDate,
   hidePastDays = true,
-  dayRange,
   nextClick,
 }: {
   selectedDate: CalendarMonthType;
   setSelectedDate: (pickedDate: CalendarMonthType) => void;
   hidePastDays?: boolean;
-  dayRange: number;
   nextClick: () => void;
 }) => {
   const [data, setData] = useState<any>([]);
@@ -22,33 +48,6 @@ export const CalendarDays = ({
   // const [startDate, setStartDate] = useState<Date>();
   // const [dayIndex, setDayIndex] = useState<number>(0);
   // const [thisMonthLastDay, setThisMonthLastDay] = useState<number>(0);
-
-  // Sunday - Saturday
-  const dayNameByIndex = {
-    0: "Sun",
-    1: "Mon",
-    2: "Tue",
-    3: "Wed",
-    4: "Thu",
-    5: "Fri",
-    6: "Sat",
-  };
-
-  // (January gives 0)
-  const monthNameByIndex = {
-    0: "Jan",
-    1: "Feb",
-    2: "Mar",
-    3: "April",
-    4: "May",
-    5: "Jun",
-    6: "Jul",
-    7: "Aug",
-    8: "Sep",
-    9: "Oct",
-    10: "Nov",
-    11: "Dec",
-  };
 
   const maxMountCount = 3;
 
@@ -153,10 +152,16 @@ export const CalendarDays = ({
     };
 
     dataReload(theDate);
+
+    nextClick();
   };
 
-  const dayClicked = (selDay: number) => {
-    setSelectedDate(selDay);
+  const dayClicked = (selDay: any) => {
+    setSelectedDate({
+      year: selDay.year,
+      month: selDay.month,
+      day: selDay.day,
+    });
   };
 
   return (

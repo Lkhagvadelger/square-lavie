@@ -179,7 +179,7 @@ export const CalendarDays = ({
               <Tr>
                 {data.map((rows: any, i: number) => {
                   return (
-                    <Td padding={0} colSpan={rows.data.length}>
+                    <Td key={i} padding={0} colSpan={rows.data.length}>
                       <Box
                         background={rows.month % 2 == 0 ? "gray" : "white"}
                         w={"full"}
@@ -200,12 +200,12 @@ export const CalendarDays = ({
             )}
 
             {data?.length > 0 &&
-              data.map((rows: any) => {
+              data.map((rows: any, i: number) => {
                 return (
-                  <Tr>
-                    {rows.data?.map((item: any) => {
+                  <Tr key={i}>
+                    {rows.data?.map((item: any, key: number) => {
                       return (
-                        <Td padding={0} rowSpan={rows.data.length}>
+                        <Td key={key} padding={0} rowSpan={rows.data.length}>
                           <Box
                             margin={1}
                             width={"50px"}

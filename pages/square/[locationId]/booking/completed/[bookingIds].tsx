@@ -1,4 +1,4 @@
-import { Completed } from "@lib/square/ui/Booking/Completed";
+// import { Completed } from "@lib/square/ui/booking/Completed";
 import { useRouter } from "next/router";
 
 export const SquareDatePage = () => {
@@ -7,10 +7,11 @@ export const SquareDatePage = () => {
   const bookingIds = router.query.bookingIds as string;
 
   // must check is location id exists in square api
-  return locationId ? (
-    <Completed locationId={locationId} bookingIds={bookingIds} />
-  ) : (
-    <>No Booking id provided</>
-  );
+  // return locationId ? (
+  //   <Completed locationId={locationId} bookingIds={bookingIds} />
+  // ) : (
+  //   <>No Booking id provided</>
+  // );
+  return <></>;
 };
 export default SquareDatePage;

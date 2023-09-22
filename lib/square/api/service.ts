@@ -217,9 +217,9 @@ export const getEndAtDate = (startDate: Date, dayRange: number) => {
  * @returns date
  */
 
-export const getStartAtDate = (nowDate: any, dayRange: number) => {
+export const getStartAtDate = (nowDate: any) => {
   const tempEndDate = new Date();
-  tempEndDate.setDate(nowDate.getDate() + dayRange - 30);
+  tempEndDate.setDate(nowDate.getDate());
   return tempEndDate;
 };
 

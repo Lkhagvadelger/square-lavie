@@ -133,6 +133,7 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
       getValues("availability") == undefined
     ) {
       console.log("first time call call Avlialablity");
+
       callAvialablity(
         getValues("selectedVariantIds"),
         getValues("selectedDate")
@@ -145,11 +146,12 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
     selectedVariantIds: any[],
     selDate: CalendarMonthType
   ) => {
+    console.log(selectedVariantIds);
+
     availabitlyMutation.mutate(
       {
         selectedVariantIds: selectedVariantIds,
-        startDate: new Date(selDate.year, selDate.month, selDate.day),
-        dayRange: 2,
+        startDate: selDate,
       },
       {
         onError: (e) => {

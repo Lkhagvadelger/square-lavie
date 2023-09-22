@@ -143,8 +143,7 @@ handler
       let serviceVariantIds = req.body
         .selectedVariantIds as AvailabilityReqModel[];
 
-      const startDate = new Date(req.body.startDate as any);
-      const dayRange = req.body.dayRange as number;
+      let startDate: any = req.body.startDate;
 
       // return res.sendSuccess(offline1);
 
@@ -158,10 +157,7 @@ handler
         },
       ];
 
-      console.log(serviceVariantIds);
-      console.log(JSON.stringify(serviceVariantIds[0]));
       //if categoryToSeparate serviceIds both detected inside serviceVariantIds
-
       const isContainingBothCategory = categoryToSeparate
         .map((r) => r.categoryId)
         .every((item) =>
@@ -200,18 +196,37 @@ handler
       // const serviceVersion = req.query.version;
       // const staffId = req.query.staffId as string;
 
-      let startAt = startDate;
-      const endAt = getEndAtDate(startAt, dayRange);
+      // const startAt = new Date();
+      // // only allow booking start time 4 hours from now
+      // startAt.setHours(startAt.getHours() + 4);
+
+      let startAt = new Date(
+        startDate.year,
+        startDate.month,
+        startDate.day,
+        0,
+        0,
+        1,
+        0
+      );
+
+      // const endAt = new Date();
+      // // only allow booking start time 4 hours from now
+      // endAt.setDate(endAt.getDate()+2)
+
+      const endAt = new Date(
+        startDate.year,
+        startDate.month,
+        startDate.day + 2,
+        0,
+        0,
+        1,
+        0
+      );
 
       console.log(startAt, "Start AT");
       console.log(endAt, "End At");
 
-      // segmentFilters: [
-      //   {
-      //     serviceVariationId: serviceId,
-      //     teamMemberIdFilter: {},
-      //   },
-      // ],
       const searchRequest: any[] = [
         {
           query: {

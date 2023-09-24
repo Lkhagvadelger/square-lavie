@@ -187,7 +187,7 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
 
         console.log(rawSelDate, "---rawSel");
 
-        const rawDate = toTimezoneDateNumeric(rawSelDate);
+        const rawDate = parseDateWithTimeZone(rawSelDate, timeZone);
 
         console.log(rawDate, "----raw");
 

@@ -37,8 +37,8 @@ export const CalendarDays = ({
   hidePastDays = true,
   nextClick,
 }: {
-  selectedDate: CalendarMonthType;
-  setSelectedDate: (pickedDate: CalendarMonthType) => void;
+  selectedDate: Date;
+  setSelectedDate: (pickedDate: Date) => void;
   hidePastDays?: boolean;
   nextClick: (endDate: any) => void;
 }) => {
@@ -52,33 +52,39 @@ export const CalendarDays = ({
   const maxMountCount = 3;
 
   useEffect(() => {
+    console.log(selectedDate, "-ss");
     if (selectedDate) {
+      console.log("hahha");
+      console.log(selectedDate, "--sel Date Days");
       dataReload(selectedDate);
     }
-  }, []);
+  }, [selectedDate]);
 
-  const dataReload = (checkDate: any) => {
-    const startDate = new Date(checkDate.year, checkDate.month + 1, 0);
+  const dataReload = (checkDate: Date) => {
+    const startDate = new Date(
+      checkDate.getUTCFullYear(),
+      checkDate.getMonth() + 1,
+      0
+    );
     const lastDay = startDate.getDate();
     const thisMonth = startDate.getMonth();
 
-    const tempEndDate = new Date(
-      checkDate.year,
-      checkDate.month,
-      checkDate.day
-    );
+    let rawDay = checkDate.getDate();
 
-    console.log(tempEndDate, "---startDate");
+    const tempEndDate = new Date(
+      checkDate.getUTCFullYear(),
+      checkDate.getMonth(),
+      checkDate.getDate()
+    );
 
     let dayIndex = tempEndDate.getDay();
 
     tempEndDate.setDate(tempEndDate.getDate() + dayRange);
     const tempEndMonth = tempEndDate.getMonth();
 
-    console.log(tempEndDate, "---tempEndDate");
+    // console.log(tempEndDate, "---tempEndDate");
 
     let result: any = [];
-    let rawDay = checkDate.day;
 
     // until lastDay loop
     const checkDay = lastDay - rawDay;
@@ -145,23 +151,19 @@ export const CalendarDays = ({
   const nextMonth = async () => {
     console.log("nextMonth clicked");
 
-    const theDate = {
-      year: lastDate.getFullYear(),
-      month: lastDate.getMonth(),
-      day: lastDate.getDate(),
-    };
-
-    dataReload(theDate);
-
-    nextClick(theDate);
+    dataReload(lastDate);
+    nextClick(lastDate);
   };
 
   const dayClicked = (selDay: any) => {
-    setSelectedDate({
-      year: selDay.year,
-      month: selDay.month,
-      day: selDay.day,
-    });
+    console.log("day clicked");
+    const rawDay = selectedDate;
+
+    rawDay.setFullYear(selDay.year);
+    rawDay.setMonth(selDay.month);
+    rawDay.setDate(selDay.day);
+
+    setSelectedDate(rawDay);
   };
 
   return (
@@ -190,7 +192,7 @@ export const CalendarDays = ({
                       >
                         <h1>
                           {rows.name}{" "}
-                          {rows.year > selectedDate.year && rows.year}
+                          {rows.year > selectedDate.getFullYear() && rows.year}
                         </h1>
                       </Box>
                     </Td>
@@ -211,16 +213,16 @@ export const CalendarDays = ({
                             width={"50px"}
                             height={"50px"}
                             color={
-                              item.day == selectedDate.day &&
-                              item.month == selectedDate.month &&
-                              item.year == selectedDate.year
+                              item.day == selectedDate.getDate() &&
+                              item.month == selectedDate.getMonth() &&
+                              item.year == selectedDate.getFullYear()
                                 ? "white"
                                 : "green.500"
                             }
                             bg={
-                              item.day == selectedDate.day &&
-                              item.month == selectedDate.month &&
-                              item.year == selectedDate.year
+                              item.day == selectedDate.getDate() &&
+                              item.month == selectedDate.getMonth() &&
+                              item.year == selectedDate.getFullYear()
                                 ? "green.500"
                                 : "white"
                             }

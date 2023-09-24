@@ -1,5 +1,6 @@
 import { Calendar } from "@ui/components/calendar/calendar";
 import { Box, Button, Flex, Spinner, Text } from "@ui/index";
+import { utcToZonedTime } from "date-fns-tz";
 import addMinutes from "date-fns/addMinutes";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -35,7 +36,7 @@ export type DatePageType = {
   selectedHourAndStaffFirst: Availability | undefined;
   selectedHourAndStaffSecond: Availability | undefined;
   availability: any | undefined;
-  selectedDate: CalendarMonthType;
+  selectedDate: Date;
   selectedVariantIds: any[];
 };
 export type ChatPageType = {
@@ -46,7 +47,7 @@ export type ChatPageType = {
   selectedHourAndStaffFirst: Availability | undefined;
   selectedHourAndStaffSecond: Availability | undefined;
   availability: any | undefined;
-  selectedDate: CalendarMonthType;
+  selectedDate: Date | null;
   selectedVariantIds: any[];
 };
 
@@ -61,11 +62,6 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
     formState: { errors },
   } = useForm<DatePageType>({
     defaultValues: {
-      selectedDate: {
-        year: new Date().getFullYear(),
-        month: new Date().getMonth(),
-        day: new Date().getDate(),
-      },
       selectedVariantIds: [],
       isSecondBookingRequired: false,
     },
@@ -79,18 +75,114 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
     "selectedDate",
     "selectedVariantIds",
   ]);
-  useEffect(() => {
-    setValue("selectedHourAndStaff", undefined);
-    setValue("selectedHourAndStaffFirst", undefined);
-    setValue("selectedHourAndStaffSecond", undefined);
-  }, [getValues("selectedDate")]);
+
   const [cart] = useLocalStorage("cart", []);
   const availabitlyMutation = useAvailabilityAny(locationId);
   const createMutation = useCreateBooking(locationId);
 
   const { data: locationData, isLoading } = useGetLocationInfo(locationId);
   const [selEndDate, setSelEndDate] = useState(null);
+  const [showingData, setShowingData] = useState(null);
   const dayRange = 30;
+  const timeZone = "America/Los_Angeles";
+  const bookingHourAdd = 4;
+
+  // if user already selected muskAskServiceIds
+  // step: 1
+  useEffect(() => {
+    if (cart) {
+      //Add variantId to selectedVariantIds array
+      setValue(
+        "selectedVariantIds",
+        cart.map((item: CartModel) => ({
+          serviceVariationId: item.variantId,
+          categoryId: item.serviceCategoryId,
+          teamMemberIdFilter: { any: item.teamMemberIds },
+        }))
+      );
+      setValue("selectedHourAndStaff", undefined);
+      setValue("selectedHourAndStaffFirst", undefined);
+      setValue("selectedHourAndStaffSecond", undefined);
+
+      const date = new Date();
+      const zonedDate = utcToZonedTime(date, timeZone);
+      zonedDate.setHours(zonedDate.getHours() + bookingHourAdd);
+
+      console.log(zonedDate, "zoned Date add hours");
+
+      setValue("selectedDate", zonedDate);
+    }
+  }, [cart]);
+
+  //step: 2
+  useEffect(() => {
+    if (
+      getValues("selectedVariantIds")?.length > 0 &&
+      getValues("selectedDate") != null &&
+      getValues("availability") == undefined
+    ) {
+      console.log("first time call call Avlialablity");
+
+      // callAvialablity(
+      //   getValues("selectedVariantIds"),
+      //   getValues("selectedDate")
+      // );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getValues("selectedVariantIds"), getValues("selectedDate")]);
+
+  const callAvialablity = (selectedVariantIds: any[], selDate: Date) => {
+    availabitlyMutation.mutate(
+      {
+        selectedVariantIds: selectedVariantIds,
+        selectedDate: selDate,
+        dayRange: dayRange,
+      },
+      {
+        onError: (e) => {
+          console.log(e);
+        },
+        onSuccess: (data: any) => {
+          setValue("availability", data);
+
+          const nowDate = new Date(data.startAt);
+
+          console.log(toTimezoneDate(data.startAt));
+
+          if (data.availabilities?.length > 0) {
+            const rawData1 = data.availabilities.filter(
+              (r: any) =>
+                toTimezoneDate(r.startAt) == toTimezoneDate(data.startAt)
+            );
+
+            console.log("dd", rawData1);
+          }
+        },
+      }
+    );
+  };
+
+  useEffect(() => {
+    if (selEndDate != null) {
+      console.log("calendar next click & next data download");
+      callAvialablity(getValues("selectedVariantIds"), selEndDate);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selEndDate]);
+
+  //step: 2
+  useEffect(() => {
+    if (getValues("selectedDate") == null) {
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getValues("selectedDate")]);
+
+  const calculateServiceOrder = () => {
+    const availability = getValues("availability");
+
+    const firstAvail = getValues("availability").availabilities;
+    const secondAvail = getValues("availability").availabilities2;
+  };
 
   const onBooking = () => {
     if (getValues("selectedHourAndStaff")) {
@@ -112,87 +204,6 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
         }
       );
     }
-  };
-  // if user already selected muskAskServiceIds
-  // step: 1
-  useEffect(() => {
-    if (cart) {
-      //Add variantId to selectedVariantIds array
-      setValue(
-        "selectedVariantIds",
-        cart.map((item: CartModel) => ({
-          serviceVariationId: item.variantId,
-          categoryId: item.serviceCategoryId,
-          teamMemberIdFilter: { any: item.teamMemberIds },
-        }))
-      );
-    }
-  }, [cart]);
-
-  //step: 2
-  useEffect(() => {
-    if (
-      getValues("selectedVariantIds")?.length > 0 &&
-      getValues("availability") == undefined
-    ) {
-      console.log("first time call call Avlialablity");
-
-      callAvialablity(
-        getValues("selectedVariantIds"),
-        getValues("selectedDate")
-      );
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getValues("selectedVariantIds")]);
-
-  const callAvialablity = (
-    selectedVariantIds: any[],
-    selDate: CalendarMonthType
-  ) => {
-    // reqDate.setFullYear(selDate.year);
-    // reqDate.setMonth(selDate.month);
-    // reqDate.setDate(selDate.day);
-
-    console.log(selDate, "---req");
-
-    availabitlyMutation.mutate(
-      {
-        selectedVariantIds: selectedVariantIds,
-        selectedDate: selDate,
-        dayRange: dayRange,
-      },
-      {
-        onError: (e) => {
-          console.log(e);
-        },
-        onSuccess: (data: any) => {
-          setValue("availability", data);
-        },
-      }
-    );
-  };
-
-  useEffect(() => {
-    if (getValues("availability")?.length > 0) {
-      console.log("first time call call Avlialablity");
-      calculateServiceOrder();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getValues("availability")]);
-
-  useEffect(() => {
-    if (selEndDate != null) {
-      console.log("first time call call Avlialablity");
-      callAvialablity(getValues("selectedVariantIds"), selEndDate);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selEndDate]);
-
-  const calculateServiceOrder = () => {
-    const availability = getValues("availability");
-
-    const firstAvail = getValues("availability").availabilities;
-    const secondAvail = getValues("availability").availabilities2;
   };
 
   const userTimezone = () => {
@@ -260,7 +271,8 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
       setValue("isSecondBookingRequired", false);
     }
   };
-  const setSelectedDate = (selectedDate: CalendarMonthType) => {
+  const setSelectedDate = (selectedDate: Date) => {
+    console.log("selected date click");
     setValue("selectedDate", selectedDate);
   };
 
@@ -290,14 +302,17 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
         )}
       {!availabitlyMutation.isLoading &&
         getValues("availability") &&
-        locationData && (
+        getValues("availability").startAt && (
           <Flex flexWrap={"wrap"} justifyContent={"flex-start"}>
-            <Box w="full">Morning</Box>
+            {/* <Box w="full">Morning</Box>
             {getValues("availability")
               ?.availabilities?.filter(
                 (r: any) =>
                   toTimezoneDate(r.startAt) ==
-                  toTimezoneDateNumeric(getValues("availability")?.startAt)
+                  toTimezoneDateNumeric(
+                    getValues("availability")?.startAt,
+                    getValues("selectedDate")
+                  )
               )
               // .filter((r: any) => r.startAt && isMorningTimestamp(r.startAt))
               .map((item: Availability, key: any) => {
@@ -311,7 +326,7 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
                     }
                   />
                 );
-              })}
+              })} */}
             {/* <Box w="full">Noon</Box>
           {getValues("availability")
             ?.availabilities.filter(

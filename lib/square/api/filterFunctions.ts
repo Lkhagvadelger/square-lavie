@@ -68,23 +68,37 @@ export const twoDateDifference = (date1: Date, date2: Date) => {
   return Difference_In_Hours;
 };
 
-export const toTimezoneDateNumeric = (date: Date) => {
+export const toTimezoneDateNumeric = (
+  date: string,
+  theDate: CalendarMonthType
+) => {
+  const timeZone = "America/Los_Angeles";
+
   const options: Intl.DateTimeFormatOptions = {
     year: "numeric",
     month: "long",
     day: "numeric",
-    timeZone: "America/Los_Angeles",
+    timeZone: timeZone,
   };
 
-  // console.log(date,'___-date');
+  // Set the date to "2018-09-01T16:01:36.386Z"
+  // Obtain a Date instance that will render the equivalent Berlin time for the UTC date
+  const zonedDate = utcToZonedTime(date, timeZone);
 
-  return "";
+  const selDate = new Date(date);
 
-  // console.log(date?.toLocaleDateString("en-US", options), "-----");
-  // return date?.toLocaleString("en-US", options);
+  const diffDay = theDate.day - zonedDate.getDate();
 
-  // return "";
+  console.log(zonedDate, "--zoned");
+
+  if (diffDay != 0) {
+  }
+  console.log(selDate, "___-date--", selDate);
+
+  console.log(selDate?.toLocaleDateString("en-US", options), "-----");
+  return selDate?.toLocaleString("en-US", options);
 };
+
 export const toTimezoneDate = (dateString: string | undefined | null) => {
   if (!dateString) return "";
   //Pacific time irj baigaa eniig Localization-ruu hurhvvlj haruulna
@@ -103,7 +117,7 @@ export const toTimezoneDate = (dateString: string | undefined | null) => {
 
   const rawDate = date.toLocaleString("en-US", options);
 
-  console.log(rawDate, "--startAt");
+  // console.log(rawDate, "--startAt");
 
   return date.toLocaleString("en-US", options);
 };

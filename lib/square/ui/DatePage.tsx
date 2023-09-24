@@ -185,19 +185,17 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
       if (rawAvial.availabilities?.length > 0) {
         const rawSelDate = getValues("selectedDate");
 
-        console.log(rawSelDate, "---rawSel");
+        // console.log(rawSelDate, "---rawSel");
 
         const rawDate = parseDateWithTimeZone(rawSelDate, timeZone);
 
-        console.log(rawDate, "----raw");
+        // console.log(rawDate, "----raw");
 
         const rawData1 = rawAvial.availabilities.filter(
-          (r: any) =>
-            parseDateWithTimeZone(new Date(r.startAt), timeZone) ==
-            parseDateWithTimeZone(rawSelDate, timeZone)
+          (r: any) => toTimezoneDate(r.startAt) == rawDate
         );
 
-        console.log("changed RawData1", rawData1);
+        // console.log("changed RawData1", rawData1);
 
         setSelData(rawData1);
       }

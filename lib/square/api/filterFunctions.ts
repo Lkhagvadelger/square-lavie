@@ -69,8 +69,15 @@ export const twoDateDifference = (date1: Date, date2: Date) => {
 };
 
 export const parseDateWithTimeZone = (date: Date, timeZone: string) => {
+  const zonedDate = utcToZonedTime(date, timeZone);
+  // zonedDate could be used to initialize a date picker or display the formatted local date/time
+
+  if (zonedDate.getDate() != date.getDate()) {
+    zonedDate.setDate(date.getDate());
+  }
+
   const pattern = "MMMM dd, yyyy";
-  const output = format(date, pattern, { timeZone: timeZone });
+  const output = format(zonedDate, pattern, { timeZone: timeZone });
 
   return output;
 };

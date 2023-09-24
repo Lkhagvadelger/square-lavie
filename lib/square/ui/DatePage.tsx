@@ -1,6 +1,6 @@
 import { Calendar } from "@ui/components/calendar/calendar";
 import { Box, Button, Flex, Spinner, Text } from "@ui/index";
-import { utcToZonedTime } from "date-fns-tz";
+import { utcToZonedTime, format } from "date-fns-tz";
 import addMinutes from "date-fns/addMinutes";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -14,6 +14,7 @@ import {
   toTimezoneDateNumeric,
   toTimezoneDateTime,
   toTimezoneTime_Name,
+  parseDateWithTimeZone,
 } from "../api/filterFunctions";
 
 import {
@@ -82,7 +83,7 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
 
   const { data: locationData, isLoading } = useGetLocationInfo(locationId);
   const [selEndDate, setSelEndDate] = useState(null);
-  const [showingData, setShowingData] = useState(null);
+  const [selData, setSelData] = useState<any>();
   const dayRange = 30;
   const timeZone = "America/Los_Angeles";
   const bookingHourAdd = 4;
@@ -123,19 +124,26 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
     ) {
       console.log("first time call call Avlialablity");
 
-      // callAvialablity(
-      //   getValues("selectedVariantIds"),
-      //   getValues("selectedDate")
-      // );
+      callAvialablity(
+        getValues("selectedVariantIds"),
+        getValues("selectedDate")
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getValues("selectedVariantIds"), getValues("selectedDate")]);
 
   const callAvialablity = (selectedVariantIds: any[], selDate: Date) => {
+    console.log(selDate, "--req Sel Date");
+
+    const reqDate = {
+      year: selDate.getFullYear(),
+      month: selDate.getMonth(),
+      day: selDate.getDate(),
+    };
     availabitlyMutation.mutate(
       {
         selectedVariantIds: selectedVariantIds,
-        selectedDate: selDate,
+        selectedDate: reqDate,
         dayRange: dayRange,
       },
       {
@@ -145,17 +153,13 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
         onSuccess: (data: any) => {
           setValue("availability", data);
 
-          const nowDate = new Date(data.startAt);
-
-          console.log(toTimezoneDate(data.startAt));
-
           if (data.availabilities?.length > 0) {
             const rawData1 = data.availabilities.filter(
               (r: any) =>
                 toTimezoneDate(r.startAt) == toTimezoneDate(data.startAt)
             );
 
-            console.log("dd", rawData1);
+            setSelData(rawData1);
           }
         },
       }
@@ -172,7 +176,31 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
 
   //step: 2
   useEffect(() => {
-    if (getValues("selectedDate") == null) {
+    if (
+      getValues("selectedDate") != null &&
+      getValues("availability") != undefined
+    ) {
+      const rawAvial = getValues("availability");
+
+      if (rawAvial.availabilities?.length > 0) {
+        const rawSelDate = getValues("selectedDate");
+
+        console.log(rawSelDate, "---rawSel");
+
+        const rawDate = toTimezoneDateNumeric(rawSelDate);
+
+        console.log(rawDate, "----raw");
+
+        const rawData1 = rawAvial.availabilities.filter(
+          (r: any) =>
+            parseDateWithTimeZone(new Date(r.startAt), timeZone) ==
+            parseDateWithTimeZone(rawSelDate, timeZone)
+        );
+
+        console.log("changed RawData1", rawData1);
+
+        setSelData(rawData1);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getValues("selectedDate")]);
@@ -272,22 +300,37 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
     }
   };
   const setSelectedDate = (selectedDate: Date) => {
-    console.log("selected date click");
-    setValue("selectedDate", selectedDate);
+    setSelData(null);
+
+    const zonedDate = utcToZonedTime(selectedDate, timeZone);
+    zonedDate.setHours(zonedDate.getHours() + bookingHourAdd);
+
+    zonedDate.setFullYear(selectedDate.getFullYear());
+    zonedDate.setMonth(selectedDate.getMonth());
+    zonedDate.setDate(selectedDate.getDate());
+    zonedDate.setHours(selectedDate.getHours() + 4);
+
+    console.log(zonedDate, "-----zzz");
+
+    setValue("selectedDate", zonedDate);
   };
 
   const nextClick = (endDate: any) => {
+    setSelData(null);
     setSelEndDate(endDate);
   };
 
   return (
     <Box width={"full"}>
-      <CalendarDays
-        selectedDate={getValues("selectedDate")}
-        setSelectedDate={setSelectedDate}
-        hidePastDays={false}
-        nextClick={nextClick}
-      />
+      {getValues("selectedDate") && (
+        <CalendarDays
+          selectedDate={getValues("selectedDate")}
+          setSelectedDate={setSelectedDate}
+          hidePastDays={false}
+          nextClick={nextClick}
+        />
+      )}
+
       <br />
       {availabitlyMutation.isLoading && <Spinner />}
 
@@ -300,40 +343,25 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
             time.
           </Text>
         )}
-      {!availabitlyMutation.isLoading &&
-        getValues("availability") &&
-        getValues("availability").startAt && (
-          <Flex flexWrap={"wrap"} justifyContent={"flex-start"}>
-            {/* <Box w="full">Morning</Box>
-            {getValues("availability")
-              ?.availabilities?.filter(
-                (r: any) =>
-                  toTimezoneDate(r.startAt) ==
-                  toTimezoneDateNumeric(
-                    getValues("availability")?.startAt,
-                    getValues("selectedDate")
-                  )
-              )
-              // .filter((r: any) => r.startAt && isMorningTimestamp(r.startAt))
-              .map((item: Availability, key: any) => {
-                return (
-                  <TimeBox
-                    key={key}
-                    availability={item}
-                    selectedAt={getValues("selectedHourAndStaff")}
-                    onTimeSelectAndSearchSecondOption={
-                      onTimeSelectAndSearchSecondOption
-                    }
-                  />
-                );
-              })} */}
-            {/* <Box w="full">Noon</Box>
-          {getValues("availability")
-            ?.availabilities.filter(
-              (r: any) =>
-                toTimezoneDate(r.startAt) ==
-                toTimezoneDateNumeric(getValues("selectedDate"))
-            )
+      {selData && (
+        <Flex flexWrap={"wrap"} justifyContent={"flex-start"}>
+          <Box w="full">Morning</Box>
+          {selData
+            .filter((r: any) => r.startAt && isMorningTimestamp(r.startAt))
+            .map((item: Availability, key: any) => {
+              return (
+                <TimeBox
+                  key={key}
+                  availability={item}
+                  selectedAt={getValues("selectedHourAndStaff")}
+                  onTimeSelectAndSearchSecondOption={
+                    onTimeSelectAndSearchSecondOption
+                  }
+                />
+              );
+            })}
+          <Box w="full">Noon</Box>
+          {selData
             .filter((r: any) => r.startAt && isNoonTimestamp(r.startAt))
             .map((item: Availability, key: any) => {
               return (
@@ -348,12 +376,7 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
               );
             })}
           <Box w="full">Evening</Box>
-          {getValues("availability")
-            ?.availabilities.filter(
-              (r: any) =>
-                toTimezoneDate(r.startAt) ==
-                toTimezoneDateNumeric(getValues("selectedDate"))
-            )
+          {selData
             .filter((r: any) => r.startAt && isEveningTimestamp(r.startAt))
             .map((item: Availability, key: any) => {
               return (
@@ -366,9 +389,9 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
                   }
                 />
               );
-            })} */}
-          </Flex>
-        )}
+            })}
+        </Flex>
+      )}
 
       <Box>
         <Button onClick={onBooking}>Book</Button>

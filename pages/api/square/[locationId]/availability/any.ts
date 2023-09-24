@@ -12,6 +12,7 @@ import {
 } from "@lib/square/api/squareClient";
 import { AvailabilityReqModel, CartModel } from "@lib/square/data/types";
 import { AppError } from "@util/errors";
+import { AnyNsRecord } from "dns";
 import { offline1 } from "./offline1";
 
 const handler = createHandler();
@@ -148,22 +149,22 @@ handler
       // nowDate: new Date(),
       // dayRange: dayRange,
 
-      let selectedDate = req.body.selectedDate;
+      let reqDate = req.body.selectedDate;
       const dayRange = req.body.dayRange as number;
 
       const selDate = new Date();
 
-      selDate.setFullYear(selectedDate.year);
-      selDate.setMonth(selectedDate.month);
-      selDate.setDate(selectedDate.day);
-
-      console.log(selDate, "server SelDate", selectedDate);
+      selDate.setFullYear(reqDate.year);
+      selDate.setMonth(reqDate.month);
+      selDate.setDate(reqDate.day);
+      selDate.setHours(selDate.getHours() + 4);
 
       const startAt = selDate;
+
       const endDate = new Date();
 
-      endDate.setFullYear(selectedDate.year);
-      endDate.setMonth(selectedDate.month);
+      endDate.setFullYear(selDate.getFullYear());
+      endDate.setMonth(selDate.getMonth());
       endDate.setDate(selDate.getDate() + dayRange);
 
       let endAt = endDate;
@@ -171,7 +172,7 @@ handler
       console.log(startAt, "Start AT");
       console.log(endAt, "End At");
 
-      // return res.sendSuccess(offline1);
+      return res.sendSuccess(offline1);
       // Sun Sep 24 2023 10:41:17 GMT+0800 (Ulaanbaatar Standard Time) '---req'
 
       //[manicure serviceId, pedicure serviceId]

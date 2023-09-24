@@ -52,13 +52,11 @@ export const CalendarDays = ({
   const maxMountCount = 3;
 
   useEffect(() => {
-    console.log(selectedDate, "-ss");
     if (selectedDate) {
       console.log("hahha");
-      console.log(selectedDate, "--sel Date Days");
       dataReload(selectedDate);
     }
-  }, [selectedDate]);
+  }, []);
 
   const dataReload = (checkDate: Date) => {
     const startDate = new Date(

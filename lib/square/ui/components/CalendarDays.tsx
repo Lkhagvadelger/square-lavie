@@ -40,7 +40,7 @@ export const CalendarDays = ({
   selectedDate: CalendarMonthType;
   setSelectedDate: (pickedDate: CalendarMonthType) => void;
   hidePastDays?: boolean;
-  nextClick: () => void;
+  nextClick: (endDate: any) => void;
 }) => {
   const [data, setData] = useState<any>([]);
   const [lastDate, setLastDate] = useState<any>();
@@ -153,7 +153,7 @@ export const CalendarDays = ({
 
     dataReload(theDate);
 
-    nextClick();
+    nextClick(theDate);
   };
 
   const dayClicked = (selDay: any) => {
@@ -244,7 +244,7 @@ export const CalendarDays = ({
               })}
           </Table>
 
-          {monthCount <= maxMountCount && (
+          {monthCount < maxMountCount && (
             <Box>
               <Button
                 alignSelf={""}

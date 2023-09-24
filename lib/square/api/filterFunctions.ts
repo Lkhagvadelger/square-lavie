@@ -1,4 +1,5 @@
 import { CalendarMonthType } from "../data/types";
+import { zonedTimeToUtc, utcToZonedTime, format } from "date-fns-tz";
 
 const options: Intl.DateTimeFormatOptions = {
   // year: "numeric",
@@ -60,34 +61,49 @@ export const toTimezoneDateTime = (dateString: string | undefined | null) => {
 
   return date.toLocaleString("en-US", options);
 };
-export const toTimezoneDateNumeric = (dateString: CalendarMonthType) => {
-  const date = new Date(
-    dateString.year,
-    dateString.month,
-    dateString.day,
-    0,
-    0,
-    0
-  );
 
+export const twoDateDifference = (date1: Date, date2: Date) => {
+  var Difference_In_Hours = date1.getHours() - date2.getHours();
+
+  return Difference_In_Hours;
+};
+
+export const toTimezoneDateNumeric = (date: Date) => {
   const options: Intl.DateTimeFormatOptions = {
     year: "numeric",
     month: "long",
     day: "numeric",
     timeZone: "America/Los_Angeles",
   };
-  return date.toLocaleString("en-US", options);
+
+  // console.log(date,'___-date');
+
+  return "";
+
+  // console.log(date?.toLocaleDateString("en-US", options), "-----");
+  // return date?.toLocaleString("en-US", options);
+
+  // return "";
 };
 export const toTimezoneDate = (dateString: string | undefined | null) => {
   if (!dateString) return "";
+  //Pacific time irj baigaa eniig Localization-ruu hurhvvlj haruulna
+
   const date = new Date(dateString);
 
   const options: Intl.DateTimeFormatOptions = {
     year: "numeric",
     month: "long",
     day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true,
     timeZone: "America/Los_Angeles",
   };
+
+  const rawDate = date.toLocaleString("en-US", options);
+
+  console.log(rawDate, "--startAt");
 
   return date.toLocaleString("en-US", options);
 };

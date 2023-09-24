@@ -143,9 +143,36 @@ handler
       let serviceVariantIds = req.body
         .selectedVariantIds as AvailabilityReqModel[];
 
-      let startDate: any = req.body.startDate;
+      // selectedVariantIds: selectedVariantIds,
+      // selectedDate: getValues("selectedDate"),
+      // nowDate: new Date(),
+      // dayRange: dayRange,
+
+      let selectedDate = req.body.selectedDate;
+      const dayRange = req.body.dayRange as number;
+
+      const selDate = new Date();
+
+      selDate.setFullYear(selectedDate.year);
+      selDate.setMonth(selectedDate.month);
+      selDate.setDate(selectedDate.day);
+
+      console.log(selDate, "server SelDate", selectedDate);
+
+      const startAt = selDate;
+      const endDate = new Date();
+
+      endDate.setFullYear(selectedDate.year);
+      endDate.setMonth(selectedDate.month);
+      endDate.setDate(selDate.getDate() + dayRange);
+
+      let endAt = endDate;
+
+      console.log(startAt, "Start AT");
+      console.log(endAt, "End At");
 
       // return res.sendSuccess(offline1);
+      // Sun Sep 24 2023 10:41:17 GMT+0800 (Ulaanbaatar Standard Time) '---req'
 
       //[manicure serviceId, pedicure serviceId]
       // Must get this data from Location settings
@@ -200,33 +227,6 @@ handler
       // // only allow booking start time 4 hours from now
       // startAt.setHours(startAt.getHours() + 4);
 
-      let startAt = new Date(
-        startDate.year,
-        startDate.month,
-        startDate.day,
-        0,
-        0,
-        1,
-        0
-      );
-
-      // const endAt = new Date();
-      // // only allow booking start time 4 hours from now
-      // endAt.setDate(endAt.getDate()+2)
-
-      const endAt = new Date(
-        startDate.year,
-        startDate.month,
-        startDate.day + 2,
-        0,
-        0,
-        1,
-        0
-      );
-
-      console.log(startAt, "Start AT");
-      console.log(endAt, "End At");
-
       const searchRequest: any[] = [
         {
           query: {
@@ -263,7 +263,8 @@ handler
 
       if (serviceVariantIds2.length > 0) {
         return res.sendSuccess({
-          startDate,
+          startAt,
+          endAt,
           availabilities,
           availabilities2: (
             await bookingsApi.searchAvailability(searchRequest[1])
@@ -271,7 +272,8 @@ handler
         });
       }
       return res.sendSuccess({
-        startDate,
+        startAt,
+        endAt,
         availabilities,
         availabilities2: null,
       });

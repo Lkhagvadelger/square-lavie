@@ -87,7 +87,10 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
   const [cart] = useLocalStorage("cart", []);
   const availabitlyMutation = useAvailabilityAny(locationId);
   const createMutation = useCreateBooking(locationId);
+
   const { data: locationData, isLoading } = useGetLocationInfo(locationId);
+  const [selEndDate, setSelEndDate] = useState(null);
+  const dayRange = 30;
 
   const onBooking = () => {
     if (getValues("selectedHourAndStaff")) {
@@ -146,12 +149,17 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
     selectedVariantIds: any[],
     selDate: CalendarMonthType
   ) => {
-    console.log(selectedVariantIds);
+    // reqDate.setFullYear(selDate.year);
+    // reqDate.setMonth(selDate.month);
+    // reqDate.setDate(selDate.day);
+
+    console.log(selDate, "---req");
 
     availabitlyMutation.mutate(
       {
         selectedVariantIds: selectedVariantIds,
-        startDate: selDate,
+        selectedDate: selDate,
+        dayRange: dayRange,
       },
       {
         onError: (e) => {
@@ -171,6 +179,14 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getValues("availability")]);
+
+  useEffect(() => {
+    if (selEndDate != null) {
+      console.log("first time call call Avlialablity");
+      callAvialablity(getValues("selectedVariantIds"), selEndDate);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selEndDate]);
 
   const calculateServiceOrder = () => {
     const availability = getValues("availability");
@@ -246,11 +262,11 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
   };
   const setSelectedDate = (selectedDate: CalendarMonthType) => {
     setValue("selectedDate", selectedDate);
-
-    callAvialablity(getValues("selectedVariantIds"), selectedDate);
   };
 
-  const nextClick = () => {};
+  const nextClick = (endDate: any) => {
+    setSelEndDate(endDate);
+  };
 
   return (
     <Box width={"full"}>
@@ -272,29 +288,31 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
             time.
           </Text>
         )}
-      {!availabitlyMutation.isLoading && getValues("availability") && (
-        <Flex flexWrap={"wrap"} justifyContent={"flex-start"}>
-          <Box w="full">Morning</Box>
-          {getValues("availability")
-            ?.availabilities?.filter(
-              (r: any) =>
-                toTimezoneDate(r.startAt) ==
-                toTimezoneDateNumeric(getValues("selectedDate"))
-            )
-            .filter((r: any) => r.startAt && isMorningTimestamp(r.startAt))
-            .map((item: Availability, key: any) => {
-              return (
-                <TimeBox
-                  key={key}
-                  availability={item}
-                  selectedAt={getValues("selectedHourAndStaff")}
-                  onTimeSelectAndSearchSecondOption={
-                    onTimeSelectAndSearchSecondOption
-                  }
-                />
-              );
-            })}
-          <Box w="full">Noon</Box>
+      {!availabitlyMutation.isLoading &&
+        getValues("availability") &&
+        locationData && (
+          <Flex flexWrap={"wrap"} justifyContent={"flex-start"}>
+            <Box w="full">Morning</Box>
+            {getValues("availability")
+              ?.availabilities?.filter(
+                (r: any) =>
+                  toTimezoneDate(r.startAt) ==
+                  toTimezoneDateNumeric(getValues("availability")?.startAt)
+              )
+              // .filter((r: any) => r.startAt && isMorningTimestamp(r.startAt))
+              .map((item: Availability, key: any) => {
+                return (
+                  <TimeBox
+                    key={key}
+                    availability={item}
+                    selectedAt={getValues("selectedHourAndStaff")}
+                    onTimeSelectAndSearchSecondOption={
+                      onTimeSelectAndSearchSecondOption
+                    }
+                  />
+                );
+              })}
+            {/* <Box w="full">Noon</Box>
           {getValues("availability")
             ?.availabilities.filter(
               (r: any) =>
@@ -333,9 +351,9 @@ export const DatePage = ({ locationId }: { locationId: string }) => {
                   }
                 />
               );
-            })}
-        </Flex>
-      )}
+            })} */}
+          </Flex>
+        )}
 
       <Box>
         <Button onClick={onBooking}>Book</Button>

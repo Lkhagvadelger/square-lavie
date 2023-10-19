@@ -10,3 +10,14 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: square_lavie_dev
       POSTGRES_HOST_AUTH_METHOD: trust
+  redis:
+    image: redis/redis-stack-server:latest
+    container_name: redis
+    ports:
+      - 6379:6379
+    volumes:
+      - data01:/usr/share/redis/data
+
+volumes:
+  data01:
+    driver: local

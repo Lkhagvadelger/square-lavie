@@ -8,6 +8,10 @@ export type AppRequest = Express.Request &
     user: User;
   };
 
+export type ValidatedAppRequest<T> = Omit<AppRequest, "body"> & {
+  body: T; // Conditional type
+};
+
 export type AppResponse = NextApiResponse & {
   sendSuccess: (data?: Record<string, any> | null) => void;
   sendError: (

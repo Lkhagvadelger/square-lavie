@@ -3,7 +3,7 @@ import { passport } from "./middlewares/passport";
 import { responseMiddleware } from "./middlewares/response";
 import { sessionMiddleware } from "./middlewares/session";
 import { trustProxyMiddleware } from "./middlewares/trust-proxy";
-import { AppRequest, AppResponse } from "./types";
+import { AppRequest, AppResponse, ValidatedAppRequest } from "./types";
 
 (BigInt.prototype as any).toJSON = function () {
   return this.toString();

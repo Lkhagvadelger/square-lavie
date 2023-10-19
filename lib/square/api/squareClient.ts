@@ -19,6 +19,8 @@ import {
   CatalogApi,
   LocationsApi,
   TeamApi,
+  OrdersApi,
+  PaymentsApi,
 } from "square";
 
 const accessToken = process.env.SQUARE_ACCESS_TOKEN;
@@ -45,14 +47,25 @@ const {
   customersApi,
   bookingsApi,
   catalogApi,
+  ordersApi,
   locationsApi,
   teamApi,
+  paymentsApi,
 }: {
   customersApi: CustomersApi;
   bookingsApi: BookingsApi;
   catalogApi: CatalogApi;
   locationsApi: LocationsApi;
   teamApi: TeamApi;
+  ordersApi: OrdersApi;
+  paymentsApi: PaymentsApi;
 } = client;
-
-export { bookingsApi, catalogApi, customersApi, locationsApi, teamApi };
+export {
+  bookingsApi,
+  catalogApi,
+  customersApi,
+  locationsApi,
+  teamApi,
+  ordersApi,
+  paymentsApi,
+};

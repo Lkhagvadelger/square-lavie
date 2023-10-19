@@ -3,8 +3,25 @@ import { useState, useEffect } from "react";
 import { useMutation, useQuery } from "react-query";
 import { CatalogObject } from "square";
 import { ServiceItem } from "./types";
+import {
+  QueryRevenueParams,
+  QueryRevenueResponse,
+} from "pages/api/square/[locationId]/payment/revenue-stats";
+import { RevenueGraphResponse } from "pages/api/square/[locationId]/payment/revenue-graph";
 
 // return ItemsResponse type
+
+export const useQueryRevenue = (params: QueryRevenueParams) =>
+  useQuery<QueryRevenueResponse>(
+    ["useQueryRevenues", params],
+    API._query(Method.GET, `square/LS1VH64H9SA5C/payment/revenue-stats`, params)
+  );
+
+export const useRevenueGraph = (params: QueryRevenueParams) =>
+  useQuery<RevenueGraphResponse>(
+    ["useRevenueGraph", params],
+    API._query(Method.GET, `square/LS1VH64H9SA5C/payment/revenue-graph`, params)
+  );
 
 export const useGetServices = (locationId: string) =>
   useQuery<ServiceItem[]>(

@@ -1,3 +1,4 @@
+import RevenueStats from "@lib/square/ui/revenue/RevenueStats";
 import SquareHomePage from "./square";
 
 // const HomePage = () => {
@@ -14,4 +15,4 @@ import SquareHomePage from "./square";
 //   return null;
 // };
 
-export default SquareHomePage;
+export default RevenueStats;

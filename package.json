@@ -3,7 +3,7 @@
   "version": "0.1.1",
   "private": true,
   "prisma": {
-    "seed": "ts-node -T prisma/seed.ts"
+    "seed": "ts-node -T prisma/seed/main.ts"
   },
   "scripts": {
     "postinstall": "husky install",
@@ -62,6 +62,7 @@
     "dotenv-cli": "^7.1.0",
     "framer-motion": "^10.2.4",
     "generate-colors": "^1.4.2",
+    "graphql-request": "^6.1.0",
     "http": "^0.0.1-security",
     "human-readable-numbers": "^0.9.5",
     "icomoon-react": "^3.0.0",

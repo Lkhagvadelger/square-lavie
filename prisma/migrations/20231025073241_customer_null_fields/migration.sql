@@ -1,0 +1,7 @@
+-- AlterTable
+ALTER TABLE "Customer" ALTER COLUMN "preferences" DROP NOT NULL,
+ALTER COLUMN "creationSource" DROP NOT NULL,
+ALTER COLUMN "emailAddress" DROP NOT NULL,
+ALTER COLUMN "familyName" DROP NOT NULL,
+ALTER COLUMN "givenName" DROP NOT NULL,
+ALTER COLUMN "phoneNumber" DROP NOT NULL;

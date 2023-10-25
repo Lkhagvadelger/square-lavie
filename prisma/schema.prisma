@@ -195,3 +195,281 @@ model LocationSettings {
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 }
+
+model Location {
+  id                String   @id
+  name              String
+  timezone          String
+  capabilities      String[]
+  status            String
+  createdAt         DateTime
+  merchantId        String
+  country           String
+  languageCode      String
+  currency          String
+  phoneNumber       String
+  businessName      String
+  type              String
+  websiteUrl        String
+  businessEmail     String
+  description       String
+  instagramUsername String
+  logoUrl           String
+  mcc               String
+  posBackgroundUrl  String?
+  fullFormatLogoUrl String
+
+  businessHours Json
+  coordinates   Json
+  address       Json
+}
+
+model Payment {
+  id                             String   @id
+  createdAt                      DateTime
+  updatedAt                      DateTime
+  amountMoney                    Json?
+  tipMoney                       Json?
+  appFeeMoney                    Json?
+  status                         String?
+  sourceType                     String?
+  cardDetails                    Json?
+  cashDetails                    Json?
+  locationId                     String?
+  orderId                        String?
+  processingFee                  Json[]
+  customerId                     String?
+  totalMoney                     Json?
+  delayDuration                  String?
+  delayAction                    String?
+  delayedUntil                   String?
+  bankAccountDetails             Json?
+  externalDetails                Json?
+  walletDetails                  Json?
+  buyNowPayLaterDetails          Json?
+  referenceId                    String?
+  employeeId                     String?
+  teamMemberId                   String?
+  refundIds                      String[]
+  riskEvaluation                 Json?
+  buyerEmailAddress              String?
+  billingAddress                 Json?
+  shippingAddress                Json?
+  note                           String?
+  statementDescriptionIdentifier String?
+  capabilities                   String[]
+  receiptNumber                  String?
+  receiptUrl                     String?
+  approvedMoney                  Json?
+  refundedMoney                  Json?
+  deviceDetails                  Json?
+  applicationDetails             Json?
+  versionToken                   String?
+}
+
+model Order {
+  id                      String               @id
+  locationId              String
+  referenceId             String?
+  customerId              String?
+  source                  Json
+  lineItems               OrderLineItem[] // Assuming OrderLineItem is another Prisma model
+  taxes                   Json[] // Assuming OrderLineItemTax is another Prisma model
+  discounts               Json[] // Assuming OrderLineItemDiscount is another Prisma model
+  serviceCharges          OrderServiceCharge[] // Assuming OrderServiceCharge is another Prisma 
+  fulfillments            Fulfillment[] // Assuming Fulfillment is another Prisma model
+  returns                 OrderReturn[] // Assuming OrderReturn is another Prisma model
+  returnAmounts           Json?
+  netAmounts              Json?
+  roundingAdjustment      Json?
+  tenders                 Tender[] // Assuming Tender is another Prisma model
+  refunds                 Refund[] // Assuming Refund is another Prisma model
+  metadata                Json?
+  createdAt               DateTime?
+  updatedAt               DateTime?
+  closedAt                DateTime?
+  state                   String?
+  version                 Int?
+  totalMoney              Json?
+  totalTaxMoney           Json?
+  totalDiscountMoney      Json?
+  totalTipMoney           Json?
+  totalServiceChargeMoney Json?
+  ticketName              String?
+  pricingOptions          Json?
+  rewards                 Json[] // Assuming OrderReward is another Prisma model
+  netAmountDueMoney       Json?
+}
+
+model Refund {
+  id                   String  @id
+  locationId           String
+  transactionId        String?
+  tenderId             String
+  createdAt            String?
+  reason               String
+  amountMoney          Json
+  status               String
+  processingFeeMoney   Json?
+  additionalRecipients Json[]
+  Order                Order?  @relation(fields: [orderId], references: [id])
+  orderId              String?
+}
+
+model Tender {
+  id                   String  @id
+  locationId           String?
+  transactionId        String?
+  createdAt            String?
+  note                 String?
+  amountMoney          Json?
+  tipMoney             Json?
+  processingFeeMoney   Json?
+  customerId           String?
+  type                 String
+  cardDetails          Json?
+  cashDetails          Json?
+  additionalRecipients Json[]
+  paymentId            String?
+  // ... Other fields
+  Order                Order?  @relation(fields: [orderId], references: [id])
+  orderId              String?
+}
+
+model OrderReturn {
+  id                   String  @id
+  uid                  String?
+  sourceOrderId        String?
+  returnLineItems      Json[]
+  returnServiceCharges Json[]
+  returnTaxes          Json[]
+  returnDiscounts      Json[]
+  roundingAdjustment   Json?
+  returnAmounts        Json?
+  // ... Other fields
+  Order                Order?  @relation(fields: [orderId], references: [id])
+  orderId              String?
+}
+
+model Fulfillment {
+  id                  String  @id
+  uid                 String?
+  type                String?
+  state               String?
+  lineItemApplication String?
+  entries             Json[]
+  metadata            Json?
+  pickupDetails       Json?
+  shipmentDetails     Json?
+  deliveryDetails     Json?
+  // ... Other fields
+  Order               Order?  @relation(fields: [orderId], references: [id])
+  orderId             String?
+}
+
+model OrderLineItem {
+  uid                      String @id
+  name                     String?
+  quantity                 String
+  quantityUnit             Json?
+  note                     String?
+  catalogObjectId          String?
+  catalogVersion           String?
+  variationName            String?
+  itemType                 String?
+  metadata                 Json?
+  modifiers                Json[]
+  appliedTaxes             Json[]
+  appliedDiscounts         Json[]
+  appliedServiceCharges    Json[]
+  basePriceMoney           Json?
+  variationTotalPriceMoney Json?
+  grossSalesMoney          Json?
+  totalTaxMoney            Json?
+  totalDiscountMoney       Json?
+  totalMoney               Json?
+  pricingBlocklists        Json?
+  totalServiceChargeMoney  Json?
+  // ... Other fields
+  Order                    Order?  @relation(fields: [orderId], references: [id])
+  orderId                  String?
+}
+
+model OrderServiceCharge {
+  id               String   @id
+  uid              String?
+  name             String?
+  catalogObjectId  String?
+  catalogVersion   BigInt?
+  percentage       String?
+  amountMoney      Json?
+  appliedMoney     Json?
+  totalMoney       Json?
+  totalTaxMoney    Json?
+  calculationPhase String?
+  taxable          Boolean?
+  appliedTaxes     Json[]
+  metadata         Json?
+  type             String?
+  treatmentType    String?
+  scope            String?
+  // ... Other fields
+  Order            Order?   @relation(fields: [orderId], references: [id])
+  orderId          String?
+}
+
+
+model TeamMember {
+  id            String     @id// Assuming MongoDB and auto-generated IDs
+  referenceId  String?
+  isOwner      Boolean
+  status        String
+  givenName    String
+  familyName   String
+  emailAddress String
+  phoneNumber  String?
+  createdAt    DateTime
+  updatedAt    DateTime
+  assignedLocations Json // Store as JSON
+}
+
+model CustomerGroup {
+  id String @id 
+  name String 
+  createdAt DateTime
+  updatedAt DateTime
+  customers Customer[] @relation("Groups")
+}
+
+
+model CustomerSegment {
+  id String @id 
+  name String 
+  createdAt DateTime
+  updatedAt DateTime
+  customers Customer[] @relation("Segments")
+}
+
+model Customer {
+  id              String       @id @map("_id") // Assuming MongoDB and auto-generated IDs
+  createdAt      DateTime
+  updatedAt      DateTime
+  givenName      String?
+  familyName     String?
+  emailAddress   String?
+  phoneNumber    String?
+  preferences     Json?         // Store as JSON
+  creationSource String?
+  version         Int
+  address         Json?        // Address is an optional JSON field
+  nickname        String?
+  companyName     String?
+  birthday        String?
+  referenceId     String?
+  note            String?
+  taxIds          Json?        // Store as JSON for taxIds
+  // Define a relation between Customer and Group
+  groups          CustomerGroup[]     @relation("Groups")
+
+  segments CustomerSegment[] @relation("Segments")
+}

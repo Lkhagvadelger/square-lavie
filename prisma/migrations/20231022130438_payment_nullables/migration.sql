@@ -1,0 +1,8 @@
+-- AlterTable
+ALTER TABLE "Payment" ALTER COLUMN "applicationDetails" DROP NOT NULL,
+ALTER COLUMN "approvedMoney" DROP NOT NULL,
+ALTER COLUMN "cardDetails" DROP NOT NULL,
+ALTER COLUMN "deviceDetails" DROP NOT NULL,
+ALTER COLUMN "totalMoney" DROP NOT NULL,
+ALTER COLUMN "amountMoney" DROP NOT NULL,
+ALTER COLUMN "tipMoney" DROP NOT NULL;

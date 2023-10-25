@@ -1,5 +1,7 @@
 import { AppointmentSegment } from "square";
 
+export type OrderState = "COMPLETED" | "CANCELED" | "OPEN" | "DRAFT";
+
 export interface ItemVariation {
   type: string;
   id: string;

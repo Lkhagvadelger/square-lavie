@@ -6,8 +6,8 @@ import { z } from "zod";
 const handler = createHandler();
 
 const querySchema = z.object({
-  beginTime: z.string().datetime(),
-  endTime: z.string().datetime(),
+  startDate: z.string().datetime(),
+  endDate: z.string().datetime(),
 });
 
 export type QueryRevenueResponse = {
@@ -20,28 +20,13 @@ export type QueryRevenueParams = z.infer<typeof querySchema>;
 handler.get(async (req, res) => {
   const input = querySchema.safeParse(req.query);
   if (!input.success) {
-    return res
-      .status(400)
-      .json({ messsage: "Incorrect input", error: input.error });
+    return res.sendError(input.error, "Invalid parameters");
   }
 
-  const cached = await RedisService.getCached(input.data);
-  if (cached) res.sendSuccess(cached);
-
-  var response = await PaymentService.queryPayments(
-    input.data.beginTime,
-    input.data.endTime
-  );
-  const revenue = response.reduce(
-    (acc, cur) => acc + parseFloat(cur.amountMoney?.amount?.toString() ?? "0"),
-    0
-  );
-  const resp = {
-    currency: response.length == 0 ? "$" : response[0].amountMoney?.currency,
+  var revenue = await PaymentService.calculateRevenue(input.data);
+  res.sendSuccess({
     revenue,
-  };
-  RedisService.setCache(input.data, resp);
-  return res.sendSuccess(resp);
+  });
 });
 
 export default handler;

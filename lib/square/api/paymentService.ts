@@ -1,6 +1,6 @@
 import { ApiResponse, ListPaymentsResponse, Payment } from "square";
 import { paymentsApi } from "./squareClient";
-
+import { prisma } from "@api/prisma";
 export namespace PaymentService {
   export const queryPayments = async (
     beginTime: string,
@@ -33,4 +33,96 @@ export namespace PaymentService {
     }
     return payments;
   };
+
+  export async function calculateRevenue({
+    startDate,
+    endDate,
+  }: {
+    startDate: string | Date;
+    endDate: string | Date;
+  }): Promise<number> {
+    // Query completed orders created within the specified date range.
+    const completedOrders = await prisma.order.findMany({
+      where: {
+        AND: [
+          {
+            createdAt: {
+              gte: startDate,
+              lte: endDate,
+            },
+          },
+          {
+            state: "COMPLETED",
+          },
+        ],
+      },
+    });
+    // Calculate the total monthly revenue.
+    const revenue = completedOrders.reduce((totalRevenue, order) => {
+      // Extract the totalMoney field as a JSON object.
+      const totalMoney = order.totalMoney as {
+        amount: string;
+        currency: string;
+      };
+
+      // Ensure the currency is USD (as specified in your data).
+      if (totalMoney.currency === "USD") {
+        totalRevenue += parseInt(totalMoney.amount);
+      }
+
+      return totalRevenue; //Total sales
+    }, 0);
+
+    //the amount is saved as cents thus divide by 100
+    return revenue / 100;
+  }
+
+  export async function calculateCurrentWeekRevenue(): Promise<number> {
+    // Get the current date.
+    const currentDate = new Date();
+
+    // Define the start and end dates for the current week.
+    const startDate = new Date(currentDate);
+    startDate.setHours(0, 0, 0, 0);
+    startDate.setDate(startDate.getDate() - currentDate.getDay()); // Start of the week (Sunday)
+
+    const endDate = new Date(startDate);
+    endDate.setDate(endDate.getDate() + 6); // End of the week (Saturday)
+    console.log(startDate, endDate);
+    // Query completed orders created within the current week.
+    const completedOrders = await prisma.order.findMany({
+      where: {
+        AND: [
+          {
+            createdAt: {
+              gte: startDate,
+              lte: endDate,
+            },
+          },
+          {
+            state: "COMPLETED",
+          },
+        ],
+      },
+    });
+
+    // Calculate the total weekly revenue.
+    const weeklyRevenue = completedOrders.reduce((totalRevenue, order) => {
+      // Extract the totalMoney field as a JSON object.
+      const totalMoney = order.totalMoney as {
+        amount: string;
+        currency: string;
+      };
+
+      // Ensure the currency is USD (as specified in your data).
+      if (totalMoney.currency === "USD") {
+        totalRevenue += parseInt(totalMoney.amount);
+      }
+
+      return totalRevenue;
+    }, 0);
+
+    // The amount is saved as cents, thus divide by 100.
+    return weeklyRevenue / 100;
+  }
 }

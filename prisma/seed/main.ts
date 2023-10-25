@@ -6,14 +6,14 @@ import { seedPayments } from "./seed-payments";
 import { seedMembers } from "./seed-members";
 import { seedCustomerGroup } from "./seed-customer-group";
 import { seedCustomerSegment } from "./seed-customer-segment";
-import { seedCustomer } from "./seed-customer";
+import { seedCustomer, seedOrderCustomers } from "./seed-customer";
 
 const prisma = new PrismaClient();
 
 async function main() {
   console.log("-------SEEDING PROCESS STARTS--------");
+
   await seedCustomer(prisma);
-  return;
 
   await seedCustomerGroup(prisma);
   await seedCustomerSegment(prisma);

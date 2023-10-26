@@ -37,11 +37,12 @@ export const options = {
 
 export const RevenueLinegraph = () => {
   const graph = useRevenueGraph({
-    beginTime: startOfMonth(new Date()).toISOString(),
-    endTime: endOfMonth(new Date()).toISOString(),
+    startDate: startOfMonth(new Date()).toISOString(),
+    endDate: endOfMonth(new Date()).toISOString(),
   });
 
-  const labels: string[] = graph.data?.dates ?? [];
+  const labels: string[] =
+    graph.data?.dates.map((iso) => new Date(iso).toLocaleDateString()) ?? [];
   const points: number[] = graph.data?.totalAmounts ?? [];
   const data = {
     labels,

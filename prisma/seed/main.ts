@@ -13,10 +13,9 @@ const prisma = new PrismaClient();
 async function main() {
   console.log("-------SEEDING PROCESS STARTS--------");
 
-  await seedCustomer(prisma);
-
   await seedCustomerGroup(prisma);
   await seedCustomerSegment(prisma);
+  await seedCustomer(prisma);
 
   await seedMembers(prisma);
 

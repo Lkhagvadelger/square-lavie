@@ -8,8 +8,20 @@ import {
   QueryRevenueResponse,
 } from "pages/api/square/[locationId]/payment/revenue-stats";
 import { RevenueGraphResponse } from "pages/api/square/[locationId]/payment/revenue-graph";
+import { RetentionRateParams } from "pages/api/square/[locationId]/client/retention-rate";
 
 // return ItemsResponse type
+
+export const useRetentionRate = (data: RetentionRateParams) =>
+  useQuery<{ retentionRate: number }>(
+    ["useRetentionRate", data],
+    API._query(
+      Method.POST,
+      `square/LS1VH64H9SA5C/client/retention-rate`,
+      {},
+      data
+    )
+  );
 
 export const useQueryRevenue = (params: QueryRevenueParams) =>
   useQuery<QueryRevenueResponse>(

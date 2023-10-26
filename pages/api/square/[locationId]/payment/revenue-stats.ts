@@ -1,6 +1,6 @@
 import { createHandler } from "@api/handler";
 import { RedisService } from "@api/redis";
-import { PaymentService } from "@lib/square/api/paymentService";
+import { RevenueService } from "@lib/square/api/revenue";
 import { z } from "zod";
 
 const handler = createHandler();
@@ -23,9 +23,10 @@ handler.get(async (req, res) => {
     return res.sendError(input.error, "Invalid parameters");
   }
 
-  var revenue = await PaymentService.calculateRevenue(input.data);
+  var revenue = await RevenueService.calculateRevenue(input.data);
   res.sendSuccess({
     revenue,
+    currency: "$",
   });
 });
 

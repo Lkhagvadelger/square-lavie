@@ -21,6 +21,7 @@ import {
 } from "date-fns";
 import { RevenueLinegraph } from "./RevenueLinegraph";
 import { BsArrowUp } from "react-icons/bs";
+import { trpc } from "@util/trpc";
 
 interface Props {
   label: string;
@@ -59,6 +60,10 @@ export const Stat = (props: Props) => {
   );
 };
 export default function RevenueStats() {
+  const data = trpc.hello.hello.useQuery();
+
+  console.log(data.data?.message);
+
   const retentionRate = useRetentionRate({
     year: new Date().getFullYear(),
     month: new Date().getMonth(),

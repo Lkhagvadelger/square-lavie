@@ -7,6 +7,7 @@ import Head from "next/head";
 import Router from "next/router";
 import { QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
+import { SessionProvider } from "next-auth/react";
 
 import "@fontsource/inter";
 import "@fontsource/inter/100.css";
@@ -29,6 +30,7 @@ import "@fontsource/inter-tight/700.css";
 import "@fontsource/inter-tight/800.css";
 import "@fontsource/inter-tight/900.css";
 import "/public/fonts/cervino.css";
+import { trpc } from "@util/trpc";
 
 const progress = new ProgressBar();
 
@@ -49,27 +51,27 @@ export const reportWebVitals = ({
   name,
   label,
   value,
-}: NextWebVitalsMetric) => {
- 
-};
+}: NextWebVitalsMetric) => {};
 
 const MyApp = ({ Component, pageProps }: Props) => {
   return (
-    <ChakraProvider theme={theme}>
-      <Head>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-        />
-      </Head>
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <Component {...pageProps} />
-        </AuthProvider>
-        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
-      </QueryClientProvider>
-    </ChakraProvider>
+    <SessionProvider session={pageProps.session}>
+      <ChakraProvider theme={theme}>
+        <Head>
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+          />
+        </Head>
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
+            <Component {...pageProps} />
+          </AuthProvider>
+          {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+        </QueryClientProvider>
+      </ChakraProvider>
+    </SessionProvider>
   );
 };
 
-export default MyApp;
+export default trpc.withTRPC(MyApp);

@@ -19,7 +19,8 @@
       "@ui/*": ["lib/core/ui/*"],
       "@api/*": ["lib/core/api/*"],
       "@util/*": ["lib/core/util/*"],
-      "@lib/*": ["lib/*"]
+      "@lib/*": ["lib/*"],
+      "~/server/*": ["lib/server/*"]
     },
     "typeRoots": ["node_modules/@types"]
   },

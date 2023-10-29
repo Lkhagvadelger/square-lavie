@@ -1,5 +1,6 @@
-import RevenueStats from "@lib/square/ui/revenue/RevenueStats";
+// import RevenueStats from "@lib/square/ui/revenue/RevenueStats";
 import SquareHomePage from "./square";
+import ECommerce from "@lib/core/components/Dashboard/E-commerce";
 
 // const HomePage = () => {
 //   const router = useRouter();
@@ -15,4 +16,4 @@ import SquareHomePage from "./square";
 //   return null;
 // };
 
-export default RevenueStats;
+export default ECommerce;

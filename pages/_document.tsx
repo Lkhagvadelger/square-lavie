@@ -1,4 +1,3 @@
-import { ColorModeScript } from "@ui/index";
 import NextDocument, { Head, Html, Main, NextScript } from "next/document";
 
 const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME;
@@ -45,7 +44,6 @@ export default class Document extends NextDocument {
           <meta name="theme-color" content="#5059a9" />
         </Head>
         <body>
-          <ColorModeScript />
           <Main />
           <NextScript />
           <script

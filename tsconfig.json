@@ -20,7 +20,8 @@
       "@api/*": ["lib/core/api/*"],
       "@util/*": ["lib/core/util/*"],
       "@lib/*": ["lib/*"],
-      "~/server/*": ["lib/server/*"]
+      "~/server/*": ["lib/server/*"],
+      "@components/*": ["lib/core/components/*"]
     },
     "typeRoots": ["node_modules/@types"]
   },

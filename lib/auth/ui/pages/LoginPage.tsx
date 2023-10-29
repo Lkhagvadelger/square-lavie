@@ -1,10 +1,10 @@
-import { AppLayout } from "@ui/index";
-import { LoginScreen } from "../screens/LoginScreen";
+// import { AppLayout } from "@ui/index";
+// import { LoginScreen } from "../screens/LoginScreen";
 
-export const LoginPage = () => {
-  return (
-    <AppLayout>
-      <LoginScreen onClose={() => {}} />
-    </AppLayout>
-  );
-};
+// export const LoginPage = () => {
+//   return (
+//     <AppLayout>
+//       <LoginScreen onClose={() => {}} />
+//     </AppLayout>
+//   );
+// };

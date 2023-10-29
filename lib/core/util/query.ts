@@ -1,5 +1,4 @@
 import { AuthUser, useCurrentUser } from "@lib/auth/data/authHooks";
-import { toaster } from "@ui/index";
 import fetch from "cross-fetch";
 import { isEmpty } from "lodash";
 import { Translate } from "next-translate";
@@ -49,8 +48,8 @@ const handleResp =
           body ? body.message : text,
           body ? body.translationKey : undefined
         );
-        if (error.statusCode === 500) toaster.error(te("undefined"));
-        else toaster.error(te(error.translationKey!));
+        if (error.statusCode === 500) alert(te("undefined"));
+        else alert(te(error.translationKey!));
         throw error;
       }
       return body;

@@ -8,7 +8,6 @@ import {
 import { useRouter } from "next/router";
 import { useAuth } from "./AuthProvider";
 import { UserRole } from "@prisma/client";
-import { toaster } from "@ui/index";
 import useTranslation from "next-translate/useTranslation";
 import { useCookies } from "react-cookie";
 
@@ -55,10 +54,10 @@ export const RequireLogin = ({
   );
 
   useEffect(() => {
-    if (status === "error" && error?.statusCode === 401) {
-      if (loggedIn) toaster.error(te("session-expired"));
-      redirect("/auth/login");
-    }
+    // if (status === "error" && error?.statusCode === 401) {
+    //   if (loggedIn) toaster.error(te("session-expired"));
+    //   redirect("/auth/login");
+    // }
     if (isLoggedIn) setLoggedIn(isLoggedIn);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoggedIn, status, user, error]);

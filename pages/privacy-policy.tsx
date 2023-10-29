@@ -1,28 +1,29 @@
-import {
-  SEO,
-  AppLayout,
-  Box,
-  Card,
-  Heading,
-  Link,
-  ListItem,
-  Stack,
-  Text,
-  UnorderedList,
-  useColorModeValue,
-} from "@ui/index";
+// import {
+//   SEO,
+//   AppLayout,
+//   Box,
+//   Card,
+//   Heading,
+//   Link,
+//   ListItem,
+//   Stack,
+//   Text,
+//   UnorderedList,
+//   useColorModeValue,
+// } from "@ui/index";
 import useTranslation from "next-translate/useTranslation";
 
 const TermsOfService = () => {
   const { t: to } = useTranslation("common");
 
   return (
-    <AppLayout title={to(`privacy-policy`)}>
-      <SEO title={to(`privacy-policy`)} />
-      <Card my={6}>
-        <Box></Box>
-      </Card>
-    </AppLayout>
+    <div>Privacy policy</div>
+    //   <AppLayout title={to(`privacy-policy`)}>
+    //     <SEO title={to(`privacy-policy`)} />
+    //     <Card my={6}>
+    //       <Box></Box>
+    //     </Card>
+    //   </AppLayout>
   );
 };
 

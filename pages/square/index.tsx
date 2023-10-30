@@ -1,4 +1,4 @@
-export const NoIdHomePage = () => {
-  return <>No location id provided</>;
+export const SquareHome = () => {
+  return <>Square Home page</>;
 };
-export default NoIdHomePage;
+export default SquareHome;
